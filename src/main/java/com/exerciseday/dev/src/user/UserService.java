@@ -29,6 +29,9 @@ public class UserService {
 
 
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException{
+        
+
+
         //이메일 중복
         if(userProvider.checkEmail(postUserReq.getEmail())==1){
             throw new BaseException(POST_USERS_EXISTS_EMAIL);
@@ -37,10 +40,11 @@ public class UserService {
         if(userProvider.checkNickNameExist(postUserReq.getNickName())==1){
             throw new BaseException(POST_USERS_EXISTS_NICKNAME);
         }
+        
         //암호화
-        String pwd;
+        String pwd;        
         try{
-            new SHA256();            
+            new SHA256();  
             pwd = SHA256.encrypt(postUserReq.getPassword());  
             postUserReq.setPassword(pwd);
         } catch (Exception exception) {

@@ -40,22 +40,25 @@ public class UserController {
      * @return BaseResponse<PostUserRes>
      */
     @ResponseBody
-    @PostMapping("") // (POST) 127.0.0.1:9000/users
+    @PostMapping("")
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
-        if(postUserReq.getEmail() == null){
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        // 이메일 형식
-        if(!isRegexEmail(postUserReq.getEmail())){
-            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-        }
         
-        // 닉네임 길이
-        if(postUserReq.getNickName().length() > 10){
-            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
-        }
 
         try{
+            //이메일 입력 x
+            if(postUserReq.getEmail() == null){
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            // 이메일 형식
+            if(!isRegexEmail(postUserReq.getEmail())){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
+            
+            // 닉네임 길이
+            if(postUserReq.getNickName().length() > 10){
+                return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+            }
+
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
@@ -73,7 +76,7 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
     @ResponseBody
-    @GetMapping("") // [GET] localhost:8080/users
+    @GetMapping("") // [GET] localhost:9000/users
     public BaseResponse<GetUserRes> getUserByEmail(@RequestParam(required = true) String Email){
         try
         {
