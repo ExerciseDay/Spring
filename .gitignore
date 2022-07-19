@@ -31,7 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-
-### JWT KEY###
-/src/main/java/com/exerciseday/dev/config/secret/

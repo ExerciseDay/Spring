@@ -1,4 +1,4 @@
-package com.exerciseday.dev;
+package com.exercise.dev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,5 +11,3 @@ public class DevApplication {
 	}
 
 }
-
-
