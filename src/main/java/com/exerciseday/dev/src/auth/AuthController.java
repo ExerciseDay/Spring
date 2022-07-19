@@ -45,24 +45,23 @@ public class AuthController {
      */
     @ResponseBody
     @PostMapping("/login")
-    public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){
-        //이메일 입력 안했을 때
-        if(postLoginReq.getEmail() == null)
-        {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }
-        //이메일 형식 이상할 때
-        if(!isRegexEmail(postLoginReq.getEmail())){
-            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-        }
-        //비밀번호 입력 안했을 때        
-        if(postLoginReq.getPwd()==null)
-        {
-            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
-        }
-        
-        
+    public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq){ 
         try{
+            //이메일 입력 안했을 때
+            if(postLoginReq.getEmail() == null)
+            {
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            //이메일 형식 이상할 때
+            if(!isRegexEmail(postLoginReq.getEmail())){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            }
+            //비밀번호 입력 안했을 때        
+            if(postLoginReq.getPassword() == null)
+            {
+                return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            }
+
             PostLoginRes postLoginRes = authService.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         }

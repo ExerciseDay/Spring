@@ -34,24 +34,23 @@ public class AuthService {
 
 
     public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
-        User user = authDao.getPwd(postLoginReq);
+        User user = authDao.getUserByPwd(postLoginReq);
         String encryptPwd;
         try {
             new SHA256();
-            encryptPwd = SHA256.encrypt(postLoginReq.getPwd());
-
+            encryptPwd = SHA256.encrypt(postLoginReq.getPassword());
+            //postLoginReq.setPassword(encryptPwd);
         }
         catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
 
         if(user.getPassword().equals(encryptPwd)){
-
+            
             int userIdx = user.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostLoginRes(userIdx, jwt);
-        }
-        else{
+        } else{            
             throw new BaseException(FAILED_TO_LOGIN);
         }
     }
