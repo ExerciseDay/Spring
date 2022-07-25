@@ -1,5 +1,7 @@
 package com.exerciseday.dev.src.user;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +61,10 @@ public class UserController {
                 return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
             }
 
-            PostUserRes postUserRes = userService.createUser(postUserReq);
+            PostUserRes postUserRes = userService.createUser(postUserReq);            
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
+
             return new BaseResponse<>((exception.getStatus()));
         }
     }

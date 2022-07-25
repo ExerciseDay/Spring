@@ -69,4 +69,6 @@ public class AuthController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    
 }
