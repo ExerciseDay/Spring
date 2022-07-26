@@ -51,10 +51,10 @@ public class UserProvider {
         }
     }
 
-    public int checkNickNameExist(String nickName) throws BaseException{
+    public int checkNicknameExist(String nickname) throws BaseException{
         try{
             
-            return userDao.checkNickNameExist(nickName);
+            return userDao.checkNicknameExist(nickname);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
@@ -64,6 +64,15 @@ public class UserProvider {
         try{
             
             return userDao.checkUserExist(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkPhoneExist(String phone) throws BaseException{
+        try{
+            
+            return userDao.checkPhoneExist(phone);
         } catch (Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

@@ -35,10 +35,11 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_NICKNAME(false,2018,"닉네임을 입력해주세요."),
     POST_USERS_INVALID_NICKNAME(false,2019,"닉네임 형식을 확인해주세요."),
     POST_USERS_EXISTS_NICKNAME(false,2020,"중복된 닉네임입니다."),
-
-
-    POST_USERS_INVALID_PASSWORD(false, 2030, "비밀번호 형식을 확인해주세요."),
-    POST_USERS_EMPTY_PASSWORD(false, 2031, "비밀번호를 입력해주세요."),
+    POST_USERS_INVALID_PASSWORD(false, 2021, "비밀번호 형식을 확인해주세요."),
+    POST_USERS_EMPTY_PASSWORD(false, 2022, "비밀번호를 입력해주세요."),
+    POST_USERS_EMPTY_PHONE(false, 2023, "전화번호를 입력해주세요."),
+    POST_USERS_INVALID_PHONE(false, 2024, "전화번호를 확인해주세요."),
+    POST_USERS_EXISTS_PHONE(false, 2025, "중복된 전화번호입니다."),
 
 
 

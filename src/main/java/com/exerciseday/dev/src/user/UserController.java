@@ -46,7 +46,7 @@ public class UserController {
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         
 
-        try{
+        try{//형식 검증
             //이메일 입력 x
             if(postUserReq.getEmail() == null){
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
@@ -55,11 +55,30 @@ public class UserController {
             if(!isRegexEmail(postUserReq.getEmail())){
                 return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
             }
+            // 비밀번호 입력 x
+            if(postUserReq.getPassword() == null){
+                return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+            }
+            // 비밀번호 형식
+
             
+            // 닉네임 입력 x
+            if(postUserReq.getNickname() == null){
+                return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+            }
+
             // 닉네임 길이
-            if(postUserReq.getNickName().length() > 10){
+            if(postUserReq.getNickname().length() > 10){
                 return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
             }
+
+            // 전화번호 입력 x
+            if(postUserReq.getPhone() == null){
+                return new BaseResponse<>(POST_USERS_EMPTY_PHONE);
+            }
+            // 전화번호 형식
+            
+
 
             PostUserRes postUserRes = userService.createUser(postUserReq);            
             return new BaseResponse<>(postUserRes);

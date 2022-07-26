@@ -31,13 +31,16 @@ public class UserService {
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException{
         //이메일 중복
         if(userProvider.checkEmail(postUserReq.getEmail())==1){
-            throw new BaseException(POST_USERS_EXISTS_EMAIL);
+            throw new BaseException(DUPLICATED_EMAIL);
         }
         //닉네임 중복
-        if(userProvider.checkNickNameExist(postUserReq.getNickName())==1){
-            throw new BaseException(POST_USERS_EXISTS_NICKNAME);
+        if(userProvider.checkNicknameExist(postUserReq.getNickname())==1){
+            throw new BaseException(DUPLICATED_NICKNAME);
         }
-        
+        //전화번호 중복
+        if(userProvider.checkPhoneExist(postUserReq.getPhone())==1){
+            throw new BaseException(DUPLICATED_PHONE);
+        }
         //암호화
         String pwd;        
         try{
