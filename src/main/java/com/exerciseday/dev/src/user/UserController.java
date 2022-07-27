@@ -1,6 +1,6 @@
 package com.exerciseday.dev.src.user;
 
-import lombok.extern.slf4j.Slf4j;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,17 +97,14 @@ public class UserController {
      * [GET] /users? Email=
      * @return BaseResponse<GetUserRes>
      */
+    /*
     @ResponseBody
     @GetMapping("") // [GET] localhost:9000/users
     public BaseResponse<GetUserRes> getUserByEmail(@RequestParam(required = true) String Email){
         try
         {
-            /* 형식적 validation
-             * 1. 입력된 이메일 없음
-             * 2. 잘못된 이메일 형식
-            */
-            
-            if(Email.length() == 0)
+                        
+            if(Email == null)
             {
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
@@ -124,12 +121,16 @@ public class UserController {
 
         }
     }
+    */
+
 
     /**
      * userIdx 검색 조회 API. userIdx 입력 받아서 해당 유저 정보 반환.
      * [GET] /users/{userIdx}
      * @return BaseResponse<GetUserRes>
      */
+
+     /*
     @ResponseBody
     @GetMapping("/{userIdx}") // [GET] /users/:userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx") int userIdx){
@@ -140,6 +141,6 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
+    */
 
 }

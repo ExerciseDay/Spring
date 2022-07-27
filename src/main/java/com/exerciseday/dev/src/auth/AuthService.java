@@ -34,7 +34,12 @@ public class AuthService {
 
 
     public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
-        User user = authDao.getUserByPwd(postLoginReq);
+        // 유저 가입 여부 검사
+        if(authProvider.checkEmail(postLoginReq.getEmail())==0){
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+        User user = authDao.getUserByLoginReq(postLoginReq);
         String encryptPwd;
         try {
             new SHA256();

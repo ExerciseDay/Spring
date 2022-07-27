@@ -35,3 +35,7 @@ build/
 
 ### JWT KEY###
 /com/exerciseday/dev/config/secret/
+
+
+
+/dev/src/main/resources/application.properties
