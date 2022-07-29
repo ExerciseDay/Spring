@@ -88,7 +88,45 @@ public class UserController {
         }
     }
 
-    
+    /*
+     * 이메일 중복 확인 API. 이메일을 입력 받아서 DB에 존재 여부 확인
+     * [GET] /users/check/:email
+     * @return BaseResponse<>
+     */
+    @ResponseBody
+    @GetMapping("/check/{email}")
+    public BaseResponse<Boolean> checkEmailExist(@PathVariable("email") String email){
+        try
+        {
+                        
+            if(email == null)
+            {
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            /*
+            if(!isRegexEmail(email)){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+                
+            }
+            */
+
+            boolean isDuplicated;            
+            if(userProvider.checkEmail(email)==1){
+                isDuplicated = true;
+            } else{
+                isDuplicated = false;
+            }
+
+            return new BaseResponse<>(isDuplicated);
+        }
+        catch(BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+
+        }
+    }
+
+
 
     /**
      * 회원 조회 API
