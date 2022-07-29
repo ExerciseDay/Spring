@@ -79,7 +79,7 @@ public class UserController {
             // 전화번호 형식
             
 
-
+            logger.info("[POST] /users 호출 성공 ############");
             PostUserRes postUserRes = userService.createUser(postUserReq);            
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){

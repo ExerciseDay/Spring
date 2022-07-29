@@ -54,6 +54,7 @@ public class UserService {
             int userIdx = userDao.createUser(postUserReq);
             //jwt 발급.
             String jwt = jwtService.createJwt(userIdx);
+            logger.info("[POST] /users 회원가입 성공 #############");
             return new PostUserRes(userIdx,jwt);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

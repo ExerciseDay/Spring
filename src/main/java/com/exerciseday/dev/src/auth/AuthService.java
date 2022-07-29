@@ -54,6 +54,7 @@ public class AuthService {
             
             int userIdx = user.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
+            logger.info("[POST] /auth/login 로그인 성공 ###############");
             return new PostLoginRes(userIdx, jwt);
         } else{            
             throw new BaseException(FAILED_TO_LOGIN);

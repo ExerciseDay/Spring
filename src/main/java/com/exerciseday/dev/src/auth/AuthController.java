@@ -64,7 +64,7 @@ public class AuthController {
             {
                 return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
             }
-            
+            logger.info("[POST] /auth/login 로그인 API 호출 성공######################");
             PostLoginRes postLoginRes = authService.login(postLoginReq);
             return new BaseResponse<>(postLoginRes);
         }
