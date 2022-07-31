@@ -33,9 +33,12 @@ build/
 .vscode/
 
 
+application.properties
+
+
 ### JWT KEY###
-/com/exerciseday/dev/config/secret/
+!src/main/java/com/exerciseday/dev/config/secret/
 
 
 
-/dev/src/main/resources/application.properties
+!**/application.properties
