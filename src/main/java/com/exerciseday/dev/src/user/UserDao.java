@@ -34,33 +34,44 @@ public class UserDao {
     }
     */
     public GetUserRes getUserByEmail(String Email){
-        String getUserByEmailQuery = "select userIdx,email,nickname,phone from User where email=?";
+        String getUserByEmailQuery = "select userIdx,userEmail,userNickname,userTel from User where userEmail=?";
         String getUserByEmailParams = Email;
         return this.jdbcTemplate.queryForObject(getUserByEmailQuery, 
         (rs, rowNum)-> new GetUserRes(
                         rs.getInt("userIdx"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        rs.getString("phone")),
+                        rs.getString("userEmail"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel")),
                         getUserByEmailParams);
 
     }
 
     public GetUserRes getUserByIdx(int userIdx){
-        String getUserByIdxQuery = "select userIdx,email,nickname,phone from User where userIdx=?";
+        String getUserByIdxQuery = "select userIdx,userEmail,userNickname,userTel from User where userIdx=?";
         int getUserByIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserByIdxQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getInt("userIdx"),
-                        rs.getString("email"),
-                        rs.getString("nickname"),
-                        rs.getString("phone")),
+                        rs.getString("userEmail"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel")),
                         getUserByIdxParams);
     }
 
+    public GetUserRes getUserByPhone(String phone){
+        String getUserByPhoneQuery = "select userIdx,userEmail,userNickname,userTel from User where userTel=?";
+        String getUserByPhoneParams = phone;
+        return this.jdbcTemplate.queryForObject(getUserByPhoneQuery,
+                (rs, rowNum) -> new GetUserRes(
+                        rs.getInt("userIdx"),
+                        rs.getString("userEmail"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel")),
+                        getUserByPhoneParams);
+    }
 
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into User (email, password, nickname, phone ) VALUES (?,?,?,?)";
+        String createUserQuery = "insert into User (userEmail, userPwd, userNickname, userTel ) VALUES (?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname(), postUserReq.getPhone()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
@@ -78,7 +89,7 @@ public class UserDao {
     }
 
     public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select userEmail from User where userEmail = ?)";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,
@@ -87,7 +98,7 @@ public class UserDao {
     }
 
     public int checkNicknameExist(String nickname){
-        String checkNicknameExistQuery = "select exists(select nickname from User where nickname = ?)";
+        String checkNicknameExistQuery = "select exists(select userNickname from User where userNickname = ?)";
         String checkNicknameExistParams = nickname;
         return this.jdbcTemplate.queryForObject(checkNicknameExistQuery,
                 int.class,
@@ -96,7 +107,7 @@ public class UserDao {
     }
 
     public int checkPhoneExist(String phone){
-        String checkPhoneExistQuery = "select exists(select phone from User where phone = ?)";
+        String checkPhoneExistQuery = "select exists(select userTel from User where userTel = ?)";
         String checkPhoneExistParams = phone;
         return this.jdbcTemplate.queryForObject(checkPhoneExistQuery,
                 int.class,

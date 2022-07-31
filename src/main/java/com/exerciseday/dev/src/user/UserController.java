@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
-
+import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.user.model.*;
 import com.exerciseday.dev.utils.JwtService;
 
@@ -91,7 +91,7 @@ public class UserController {
     /*
      * 이메일 중복 확인 API. 이메일을 입력 받아서 DB에 존재 여부 확인
      * [GET] /users/check/:email
-     * @return BaseResponse<>
+     * @return BaseResponse<Boolean>
      */
     @ResponseBody
     @GetMapping("/check/{email}")
@@ -126,8 +126,34 @@ public class UserController {
         }
     }
 
+    /*
+     *  아이디(이메일) 찾기 API
+     *  [GET] /users/find?phone=01012341234
+     *  @return BaseResponse<String>
+     */
+    @ResponseBody
+    @GetMapping("/find")
+    public BaseResponse<GetUserRes> getUserByPhone(@RequestParam String phone){
 
+        if(phone == null){  
+            return new BaseResponse<>(EMPTY_PHONE);
+        }
+        if(phone.length() != 11){
+            return new BaseResponse<>(BaseResponseStatus.INVALID_PHONE);
+        }
 
+        try
+        {
+
+            GetUserRes getUserRes = userProvider.getUserByPhone(phone);
+            return new BaseResponse<>(getUserRes);
+
+        }
+        catch(BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
     /**
      * 회원 조회 API
      * [GET] /users

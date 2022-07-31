@@ -19,23 +19,22 @@ public class AuthDao {
     }
 
     public User getUserByLoginReq(PostLoginReq postLoginReq){
-        String getUserByLoginReqQuery = "SELECT userIdx, email, password, nickname, phone FROM User WHERE email = ?";
+        String getUserByLoginReqQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel FROM User WHERE userEmail = ?";
         String getUserByLoginReqParams = postLoginReq.getEmail();
         
-                
         return this.jdbcTemplate.queryForObject(getUserByLoginReqQuery,
                 (rs, rowNum)-> new User(
                         rs.getInt("userIdx"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("nickname"),
-                        rs.getString("phone")
+                        rs.getString("userEmail"),
+                        rs.getString("userPwd"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel")
                         
                 ), getUserByLoginReqParams);
     }
 
     public int checkEmail(String email){
-        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailQuery = "select exists(select userEmail from User where userEmail = ?)";
         String checkEmailParams = email;
         return this.jdbcTemplate.queryForObject(checkEmailQuery,
                 int.class,

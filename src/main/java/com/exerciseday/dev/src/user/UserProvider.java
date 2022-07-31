@@ -6,10 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
+import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.user.model.GetUserRes;
 import com.exerciseday.dev.utils.JwtService;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.exerciseday.dev.config.BaseResponseStatus.EXIST_NO_PHONE;;
 
 @Service
 public class UserProvider {
@@ -43,6 +45,21 @@ public class UserProvider {
         } 
     }
     
+    public GetUserRes getUserByPhone(String phone) throws BaseException{
+        
+        if(checkPhoneExist(phone)==0){
+            throw new BaseException(EXIST_NO_PHONE);
+        }
+
+        try {
+
+            GetUserRes getUserRes = userDao.getUserByPhone(phone);
+            return getUserRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        } 
+    }
+
     public int checkEmail(String Email) throws BaseException{
         try{                
             return userDao.checkEmail(Email);
