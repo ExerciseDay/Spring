@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.exerciseday.dev.src.user.model.PostUserRes;
+import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
 import com.exerciseday.dev.src.user.model.PostUserReq;
 import com.exerciseday.dev.utils.JwtService;
 
@@ -57,6 +58,33 @@ public class UserService {
             logger.info("[POST] /users 회원가입 성공 #############");
             return new PostUserRes(userIdx,jwt);
         } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void editUserPwd(PatchUserEditPwdReq patchUserEditPwdReq) throws BaseException {
+        try{
+            //암호화
+            String oldPwd = userProvider.getUser(patchUserEditPwdReq.getUserIdx()).getPassword();
+            String pwd;        
+            try{
+                new SHA256();  
+                pwd = SHA256.encrypt(patchUserEditPwdReq.getNewPassword());  
+                patchUserEditPwdReq.setNewPassword(pwd);
+            } catch (Exception exception) {
+                throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+            }
+
+            // 이전 비밀번호와 다른 비밀번호인가?
+            if(oldPwd.equals(pwd)){
+                throw new BaseException(DIFFERENT_PASSWORD);
+            }
+
+            int result = userDao.editPwd(patchUserEditPwdReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_PASSWORD);
+            }
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }

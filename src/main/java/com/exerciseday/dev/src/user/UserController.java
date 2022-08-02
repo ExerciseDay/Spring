@@ -171,7 +171,12 @@ public class UserController {
 
         }
     }
-
+    /*
+     * 회원가입 본인인증 API
+     * [POST] /users/sms?phone=
+     * @return BaseResponse<String>
+     * 발송한 인증번호 반환
+     */
     @ResponseBody
     @PostMapping("/sms")
     public BaseResponse<String> certify(@RequestParam String phone){
@@ -223,24 +228,27 @@ public class UserController {
 
     /*
      * 비밀번호 찾기 API
-     * [POST] /users/find/?phone=
+     * [POST] /users/findPwd
      */
     @ResponseBody
-    @GetMapping("/findPwd")
-    public BaseResponse<String> getUserFindPwd(@RequestParam(required = true) String email, String phone){
-
-        if(phone == null){  
+    @PostMapping("/findPwd")
+    public BaseResponse<PostUserFindPwdRes> postUserFindPwd(@RequestBody PostUserFindPwdReq postUserFindPwdReq){
+        if(postUserFindPwdReq.getEmail() == null){
+            return new BaseResponse<>(EMPTY_EMAIL);
+        }
+        
+        if(postUserFindPwdReq.getPhone() == null){  
             return new BaseResponse<>(EMPTY_PHONE);
         }
-        if(phone.length() != 11){
+        if(postUserFindPwdReq.getPhone().length() != 11){
             return new BaseResponse<>(BaseResponseStatus.INVALID_PHONE);
         }
-
+        
         try
         {
 
-            GetUserRes getUserRes = userProvider.getUserByPhone(phone);
-            return new BaseResponse<>(getUserRes.getEmail());
+            PostUserFindPwdRes postUserFindPwdRes = userProvider.postUserFindPwd(postUserFindPwdReq);                        
+            return new BaseResponse<>(postUserFindPwdRes);
 
         }
         catch(BaseException exception)
@@ -248,6 +256,35 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /*
+     * 비밀번호 변경 API
+     * [PATCH] /users/editPwd/{userIdx}
+     *  @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/editPwd")
+    public BaseResponse<String> editUserPwd(@RequestBody PatchUserEditPwdReq patchUserEditPwdReq){
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(patchUserEditPwdReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            
+            userService.editUserPwd(patchUserEditPwdReq);
+
+            String result = "비밀번호 변경 성공했습니다.";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+
+
     /**
      * 회원 조회 API
      * [GET] /users

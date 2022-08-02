@@ -1,7 +1,5 @@
 package com.exerciseday.dev.src.user.model;
 
-import java.sql.Date;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetUserFindEmailRes {
+public class PatchUserEditPwdReq {
     private int userIdx;
-    private String email;
-    private Date userCreate;
+    //private String encryptPassword;
+    private String newPassword;
+
 }

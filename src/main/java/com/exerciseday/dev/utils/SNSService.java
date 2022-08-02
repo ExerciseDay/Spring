@@ -31,13 +31,13 @@ public class SNSService {
         String phoneNumber = "+82" + phone;
 
         //인증번호 생성
-        String code = "";
+        String codes = "";
         Random random = new Random();
         random.setSeed(System.currentTimeMillis());
         for(int i = 0 ; i < 6 ; i++){
-            code+=Integer.toString(random.nextInt(9));
+            codes+=Integer.toString(random.nextInt(9));
         }
-        String message = "하루운동 본인인증 [" + code + "] 입니다.";
+        String message = "하루운동 본인인증 [" + codes + "] 입니다.";
 
 
         //SNS 접속
@@ -47,7 +47,7 @@ public class SNSService {
         .build();
 
         
-      
+        /*
         // 토픽 구독
         try{
             SubscribeRequest subscribeRequest = SubscribeRequest.builder()
@@ -62,7 +62,7 @@ public class SNSService {
         }catch (SnsException e){
             System.err.println(e.awsErrorDetails().errorMessage());
         }
-
+*/
         // 메세지 전송
         try{
             PublishRequest request = PublishRequest.builder()
@@ -76,7 +76,7 @@ public class SNSService {
             System.err.println(e.awsErrorDetails().errorMessage());
         }
 
-
+/* 
         // 토픽 구독 목록
         try{
             ListSubscriptionsRequest listSubscriptionsRequest = ListSubscriptionsRequest.builder().build();
@@ -87,9 +87,9 @@ public class SNSService {
             System.err.println(e.awsErrorDetails().errorMessage());
             
         }
-
+*/
         snsClient.close();
-        return code;
+        return codes;
     }
 
     

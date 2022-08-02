@@ -46,6 +46,20 @@ public class UserDao {
 
     }
 
+    public User getUser(int userIdx){
+        String getUserByIdxQuery = "select userIdx,userEmail, userPwd, userNickname,userTel from User where userIdx=?";
+        int getUserByIdxParams = userIdx;
+        return this.jdbcTemplate.queryForObject(getUserByIdxQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPwd"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel")),
+                        getUserByIdxParams);
+    }
+
+
     public GetUserRes getUserByIdx(int userIdx){
         String getUserByIdxQuery = "select userIdx,userEmail,userNickname,userTel from User where userIdx=?";
         int getUserByIdxParams = userIdx;
@@ -72,13 +86,24 @@ public class UserDao {
 
 
     public GetUserFindEmailRes getUserFindEmail(String phone){
-        String getUserFindEmailQuery = "select userEmail, userCreate from User where userTel=?";
+        String getUserFindEmailQuery = "select userIdx, userEmail, userCreate from User where userTel=?";
         String getUserFindEmailParams = phone;
         return this.jdbcTemplate.queryForObject(getUserFindEmailQuery,
-                (rs, rowNum) -> new GetUserFindEmailRes(                        
+                (rs, rowNum) -> new GetUserFindEmailRes(   
+                        rs.getInt("userIdx"),
                         rs.getString("userEmail"),                        
                         rs.getDate("userCreate")),
                         getUserFindEmailParams);
+    }
+    
+
+    public int postUserFindPwd(String phone){
+        String postUserFindPwdQuery = "select userIdx from User where userTel=?";
+        String postUserFindPwdParams = phone;
+        return this.jdbcTemplate.queryForObject(postUserFindPwdQuery,
+                (rs, rowNum) ->   
+                        rs.getInt("userIdx"),                        
+                        postUserFindPwdParams);
     }
 
     public int createUser(PostUserReq postUserReq){
@@ -124,5 +149,12 @@ public class UserDao {
                 int.class,
                 checkPhoneExistParams);
 
+    }
+
+    public int editPwd(PatchUserEditPwdReq patchUserEditPwdReq){
+        String patchUserEditPwdQuery = "update User set userPwd = ? where userIdx = ? ";
+        Object[] patchUserEditPwdParams = new Object[]{patchUserEditPwdReq.getNewPassword(), patchUserEditPwdReq.getUserIdx()};
+
+        return this.jdbcTemplate.update(patchUserEditPwdQuery,patchUserEditPwdParams);
     }
 }

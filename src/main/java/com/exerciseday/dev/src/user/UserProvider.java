@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.user.model.GetUserFindEmailRes;
+import com.exerciseday.dev.src.user.model.PostUserFindPwdReq;
+import com.exerciseday.dev.src.user.model.PostUserFindPwdRes;
 import com.exerciseday.dev.src.user.model.GetUserRes;
+import com.exerciseday.dev.src.user.model.User;
 import com.exerciseday.dev.utils.JwtService;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.DATABASE_ERROR;
@@ -27,6 +30,16 @@ public class UserProvider {
         this.userDao = userDao;
         this.jwtService = jwtService;
     }
+
+    public User getUser(int userIdx) throws BaseException{
+        try {
+            User user = userDao.getUser(userIdx);
+            return user;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        } 
+    }
+
 
     public GetUserRes getUserByEmail(String Email) throws BaseException{
         try {
@@ -71,6 +84,34 @@ public class UserProvider {
 
             GetUserFindEmailRes getUserFindEmailRes = userDao.getUserFindEmail(phone);
             return getUserFindEmailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        } 
+    }
+
+
+    public PostUserFindPwdRes postUserFindPwd(PostUserFindPwdReq postUserFindPwdReq) throws BaseException{
+        
+        if(checkEmail(postUserFindPwdReq.getEmail())==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_EMAIL);
+        }
+
+        if(checkPhoneExist(postUserFindPwdReq.getPhone())==0){
+            throw new BaseException(EXIST_NO_PHONE);
+        }
+
+        // 입력한 이메일과 전화번호는 같은 유저의 정보인가?
+        GetUserRes getUserRes1 = userDao.getUserByEmail(postUserFindPwdReq.getEmail());
+        GetUserRes getUserRes2 = userDao.getUserByPhone(postUserFindPwdReq.getPhone());
+        if(getUserRes1.getUserIdx() != getUserRes2.getUserIdx()){
+            throw new BaseException(BaseResponseStatus.DIFFERENT_USERS);
+        }
+
+        try {
+            int userIdx = userDao.getUserByPhone(postUserFindPwdReq.getPhone()).getUserIdx();
+            String jwt = jwtService.createJwt(userIdx);
+            PostUserFindPwdRes postUserFindPwdRes = new PostUserFindPwdRes(userIdx,jwt);
+            return postUserFindPwdRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         } 
