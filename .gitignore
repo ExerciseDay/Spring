@@ -37,8 +37,8 @@ application.properties
 
 
 ### JWT KEY###
-!src/main/java/com/exerciseday/dev/config/secret/
+**/secret/
 
 
 
-!**/application.properties
+application.properties

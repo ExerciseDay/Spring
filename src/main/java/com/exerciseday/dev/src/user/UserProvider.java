@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponseStatus;
+import com.exerciseday.dev.src.user.model.GetUserFindEmailRes;
 import com.exerciseday.dev.src.user.model.GetUserRes;
 import com.exerciseday.dev.utils.JwtService;
 
@@ -59,6 +60,22 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         } 
     }
+
+    public GetUserFindEmailRes getUserFindEmail(String phone) throws BaseException{
+        
+        if(checkPhoneExist(phone)==0){
+            throw new BaseException(EXIST_NO_PHONE);
+        }
+
+        try {
+
+            GetUserFindEmailRes getUserFindEmailRes = userDao.getUserFindEmail(phone);
+            return getUserFindEmailRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        } 
+    }
+
 
     public int checkEmail(String Email) throws BaseException{
         try{                

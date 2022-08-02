@@ -56,7 +56,9 @@ public enum BaseResponseStatus {
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     DUPLICATED_NICKNAME(false, 3014, "중복된 닉네임입니다."),
     DUPLICATED_PHONE(false, 3015, "중복된 전화번호입니다."),
-    
+    // [POST] /auth/login
+    FAILED_TO_LOGIN(false,3016,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    FAILED_MESSAGE(false,3017,"메세지 전송에 실패했습니다."),
 
     EXIST_NO_NICKNAME(false, 3030, "존재하지 않는 닉네임입니다."),
     EXIST_NO_EMAIL(false, 3031, "존재하지 않는 이메일입니다."),
@@ -71,8 +73,7 @@ public enum BaseResponseStatus {
     EMPTY_PHONE(false,3052,"전화번호를 입력해주세요."),
     EMPTY_PASSWORD(false,3053,"비밀번호를 입력해주세요."),
 
-    // [POST] /auth/login
-    FAILED_TO_LOGIN(false,3016,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    
 
 
 

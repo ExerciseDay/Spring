@@ -70,6 +70,17 @@ public class UserDao {
                         getUserByPhoneParams);
     }
 
+
+    public GetUserFindEmailRes getUserFindEmail(String phone){
+        String getUserFindEmailQuery = "select userEmail, userCreate from User where userTel=?";
+        String getUserFindEmailParams = phone;
+        return this.jdbcTemplate.queryForObject(getUserFindEmailQuery,
+                (rs, rowNum) -> new GetUserFindEmailRes(                        
+                        rs.getString("userEmail"),                        
+                        rs.getDate("userCreate")),
+                        getUserFindEmailParams);
+    }
+
     public int createUser(PostUserReq postUserReq){
         String createUserQuery = "insert into User (userEmail, userPwd, userNickname, userTel ) VALUES (?,?,?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname(), postUserReq.getPhone()};

@@ -12,7 +12,9 @@ import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.user.model.*;
 import com.exerciseday.dev.utils.JwtService;
+import com.exerciseday.dev.utils.SNSService;
 
+import software.amazon.awssdk.services.sns.model.SnsException;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.*;
 import static com.exerciseday.dev.utils.ValidationRegex.isRegexEmail;
@@ -29,11 +31,15 @@ public class UserController {
     private final UserService userService;
     @Autowired
     private final JwtService jwtService;
+    @Autowired
+    private final SNSService snsService;
 
-    public UserController(UserProvider userProvider, UserService userService, JwtService jwtService){
+
+    public UserController(UserProvider userProvider, UserService userService, JwtService jwtService, SNSService snsService){
         this.userProvider = userProvider;
         this.userService = userService;
         this.jwtService = jwtService;
+        this.snsService = snsService;
     }
 
     /**
@@ -89,12 +95,13 @@ public class UserController {
     }
 
     /*
-     * 이메일 중복 확인 API. 이메일을 입력 받아서 DB에 존재 여부 확인
-     * [GET] /users/check/:email
+     * 이메일 중복 확인 API. 이메일을 입력 받아서 DB에 존재 여부 확인.
+     * [GET] /users/check/email/{email}
      * @return BaseResponse<Boolean>
+     *  중복O : true / 중복X : false
      */
     @ResponseBody
-    @GetMapping("/check/{email}")
+    @GetMapping("/check/email/{email}")
     public BaseResponse<Boolean> checkEmailExist(@PathVariable("email") String email){
         try
         {
@@ -127,13 +134,100 @@ public class UserController {
     }
 
     /*
+     *  닉네임 중복 확인 API. 닉네임을 입력 받아서 DB에 닉네임 존재 여부 확인.
+     *  [GET] users/check/nickname/{nickname}
+     *  @return BaseResponse<Boolean>
+     *  중복O : true / 중복X : false
+     */
+    @ResponseBody
+    @GetMapping("/check/nickname/{nickname}")
+    public BaseResponse<Boolean> checkNicknameExist(@PathVariable("nickname") String nickname){
+        try
+        {
+                        
+            if(nickname == null)
+            {
+                return new BaseResponse<>(EMPTY_NICKNAME);
+            }
+            /*
+            if(!isRegexEmail(email)){
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+                
+            }
+            */
+
+            boolean isDuplicated;            
+            if(userProvider.checkNicknameExist(nickname)==1){
+                isDuplicated = true;
+            } else{
+                isDuplicated = false;
+            }
+
+            return new BaseResponse<>(isDuplicated);
+        }
+        catch(BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/sms")
+    public BaseResponse<String> certify(@RequestParam String phone){
+        try{
+            if(phone == null){
+                return new BaseResponse<>(EMPTY_PHONE);
+            }
+            if(phone.length()!=11){
+                return new BaseResponse<>(INVALID_PHONE);
+            }
+            String code = snsService.sendSMS(phone);
+            return new BaseResponse<>(code);
+        }
+        catch(SnsException exception)
+        {
+            return new BaseResponse<>(FAILED_MESSAGE);
+        }
+    }
+
+    /*
      *  아이디(이메일) 찾기 API
-     *  [GET] /users/find?phone=01012341234
+     *  [GET] /users/findId?phone=01012341234
      *  @return BaseResponse<String>
      */
     @ResponseBody
-    @GetMapping("/find")
-    public BaseResponse<GetUserRes> getUserByPhone(@RequestParam String phone){
+    @GetMapping("/findId")
+    public BaseResponse<GetUserFindEmailRes> getUserFindEmail(@RequestParam(required = true) String phone){
+
+        if(phone == null){  
+            return new BaseResponse<>(EMPTY_PHONE);
+        }
+        if(phone.length() != 11){
+            return new BaseResponse<>(BaseResponseStatus.INVALID_PHONE);
+        }
+
+        try
+        {
+
+            GetUserFindEmailRes getUserFindEmailRes = userProvider.getUserFindEmail(phone);
+
+            return new BaseResponse<>(getUserFindEmailRes);
+
+        }
+        catch(BaseException exception)
+        {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /*
+     * 비밀번호 찾기 API
+     * [POST] /users/find/?phone=
+     */
+    @ResponseBody
+    @GetMapping("/findPwd")
+    public BaseResponse<String> getUserFindPwd(@RequestParam(required = true) String email, String phone){
 
         if(phone == null){  
             return new BaseResponse<>(EMPTY_PHONE);
@@ -146,7 +240,7 @@ public class UserController {
         {
 
             GetUserRes getUserRes = userProvider.getUserByPhone(phone);
-            return new BaseResponse<>(getUserRes);
+            return new BaseResponse<>(getUserRes.getEmail());
 
         }
         catch(BaseException exception)
