@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetUserFindPwdRes {
+public class PostUserFindPwdRes{
     private int userIdx;
-    //private String encryptPassword;
     private String jwt;
+
 }
