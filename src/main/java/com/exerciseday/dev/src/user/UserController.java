@@ -264,7 +264,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/editPwd")
-    public BaseResponse<String> editUserPwd(@RequestBody PatchUserEditPwdReq patchUserEditPwdReq){
+    public BaseResponse<String> editUserPwd(@PathVariable("userIdx") int userIdx,@RequestBody PatchUserEditPwdReq patchUserEditPwdReq){
 
         try{
             int userIdxByJwt = jwtService.getUserIdx();
