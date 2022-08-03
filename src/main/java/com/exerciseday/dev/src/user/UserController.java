@@ -259,7 +259,7 @@ public class UserController {
 
     /*
      * 비밀번호 변경 API
-     * [PATCH] /users/editPwd/{userIdx}
+     * [PATCH] /users/editPwd
      *  @return BaseResponse<String>
      */
     @ResponseBody

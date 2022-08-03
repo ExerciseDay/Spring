@@ -69,17 +69,17 @@ public class UserService {
         try{
             new SHA256();  
             pwd = SHA256.encrypt(patchUserEditPwdReq.getNewPassword());  
-            // 이전 비밀번호와 다른 비밀번호인가?
-            if(oldPwd.equals(pwd)){
-                throw new BaseException(DIFFERENT_PASSWORD);
-            }
-
             patchUserEditPwdReq.setNewPassword(pwd);
         } catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
 
-        try{
+
+        try{  
+            // 이전 비밀번호와 다른 비밀번호인가?
+            if(oldPwd.equals(pwd)){
+                throw new BaseException(DIFFERENT_PASSWORD);
+            }
             int result = userDao.editPwd(patchUserEditPwdReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_PASSWORD);
