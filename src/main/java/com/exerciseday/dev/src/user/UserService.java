@@ -73,13 +73,14 @@ public class UserService {
         } catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
-
+        // 이전 비밀번호와 다른 비밀번호인가?  
+        if(oldPwd.equals(pwd)){
+            throw new BaseException(DIFFERENT_PASSWORD);
+        }
 
         try{  
-            // 이전 비밀번호와 다른 비밀번호인가?
-            if(oldPwd.equals(pwd)){
-                throw new BaseException(DIFFERENT_PASSWORD);
-            }
+
+ 
             int result = userDao.editPwd(patchUserEditPwdReq);
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_PASSWORD);
