@@ -13,4 +13,5 @@ public class GetUserFindEmailRes {
     private int userIdx;
     private String email;
     private Date userCreate;
+    private String userImg;
 }

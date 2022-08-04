@@ -19,7 +19,7 @@ public class AuthDao {
     }
 
     public User getUserByLoginReq(PostLoginReq postLoginReq){
-        String getUserByLoginReqQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel FROM User WHERE userEmail = ?";
+        String getUserByLoginReqQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel,userImg FROM User WHERE userEmail = ?";
         String getUserByLoginReqParams = postLoginReq.getEmail();
         
         return this.jdbcTemplate.queryForObject(getUserByLoginReqQuery,
@@ -28,7 +28,8 @@ public class AuthDao {
                         rs.getString("userEmail"),
                         rs.getString("userPwd"),
                         rs.getString("userNickname"),
-                        rs.getString("userTel")
+                        rs.getString("userTel"),
+                        rs.getString("userImg")
                         
                 ), getUserByLoginReqParams);
     }
@@ -40,5 +41,23 @@ public class AuthDao {
                 int.class,
                 checkEmailParams);
 
+    }
+
+    public int checkUserExist(int userIdx){
+        String checkUserExistQuery = "select exists(select userIdx from User where userIdx = ?)";
+        int checkUserExistParams = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserExistQuery,
+                int.class,
+                checkUserExistParams);
+
+    }
+
+    public int getUserIdxByJWT(int userIdxByJwt){
+        String getUserIdxByJWTQuery = "SELECT userIdx FROM User WHERE userIdx = ?";
+        int getUserIdxByJWTParams = userIdxByJwt;
+        
+        return this.jdbcTemplate.queryForObject(getUserIdxByJWTQuery,
+                (rs, rowNum)-> rs.getInt("userIdx")
+                , getUserIdxByJWTParams);
     }
 }

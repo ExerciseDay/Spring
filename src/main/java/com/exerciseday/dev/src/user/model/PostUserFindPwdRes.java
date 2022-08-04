@@ -10,5 +10,5 @@ import lombok.Setter;
 public class PostUserFindPwdRes{
     private int userIdx;
     private String jwt;
-
+    
 }

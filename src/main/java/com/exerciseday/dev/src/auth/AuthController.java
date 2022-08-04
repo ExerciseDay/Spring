@@ -8,6 +8,7 @@ import static com.exerciseday.dev.utils.ValidationRegex.isRegexEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.src.auth.model.PostLoginReq;
 import com.exerciseday.dev.src.auth.model.PostLoginRes;
+import com.exerciseday.dev.src.user.UserProvider;
 import com.exerciseday.dev.utils.JwtService;
 
 
@@ -73,6 +75,27 @@ public class AuthController {
         }
         
     }
+    /*
+     * 자동 로그인 API
+     * [GET] /auth/jwt
+     * @return BaseResponse<>(Integer)
+     */
+    @ResponseBody
+    @GetMapping("/jwt")
+    public BaseResponse<Integer> autoLogin(){
 
-    
+        try{
+            if(jwtService.isExpiredJWT()){
+                return new BaseResponse<>(INVALID_JWT);
+            }
+            int userIdxByJwt = jwtService.getUserIdx();
+            
+            int userIdx = authProvider.getUserIdxByJWT(userIdxByJwt);
+            return new BaseResponse<>(userIdx);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }

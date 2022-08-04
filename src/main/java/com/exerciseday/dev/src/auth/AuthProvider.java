@@ -28,4 +28,21 @@ public class AuthProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public int checkUserExist(int userIdx) throws BaseException{
+        try{                
+            return authDao.checkUserExist(userIdx);
+        } catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public int getUserIdxByJWT(int userIdxByJwt) throws BaseException{
+        try{      
+            if(checkUserExist(userIdxByJwt)==0){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+            }
+            return authDao.getUserIdxByJWT(userIdxByJwt);
+        } catch (Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

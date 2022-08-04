@@ -86,13 +86,14 @@ public class UserDao {
 
 
     public GetUserFindEmailRes getUserFindEmail(String phone){
-        String getUserFindEmailQuery = "select userIdx, userEmail, userCreate from User where userTel=?";
+        String getUserFindEmailQuery = "select userIdx, userEmail, userCreate, userImg from User where userTel=?";
         String getUserFindEmailParams = phone;
         return this.jdbcTemplate.queryForObject(getUserFindEmailQuery,
                 (rs, rowNum) -> new GetUserFindEmailRes(   
                         rs.getInt("userIdx"),
                         rs.getString("userEmail"),                        
-                        rs.getDate("userCreate")),
+                        rs.getDate("userCreate"),
+                        rs.getString("userImg")),
                         getUserFindEmailParams);
     }
     
