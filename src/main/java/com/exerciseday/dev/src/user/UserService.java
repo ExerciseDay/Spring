@@ -63,6 +63,10 @@ public class UserService {
     }
 
     public void editUserPwd(PatchUserEditPwdReq patchUserEditPwdReq) throws BaseException {
+        if(userProvider.checkUserExist(patchUserEditPwdReq.getUserIdx())==0){
+            throw new BaseException(EXIST_NO_USER);
+        }
+        
         //암호화
         String oldPwd = userProvider.getUser(patchUserEditPwdReq.getUserIdx()).getPassword();
         String pwd;        

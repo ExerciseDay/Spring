@@ -64,7 +64,7 @@ public class SNSService {
         }
 */
         // 메세지 전송
-        /*
+        
         try{
             PublishRequest request = PublishRequest.builder()
             .message(message)
@@ -76,7 +76,7 @@ public class SNSService {
         } catch (SnsException e){
             System.err.println(e.awsErrorDetails().errorMessage());
         }
-        */
+        
 /* 
         // 토픽 구독 목록
         try{

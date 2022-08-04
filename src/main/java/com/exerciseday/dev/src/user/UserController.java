@@ -110,12 +110,12 @@ public class UserController {
             {
                 return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
             }
-            /*
+            
             if(!isRegexEmail(email)){
                 return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
                 
             }
-            */
+            
 
             boolean isDuplicated;            
             if(userProvider.checkEmail(email)==1){
@@ -239,6 +239,10 @@ public class UserController {
         
         if(postUserFindPwdReq.getPhone() == null){  
             return new BaseResponse<>(EMPTY_PHONE);
+        }
+
+        if(!isRegexEmail(postUserFindPwdReq.getEmail())){
+            return new BaseResponse<>(INVALID_EMAIL);
         }
         if(postUserFindPwdReq.getPhone().length() != 11){
             return new BaseResponse<>(BaseResponseStatus.INVALID_PHONE);

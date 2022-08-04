@@ -63,6 +63,7 @@ public enum BaseResponseStatus {
     EXIST_NO_NICKNAME(false, 3030, "존재하지 않는 닉네임입니다."),
     EXIST_NO_EMAIL(false, 3031, "존재하지 않는 이메일입니다."),
     EXIST_NO_PHONE(false, 3032, "존재하지 않는 전화번호입니다."),
+    EXIST_NO_USER(false, 3033, "존재하지 않는 유저입니다."),
 
     INVALID_EMAIL(false,3040,"바르지 않은 이메일입니다."),
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),
