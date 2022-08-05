@@ -267,7 +267,7 @@ public class UserController {
      *  @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/editPwd")
+    @PatchMapping("/edit/pwd")
     public BaseResponse<String> editUserPwd(@RequestBody PatchUserEditPwdReq patchUserEditPwdReq){
 
         try{
@@ -286,8 +286,46 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/edit/nickname")
+    public BaseResponse<String> editUserNickname(@RequestBody PatchUserEditNicknameReq patchUserEditNicknameReq){
 
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(patchUserEditNicknameReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            
+            
+            userService.editUserNickname(patchUserEditNicknameReq);
 
+            String result = "닉네임 변경 성공했습니다.";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/edit/img")
+    public BaseResponse<String> editUserImg(@RequestBody PatchUserEditImgReq patchUserEditImgReq){
+
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(patchUserEditImgReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            
+            userService.editUserImg(patchUserEditImgReq);
+
+            String result = "프로필 사진 변경 성공했습니다.";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
     /**
      * 회원 조회 API

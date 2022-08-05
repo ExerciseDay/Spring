@@ -86,13 +86,14 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
 
-    //[PATCH] /users/{userIdx}
-    MODIFY_FAIL_NICKNAME(false,4014,"유저 닉네임 수정 실패"),
-    MODIFY_FAIL_PASSWORD(false,4015,"유저 비밀번호 수정 실패"),
+   
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
-
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+ //[PATCH] /users/{userIdx}
+    MODIFY_FAIL_NICKNAME(false,4014,"유저 닉네임 수정 실패"),
+    MODIFY_FAIL_PASSWORD(false,4015,"유저 비밀번호 수정 실패"),
+    MODIFY_FAIL_IMG(false,4016,"사진 수정 실패");
 
     private final boolean isSuccess;
     private final int code;

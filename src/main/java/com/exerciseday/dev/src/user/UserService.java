@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.exerciseday.dev.src.user.model.PostUserRes;
+import com.exerciseday.dev.src.user.model.PatchUserEditImgReq;
+import com.exerciseday.dev.src.user.model.PatchUserEditNicknameReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
 import com.exerciseday.dev.src.user.model.PostUserReq;
 import com.exerciseday.dev.utils.JwtService;
@@ -72,8 +74,8 @@ public class UserService {
         String pwd;        
         try{
             new SHA256();  
-            pwd = SHA256.encrypt(patchUserEditPwdReq.getNewPassword());  
-            patchUserEditPwdReq.setNewPassword(pwd);
+            pwd = SHA256.encrypt(patchUserEditPwdReq.getPassword());  
+            patchUserEditPwdReq.setPassword(pwd);
         } catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
@@ -89,6 +91,46 @@ public class UserService {
             if(result == 0){
                 throw new BaseException(MODIFY_FAIL_PASSWORD);
             }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void editUserNickname(PatchUserEditNicknameReq patchUserEditNicknameReq) throws BaseException {
+        //존재하는 유저?
+        if(userProvider.checkUserExist(patchUserEditNicknameReq.getUserIdx())==0){
+            throw new BaseException(EXIST_NO_USER);
+        }       
+        
+        // 이미 존재하는 닉네임?
+        if(userProvider.checkNicknameExist(patchUserEditNicknameReq.getNickname())==1){
+            throw new BaseException(DUPLICATED_NICKNAME);
+        }
+
+        try{   
+            int result = userDao.editNickname(patchUserEditNicknameReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_NICKNAME);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void editUserImg(PatchUserEditImgReq patchUserEditImgReq) throws BaseException {
+        //존재하는 유저?
+        if(userProvider.checkUserExist(patchUserEditImgReq.getUserIdx())==0){
+            throw new BaseException(EXIST_NO_USER);
+        }       
+
+
+        try{   
+            int result = userDao.editImg(patchUserEditImgReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_IMG);
+            }
+            
+            
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }

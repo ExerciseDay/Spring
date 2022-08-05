@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchUserEditPwdReq {
+public class PatchUserEditImgReq {
     private int userIdx;
-    //private String encryptPassword;
-    private String password;
-
+    private String img;
 }

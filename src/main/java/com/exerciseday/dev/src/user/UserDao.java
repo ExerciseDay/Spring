@@ -154,8 +154,22 @@ public class UserDao {
 
     public int editPwd(PatchUserEditPwdReq patchUserEditPwdReq){
         String patchUserEditPwdQuery = "update User set userPwd = ? where userIdx = ? ";
-        Object[] patchUserEditPwdParams = new Object[]{patchUserEditPwdReq.getNewPassword(), patchUserEditPwdReq.getUserIdx()};
+        Object[] patchUserEditPwdParams = new Object[]{patchUserEditPwdReq.getPassword(), patchUserEditPwdReq.getUserIdx()};
 
         return this.jdbcTemplate.update(patchUserEditPwdQuery,patchUserEditPwdParams);
+    }
+
+    public int editNickname(PatchUserEditNicknameReq patchUserEditNicknameReq){
+        String patchUserEditNicknameQuery = "update User set userNickname = ? where userIdx = ? ";
+        Object[] patchUserEditNicknameParams = new Object[]{patchUserEditNicknameReq.getNickname(), patchUserEditNicknameReq.getUserIdx()};
+
+        return this.jdbcTemplate.update(patchUserEditNicknameQuery,patchUserEditNicknameParams);
+    }
+
+    public int editImg(PatchUserEditImgReq patchUserEditImgReq){
+        String patchUserEditImgQuery = "update User set userImg = ? where userIdx = ? ";
+        Object[] patchUserEditImgParams = new Object[]{patchUserEditImgReq.getImg(), patchUserEditImgReq.getUserIdx()};
+
+        return this.jdbcTemplate.update(patchUserEditImgQuery,patchUserEditImgParams);
     }
 }
