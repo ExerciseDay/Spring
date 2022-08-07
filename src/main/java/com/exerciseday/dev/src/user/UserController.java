@@ -285,7 +285,10 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
-
+    /*
+     * 닉네임 변경 API
+     * [PATCH] /users/edit/nickname
+     */
     @ResponseBody
     @PatchMapping("/edit/nickname")
     public BaseResponse<String> editUserNickname(@RequestBody PatchUserEditNicknameReq patchUserEditNicknameReq){
@@ -307,6 +310,10 @@ public class UserController {
         }
     }
 
+    /*
+     * 프로필 사진 변경 API
+     * [PATCH] 
+     */
     @ResponseBody
     @PatchMapping("/edit/img")
     public BaseResponse<String> editUserImg(@RequestBody PatchUserEditImgReq patchUserEditImgReq){
@@ -327,6 +334,31 @@ public class UserController {
         }
     }
 
+
+    /*
+     * 회원 탈퇴 API
+     * [PATCH] /users/delete/{userIdx}
+     */
+    @ResponseBody
+    @PatchMapping("/delete/{userIdx}")
+    public BaseResponse<String> deleteUser(@PathVariable int userIdx){
+
+        try{
+            
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            
+            userService.deleteUser(userIdx);
+
+            String result = "회원 탈퇴 성공했습니다.";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
     /**
      * 회원 조회 API
      * [GET] /users

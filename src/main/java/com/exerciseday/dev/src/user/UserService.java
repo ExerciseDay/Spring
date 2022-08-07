@@ -135,4 +135,24 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    
+    public void deleteUser(int userIdx) throws BaseException {
+        //존재하는 유저?
+        if(userProvider.checkUserExist(userIdx)==0){
+            throw new BaseException(EXIST_NO_USER);
+        }       
+
+
+        try{   
+            int result = userDao.deleteUser(userIdx);
+            if(result == 0){
+                throw new BaseException(DELETE_FAIL_USER);
+            }
+            
+            
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 }

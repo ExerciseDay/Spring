@@ -172,4 +172,11 @@ public class UserDao {
 
         return this.jdbcTemplate.update(patchUserEditImgQuery,patchUserEditImgParams);
     }
+
+    public int deleteUser(int userIdx){
+        String deleteUserQuery = "update User set userStatus = 0 where userIdx = ? ";
+        Object[] deleteUserParams = new Object[]{userIdx};
+
+        return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+    }
 }

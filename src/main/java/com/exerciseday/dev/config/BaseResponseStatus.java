@@ -93,8 +93,10 @@ public enum BaseResponseStatus {
  //[PATCH] /users/{userIdx}
     MODIFY_FAIL_NICKNAME(false,4014,"유저 닉네임 수정 실패"),
     MODIFY_FAIL_PASSWORD(false,4015,"유저 비밀번호 수정 실패"),
-    MODIFY_FAIL_IMG(false,4016,"사진 수정 실패");
+    MODIFY_FAIL_IMG(false,4016,"사진 수정 실패"),
 
+    DELETE_FAIL_USER(false,4020,"유저 삭제 실패");
+    
     private final boolean isSuccess;
     private final int code;
     private final String message;
