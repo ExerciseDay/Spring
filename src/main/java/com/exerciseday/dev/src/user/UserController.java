@@ -96,27 +96,25 @@ public class UserController {
 
     /*
      * 이메일 중복 확인 API. 이메일을 입력 받아서 DB에 존재 여부 확인.
-     * [GET] /users/check/email/{email}
+     * [GET] /users/check/email?email=
      * @return BaseResponse<Boolean>
      *  중복O : true / 중복X : false
      */
     @ResponseBody
-    @GetMapping("/check/email/{email}")
-    public BaseResponse<Boolean> checkEmailExist(@PathVariable("email") String email){
+    @GetMapping("/check/email")
+    public BaseResponse<Boolean> checkEmailExist(@RequestParam(required = false) String email){
+        
+        if(email.length() < 1)
+        {            
+            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
+        if(!isRegexEmail(email)){
+            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+            
+        }
         try
         {
                         
-            if(email == null)
-            {
-                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-            }
-            
-            if(!isRegexEmail(email)){
-                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-                
-            }
-            
-
             boolean isDuplicated;            
             if(userProvider.checkEmail(email)==1){
                 isDuplicated = true;
@@ -135,13 +133,13 @@ public class UserController {
 
     /*
      *  닉네임 중복 확인 API. 닉네임을 입력 받아서 DB에 닉네임 존재 여부 확인.
-     *  [GET] users/check/nickname/{nickname}
+     *  [GET] users/check/nickname?nickname=
      *  @return BaseResponse<Boolean>
      *  중복O : true / 중복X : false
      */
     @ResponseBody
-    @GetMapping("/check/nickname/{nickname}")
-    public BaseResponse<Boolean> checkNicknameExist(@PathVariable("nickname") String nickname){
+    @GetMapping("/check/nickname")
+    public BaseResponse<Boolean> checkNicknameExist(@RequestParam(required = false) String nickname){
         try
         {
                         
