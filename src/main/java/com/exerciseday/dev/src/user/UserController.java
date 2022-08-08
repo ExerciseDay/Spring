@@ -103,7 +103,9 @@ public class UserController {
     @ResponseBody
     @GetMapping("/check/email")
     public BaseResponse<Boolean> checkEmailExist(@RequestParam(required = false) String email){
-        
+        if(email == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
         if(email.length() < 1)
         {            
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
@@ -145,6 +147,9 @@ public class UserController {
                         
             if(nickname == null)
             {
+                return new BaseResponse<>(EMPTY_NICKNAME);
+            }
+            if(nickname.length() < 1){
                 return new BaseResponse<>(EMPTY_NICKNAME);
             }
             /*
