@@ -75,5 +75,39 @@ public class JwtService {
         // 3. userIdx 추출
         return claims.getBody().get("userIdx",Integer.class);
     }
+    /*
+     * JWT에서 만료일 추출
+     */
+    public Date getExp() throws BaseException{
+        //1. JWT 추출
+        String accessToken = getJwt();
+        if(accessToken == null || accessToken.length() == 0){
+            throw new BaseException(EMPTY_JWT);
+        }
 
+        // 2. JWT parsing
+        Jws<Claims> claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey(Secret.JWT_SECRET_KEY)
+                    .parseClaimsJws(accessToken);
+        } catch (Exception ignored) {
+            throw new BaseException(INVALID_JWT);
+        }
+
+        // 3. exp 추출
+        return claims.getBody().get("exp",Date.class);
+    }
+    public boolean isExpiredJWT() throws BaseException{
+        Date exp = getExp();
+        Date now = new Date();
+        System.out.println("만료일 : "+ exp);
+        System.out.println("현재 : "+now);
+        if(exp.before(now)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
