@@ -11,7 +11,9 @@ import com.exerciseday.dev.src.user.model.*;
 import com.exerciseday.dev.utils.JwtService;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.exerciseday.dev.config.BaseResponseStatus.EXIST_NO_PHONE;;
+import static com.exerciseday.dev.config.BaseResponseStatus.EXIST_NO_PHONE;
+
+import java.util.List;;
 
 @Service
 public class UserProvider {
@@ -148,4 +150,21 @@ public class UserProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public GetUserCourseRes getUserCourse(int userIdx) throws BaseException{        
+        if(checkUserExist(userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        try{
+            User user = userDao.getUser(userIdx);
+            List<GetUserCustomRes> getUserCustoms = userDao.getUserCustoms(userIdx);
+            List<GetUserExpertRes> getUserExperts = userDao.getUserExperts(userIdx);
+            GetUserCourseRes getUserCourseRes = new GetUserCourseRes(user.getImg(),user.getGoal(),getUserCustoms,getUserExperts);
+            return getUserCourseRes;
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    
 }

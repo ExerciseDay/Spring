@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.exerciseday.dev.src.user.model.PostUserRes;
+import com.exerciseday.dev.src.user.model.PatchUserEditGoalReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditImgReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditNicknameReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
@@ -155,4 +156,22 @@ public class UserService {
         }
     }
 
+    public void editUserGoal(PatchUserEditGoalReq patchUserEditGoalReq) throws BaseException {
+        //존재하는 유저?
+        if(userProvider.checkUserExist(patchUserEditGoalReq.getUserIdx())==0){
+            throw new BaseException(EXIST_NO_USER);
+        }       
+
+
+        try{   
+            int result = userDao.editUserGoal(patchUserEditGoalReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_GOAL);
+            }
+            
+            
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

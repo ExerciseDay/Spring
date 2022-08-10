@@ -64,15 +64,18 @@ public enum BaseResponseStatus {
     EXIST_NO_EMAIL(false, 3031, "존재하지 않는 이메일입니다."),
     EXIST_NO_PHONE(false, 3032, "존재하지 않는 전화번호입니다."),
     EXIST_NO_USER(false, 3033, "존재하지 않는 유저입니다."),
+    EXIST_NO_TRAINER(false,3034,"존재하지 않는 트레이너입니다."),
 
     INVALID_EMAIL(false,3040,"바르지 않은 이메일입니다."),
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),
     INVALID_PHONE(false, 3042, "바르지 않은 전화번호입니다."),
+    INVALID_NAME(false,3043,"바르지 않은 이름입니다."),
 
     EMPTY_EMAIL(false,3050,"이메일을 입력해주세요."),
     EMPTY_NICKNAME(false,3051,"닉네임을 입력해주세요."),
     EMPTY_PHONE(false,3052,"전화번호를 입력해주세요."),
     EMPTY_PASSWORD(false,3053,"비밀번호를 입력해주세요."),
+    EMPTY_ROUTINE(false,3054,"운동 루틴을 추가해주세요."),
 
     DIFFERENT_USERS(false,3060,"서로 다른 유저 정보를 입력했습니다."),
     DIFFERENT_PASSWORD(false,3061,"서로 다른 비밀번호를 입력해주세요."),
@@ -94,6 +97,7 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_NICKNAME(false,4014,"유저 닉네임 수정 실패"),
     MODIFY_FAIL_PASSWORD(false,4015,"유저 비밀번호 수정 실패"),
     MODIFY_FAIL_IMG(false,4016,"사진 수정 실패"),
+    MODIFY_FAIL_GOAL(false,4017,"목표 수정 실패"),
 
     DELETE_FAIL_USER(false,4020,"유저 삭제 실패");
     

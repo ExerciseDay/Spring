@@ -315,7 +315,7 @@ public class UserController {
 
     /*
      * 프로필 사진 변경 API
-     * [PATCH] 
+     * [PATCH] /users/edit/img
      */
     @ResponseBody
     @PatchMapping("/edit/img")
@@ -337,6 +337,26 @@ public class UserController {
         }
     }
 
+    /*
+     * 이용 목적 변경 API
+     * [PATCH] /users/edit/goal
+     */
+    @ResponseBody
+    @PatchMapping("/edit/goal")
+    public BaseResponse<String> editUserGoal(@RequestBody PatchUserEditGoalReq patchUserEditGoalReq){
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(patchUserEditGoalReq.getUserIdx() != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            userService.editUserGoal(patchUserEditGoalReq);
+            String result = "목표 변경 성공했습니다.";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
     /*
      * 회원 탈퇴 API
@@ -344,7 +364,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/delete/{userIdx}")
-    public BaseResponse<String> deleteUser(@PathVariable int userIdx){
+    public BaseResponse<String> deleteUser(@PathVariable("userIdx") int userIdx){
 
         try{
             
@@ -362,6 +382,27 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /*
+     * 보유중인 코스 확인하기 API
+     * [GET] /users/{userIdx}
+     */
+    @ResponseBody
+    @GetMapping("/course/{userIdx}")
+    public BaseResponse<GetUserCourseRes> getUserCourse(@PathVariable("userIdx") int userIdx){
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            GetUserCourseRes getUserCourseRes = userProvider.getUserCourse(userIdx);
+            return new BaseResponse<>(getUserCourseRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
     /**
      * 회원 조회 API
      * [GET] /users

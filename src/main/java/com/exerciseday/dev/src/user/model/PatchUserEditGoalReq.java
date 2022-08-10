@@ -7,12 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
+public class PatchUserEditGoalReq {
     private int userIdx;
-    private String email;
-    private String password;
-    private String nickname;
-    private String phone;
-    private String img;
     private String goal;
 }

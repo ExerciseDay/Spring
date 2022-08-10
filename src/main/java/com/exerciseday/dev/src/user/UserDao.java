@@ -47,15 +47,17 @@ public class UserDao {
     }
 
     public User getUser(int userIdx){
-        String getUserByIdxQuery = "select userIdx,userEmail, userPwd, userNickname,userTel from User where userIdx=?";
+        String getUserByIdxQuery = "select userIdx,userEmail,userPwd, userNickname, userTel, userImg, userGoal from User where userIdx=?";
         int getUserByIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserByIdxQuery,
                 (rs, rowNum) -> new User(
                         rs.getInt("userIdx"),
-                        rs.getString("userEmail"),
+                        rs.getString("userEmail"),                        
                         rs.getString("userPwd"),
-                        rs.getString("userNickname"),
-                        rs.getString("userTel")),
+                        rs.getString("userNickname"),                        
+                        rs.getString("userTel"),
+                        rs.getString("userImg"),
+                        rs.getString("userGoal")),
                         getUserByIdxParams);
     }
 
@@ -97,6 +99,47 @@ public class UserDao {
                         getUserFindEmailParams);
     }
     
+    public List<GetUserCustomRes> getUserCustoms(int userIdx){
+        String getUserCustomsQuery = ""+
+                "SELECT c.cCourseIdx, \n"+
+                "       c.cCourseName, \n"+
+                "       c.cCourseTime, \n"+
+                "       c.cCourseCalory \n"+
+                "FROM   CustomCourse as c\n"+
+                "    join User as u on u.userIdx = c.userIdx\n"+
+                "WHERE u.userIdx = ?\n"+
+                "order by c.cCourseIdx";                
+        int getUserCustomsParam = userIdx;
+        return this.jdbcTemplate.query(getUserCustomsQuery,
+                (rs,rowNum) -> new GetUserCustomRes(
+                    rs.getInt("c.cCourseIdx"),
+                    rs.getString("c.cCourseName"),
+                    rs.getInt("c.cCourseTime"),
+                    rs.getInt("c.cCourseCalory")
+                ),
+                getUserCustomsParam);
+    }
+
+    public List<GetUserExpertRes> getUserExperts(int userIdx){
+        String getUserExpertsQuery = ""+
+                "SELECT e.eCourseIdx, \n"+
+                "       e.eCourseName, \n"+
+                "       e.eCourseTime, \n"+
+                "       e.eCourseCalory \n"+
+                "FROM   ExpertCourse as e\n"+
+                "    join User as u on u.userIdx = e.userIdx\n"+
+                "WHERE u.userIdx = ?\n"+
+                "order by e.eCourseIdx";                
+        int getUserExpertsParam = userIdx;
+        return this.jdbcTemplate.query(getUserExpertsQuery,
+                (rs,rowNum) -> new GetUserExpertRes(
+                    rs.getInt("e.eCourseIdx"),
+                    rs.getString("e.eCourseName"),
+                    rs.getInt("e.eCourseTime"),
+                    rs.getInt("e.eCourseCalory")
+                ),
+                getUserExpertsParam);
+    }
 
     public int postUserFindPwd(String phone){
         String postUserFindPwdQuery = "select userIdx from User where userTel=?";
@@ -178,5 +221,12 @@ public class UserDao {
         Object[] deleteUserParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);
+    }
+
+    public int editUserGoal(PatchUserEditGoalReq patchUserEditGoalReq){
+        String editUserGoalQuery = "update User set userGoal = ? where userIdx = ? ";
+        Object[] editUserGoalParams = new Object[]{patchUserEditGoalReq.getGoal(),patchUserEditGoalReq.getUserIdx()};
+
+        return this.jdbcTemplate.update(editUserGoalQuery,editUserGoalParams);
     }
 }
