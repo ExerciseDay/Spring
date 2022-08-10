@@ -30,12 +30,12 @@ public class GymController {
     }
 
     @ResponseBody
-    @GetMapping("/gym")
-    public BaseResponse<GetGymRes> getGym(int gymIdx){
+    @PostMapping("")
+    public BaseResponse<GetGymListRes> getGymList(int gymIdx){
 
         try{
-            GetGymRes getGymRes = gymProvider.retrieveGym(gymIdx);
-            return new BaseResponse<>(getGymRes);
+            GetGymListRes getGymList = gymProvider.retrieveGymList(gymIdx);
+            return new BaseResponse<>(getGymList);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
