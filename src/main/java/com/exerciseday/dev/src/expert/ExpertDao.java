@@ -38,7 +38,7 @@ public class ExpertDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
     }
 
-    //////////////////////////////////////////쿼리 짜기 PostDao selectPosts
+    //////////////////////////////////////////////
     public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq){
         String getExpertsByPartQuery="";
 

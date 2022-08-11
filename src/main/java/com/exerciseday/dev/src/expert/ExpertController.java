@@ -77,7 +77,7 @@ public class ExpertController {
     public BaseResponse<GetExpertByPartRes> getExpertsByPart(@RequestBody GetExpertByPartReq getExpertByPartReq){
         try{
 
-            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(getExpertByPart);
+            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(getExpertByPartReq);
             GetExpertByPartRes getExpertByPartRes = new GetExpertByPartRes(getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart(), expertList);
             return new BaseResponse<>(getExpertByPartRes);
         }

@@ -65,6 +65,7 @@ public enum BaseResponseStatus {
     EXIST_NO_PHONE(false, 3032, "존재하지 않는 전화번호입니다."),
     EXIST_NO_USER(false, 3033, "존재하지 않는 유저입니다."),
     EXIST_NO_TRAINER(false,3034,"존재하지 않는 트레이너입니다."),
+    EXIST_NO_EXERCISE(false,3035,"존재하지 않는 운동입니다."),
 
     INVALID_EMAIL(false,3040,"바르지 않은 이메일입니다."),
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),
@@ -99,7 +100,8 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_IMG(false,4016,"사진 수정 실패"),
     MODIFY_FAIL_GOAL(false,4017,"목표 수정 실패"),
 
-    DELETE_FAIL_USER(false,4020,"유저 삭제 실패");
+    DELETE_FAIL_USER(false,4020,"유저 삭제 실패"),
+    DELETE_FAIL_EXERCISE(false,4021,"운동 삭제 실패");
     
     private final boolean isSuccess;
     private final int code;
