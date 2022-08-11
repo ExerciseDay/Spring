@@ -8,9 +8,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ExpertRoutine {
-    private int exerciseIdx;
+    private int expertRoutineIdx;
+    
     private int rep;
     private int weight;
     private int set;
     private int rest;
+    private int exerciseIdx;
 }

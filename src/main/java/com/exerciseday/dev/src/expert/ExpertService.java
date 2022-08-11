@@ -18,16 +18,21 @@ public class ExpertService {
         this.expertProvider = expertProvider;
     }
 
-    public PostExpertRes createExpert(PostExpertReq postExpertReq) throws BaseException{
+    public int createExpert(PostExpertReq postExpertReq) throws BaseException{
         try{
             if(expertProvider.checkTrainerExist(postExpertReq.getTrainerIdx())==0){
                 throw new BaseException(BaseResponseStatus.EXIST_NO_TRAINER);
+            }
+            for(int i = 0 ; i < postExpertReq.getExpertRoutines().size() ; i++){
+                if(expertProvider.checkExerciseExist(postExpertReq.getExpertRoutines().get(i).getExerciseIdx())==0){
+                    throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+                }
             }
             int expertIdx = expertDao.createExpert(postExpertReq.getTrainerIdx(),postExpertReq.getExpertName(),postExpertReq.getExpertPart(),postExpertReq.getExpertDetailPart());
             for(int i = 0 ; i < postExpertReq.getExpertRoutines().size() ; i++){
                 expertDao.createExpertRoutine(expertIdx, postExpertReq.getExpertRoutines().get(i));
             }
-            return new PostExpertRes(expertIdx);
+            return expertIdx;
         } catch(Exception exception){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }

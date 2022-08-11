@@ -25,6 +25,41 @@ public class ExpertProvider {
         }
     }
 
+    public int checkExerciseExist(int exerciseIdx) throws BaseException{
+        try{
+            return expertDao.checkExerciseExist(exerciseIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public int checkExpertExist(int expertIdx) throws BaseException{
+        try{
+            return expertDao.checkExpertExist(expertIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public GetExpertRes getExpert(int expertIdx) throws BaseException{
+        try{
+            if(checkExpertExist(expertIdx)==0){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_EXPERTCOURSE);
+            }
+
+            
+            ExpertNTC expert = expertDao.getExpertNTC(expertIdx);
+            List<GetExpertRoutineInfoRes> expertRoutineInfos = expertDao.getExpertRoutineInfos(expertIdx);
+            GetExpertRes expertRes = new GetExpertRes(expertIdx, expert, expertRoutineInfos);
+            return expertRes;
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
     public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq) throws BaseException{
         try{
             List<ExpertByPart> expertList = expertDao.getExpertsByPart(getExpertByPartReq);
@@ -34,4 +69,6 @@ public class ExpertProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    
 }

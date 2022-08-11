@@ -52,7 +52,7 @@ public class ExpertController {
                 return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
             }
 
-            PostExpertRes postExpertRes = expertService.createExpert(postExpertReq);
+            PostExpertRes postExpertRes = new PostExpertRes(expertService.createExpert(postExpertReq),postExpertReq.getExpertName());
             return new BaseResponse<>(postExpertRes);
         }
         catch(BaseException exception){
@@ -63,9 +63,19 @@ public class ExpertController {
 
     /*
      * 전문가 코스 조회 API
-     * [GET] /expert/{expertId}
+     * [GET] /expert/{expertIdx}
      */
-   
+    @ResponseBody
+    @GetMapping("/{expertIdx")
+    public BaseResponse<GetExpertRes> getExpert(@PathVariable("expertIdx") int expertIdx){
+        try{
+            GetExpertRes expert = expertProvider.getExpert(expertIdx);
+            return new BaseResponse<>(expert);
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
 
     /*

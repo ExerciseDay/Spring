@@ -45,15 +45,80 @@ public class ExpertDao {
         Object[] getExpertsByPartParams = new Object[]{getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart()};
         return this.jdbcTemplate.query(getExpertsByPartQuery,
                     (rs,rowNum) -> new ExpertByPart(
-                        rs.getInt("expertIdx"),
-                        rs.getString("expertName"),
-                        rs.getString("expertIntroduce"),
-                        rs.getInt("expertTime"),
-                        rs.getInt("expertCalory")
+                        rs.getInt("eCourseIdx"),
+                        rs.getString("eCourseName"),
+                        rs.getString("eCourseIntroduce"),
+                        rs.getInt("eCourseTime"),
+                        rs.getInt("eCourseCalory")
                         )
                         ,getExpertsByPartParams);
     }
 
+    public ExpertNTC getExpertNTC(int expertIdx){
+        String getExpertNTCQuery = "select eCourseName, eCourseTime, eCourseCalory from ExpertCourse where eCourseIdx = ?";
+        int getExpertNTCParam = expertIdx;
+        return this.jdbcTemplate.queryForObject(getExpertNTCQuery
+                                        ,(rs, rowNum) -> new ExpertNTC(
+                                                                rs.getString("eCourseName"),
+                                                                rs.getInt("eCourseTime"),
+                                                                rs.getInt("eCourseCalory")                                                                
+                                                            ) 
+                                        ,getExpertNTCParam);
+    }
+
+    public List<ExpertRoutine> getExpertRoutines(int expertIdx){
+        String getExpertRoutineQuery = "SELECT er.eCourseRoutineIdx, "+
+                                                "er.rep,"+
+                                                "er.weight,"+ 
+                                                "er.set," +
+                                                "er.rest," +
+                                                "er.exIdx " +
+                                        "FROM ExpertCourseRoutine as er "+
+                                        "join ExpertCourse as e on e.eCourseIdx = er.eCourseIdx "+
+                                        "WHERE e.eCourseIdx = ?";
+        int getExpertRoutineParam = expertIdx;
+        return this.jdbcTemplate.query(getExpertRoutineQuery,
+                                                (rs,rowNum)->new ExpertRoutine(
+                                                    rs.getInt("er.eCourseRoutineIdx"),
+                                                    rs.getInt("er.rep"),
+                                                    rs.getInt("er.weight"),
+                                                    rs.getInt("er.set"),
+                                                    rs.getInt("er.rest"),
+                                                    rs.getInt("er.exIdx")) 
+                                                ,getExpertRoutineParam);
+    }
+
+    public List<GetExpertRoutineInfoRes> getExpertRoutineInfos(int expertIdx){
+        String getExpertRoutineInfoQuery="SELECT er.eCourseRoutineIdx, "+
+                                                //"ex.exIdx, "+
+                                                "ex.exName, "+
+                                                "ex.exPart, "+
+                                                "ex.exDetailPart, "+
+                                                "ex.exInfo, "+
+                                                "ex.exImg, "+
+                                                "ex.exTime, "+
+                                                "ex.exCalory, "+
+                                                "ex.exIntroduce"+
+                                                "FROM Exercise as ex "+
+                                                "join ExpertCourseRoutine as er on er.exIdx = ex.exIdx "+     
+                                                "join ExpertCourse as e on e.eCourseIdx = er.eCourseIdx "+        
+                                                "WHERE e.eCourseIdx = ? ";
+        int getExpertRoutineInfoParam = expertIdx;
+        return this.jdbcTemplate.query(getExpertRoutineInfoQuery,
+                                        (rs,rowNum) -> new GetExpertRoutineInfoRes(
+                                            rs.getInt("er.eCourseRoutineIdx"),
+                                            //rs.getInt("ex.exIdx"),
+                                            rs.getString("ex.exName"),
+                                            rs.getString("ex.exPart"),
+                                            rs.getString("ex.exDetailPart"),
+                                            rs.getString("ex.exInfo"),
+                                            rs.getString("ex.exImg"),
+                                            rs.getInt("ex.exTime"),
+                                            rs.getInt("ex.exCalory"),
+                                            rs.getString("ex.exIntroduce")
+                                        )
+                                        ,getExpertRoutineInfoParam);
+    }
 
     public int checkTrainerExist(int trainerIdx){
         String checkTrainerExistQuery = "select exists(select trainerIdx from Trainer where trainerIdx = ?)";
@@ -62,4 +127,21 @@ public class ExpertDao {
                 int.class,
                 checkTrainerExistParam);
     }
+
+    public int checkExerciseExist(int exerciseIdx){
+        String checkExerciseExistQuery = "select exists(select exIdx from Exercise where exIdx = ?)";
+        int checkExerciseExistParam = exerciseIdx;
+        return this.jdbcTemplate.queryForObject(checkExerciseExistQuery,
+                                                int.class, 
+                                                checkExerciseExistParam);
+    }
+
+    public int checkExpertExist(int expertIdx){
+        String checkExpertExistQuery = "select exists(select eCourseIdx from ExpertCourse where eCourseIdx = ?)";
+        int checkExpertExistParam = expertIdx;
+        return this.jdbcTemplate.queryForObject(checkExpertExistQuery
+                                                ,int.class
+                                                , checkExpertExistParam);
+    }
+    
 }

@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostExpertRes {
     private int expertIdx;
-    
+    private String expertName;
 }

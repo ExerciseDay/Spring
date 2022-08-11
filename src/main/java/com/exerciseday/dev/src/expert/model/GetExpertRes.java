@@ -1,5 +1,7 @@
 package com.exerciseday.dev.src.expert.model;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,5 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetExpertRes {
-    
+    private int expertIdx;
+    private ExpertNTC expertNTC;
+    private List<GetExpertRoutineInfoRes> expertRoutineInfos;
 }

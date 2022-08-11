@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetExpertReq {
-    
+public class ExpertNTC {
+    private String expertName;
+    private int expertTime;
+    private int expertCalory;
 }
