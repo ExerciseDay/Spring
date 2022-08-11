@@ -30,7 +30,7 @@ public class GymProvider {
 
     public GetGymListRes retrieveGymList(int gymIdx) throws BaseException {
         try{
-            List<GetGymListRes> getGymList = gymDao.selectGymList(gymIdx);
+            List<GetGymRes> getGym = gymDao.selectGym(gymIdx);
             GetGymListRes getGymList = new GetGymListRes(getGym);
             return getGymList;
         } catch(Exception exception){
