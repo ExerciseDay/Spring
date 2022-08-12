@@ -19,5 +19,5 @@ public class GetExpertRoutineInfoRes {
     private int exerciseTime;
     private int exerciseCalory;
     private String exerciseIntroduce;
-    
+    private int expertIdx;
 }

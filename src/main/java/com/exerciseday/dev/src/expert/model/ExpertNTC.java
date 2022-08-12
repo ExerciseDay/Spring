@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ExpertNTC {
+    private int expertIdx;
     private String expertName;
     private int expertTime;
     private int expertCalory;

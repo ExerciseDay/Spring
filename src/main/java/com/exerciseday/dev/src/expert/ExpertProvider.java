@@ -25,6 +25,16 @@ public class ExpertProvider {
         }
     }
 
+    public GetExerciseTCRes getExerciseTC(int exerciseIdx) throws BaseException{
+        try{
+            GetExerciseTCRes exerciseTCRes = expertDao.getExerciseTCRes(exerciseIdx);
+            return exerciseTCRes;
+        }
+        catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
     public int checkExerciseExist(int exerciseIdx) throws BaseException{
         try{
             return expertDao.checkExerciseExist(exerciseIdx);
@@ -46,13 +56,13 @@ public class ExpertProvider {
     public GetExpertRes getExpert(int expertIdx) throws BaseException{
         try{
             if(checkExpertExist(expertIdx)==0){
-                throw new BaseException(BaseResponseStatus.EXIST_NO_EXPERTCOURSE);
+                throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
             }
-
+            ExpertNTC expertNTC = expertDao.getExpertNTC(expertIdx);
             
-            ExpertNTC expert = expertDao.getExpertNTC(expertIdx);
             List<GetExpertRoutineInfoRes> expertRoutineInfos = expertDao.getExpertRoutineInfos(expertIdx);
-            GetExpertRes expertRes = new GetExpertRes(expertIdx, expert, expertRoutineInfos);
+            
+            GetExpertRes expertRes = new GetExpertRes(expertNTC, expertRoutineInfos);
             return expertRes;
         }
         catch(Exception e){
@@ -60,9 +70,13 @@ public class ExpertProvider {
         }
     }
 
-    public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq) throws BaseException{
+    public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq,int page) throws BaseException{
         try{
-            List<ExpertByPart> expertList = expertDao.getExpertsByPart(getExpertByPartReq);
+            int offset = (page - 1)*8;
+            List<ExpertByPart> expertList = expertDao.getExpertsByPart(getExpertByPartReq,offset);
+            if(expertList.size()<1){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
+            }
             return expertList;
 
         } catch(Exception exception){

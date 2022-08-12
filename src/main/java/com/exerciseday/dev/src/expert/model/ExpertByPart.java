@@ -13,4 +13,7 @@ public class ExpertByPart {
     private String expertIntroduce;
     private int expertTime;
     private int expertCalory;
+    private String part;
+    private String detailPart;
 }
+

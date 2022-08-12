@@ -8,9 +8,10 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class PostExpertReq {
-    private int trainerIdx;
+    //private int trainerIdx;
     private String expertName;
     private String expertPart;
     private String expertDetailPart;
-    private List<ExpertRoutine> expertRoutines;
+    private String expertIntroduce;
+    private List<PostExpertRoutineReq> expertRoutines;
 }

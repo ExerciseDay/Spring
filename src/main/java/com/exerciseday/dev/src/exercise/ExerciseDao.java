@@ -50,6 +50,17 @@ public class ExerciseDao {
                                                             ),getExerciseParam);
     }
 
+    public GetExerciseTCRes getExerciseTCRes(int exerciseIdx){
+        String getExerciseQuery = "SELECT exTime, exCalory FROM Exercise WHERE exIdx = ?";
+        int getExerciseParam = exerciseIdx;
+        return this.jdbcTemplate.queryForObject(getExerciseQuery,
+                                (rs, rowNum) -> new GetExerciseTCRes(rs.getInt("exTime")
+                                                            ,rs.getInt("exCalory")                                                         
+                                                            )
+                                                            ,getExerciseParam);
+    }
+
+
     public int checkExerciseExist(int exerciseIdx){
         String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exidx = ?)";
         int checkExerciseExistParam = exerciseIdx;

@@ -66,7 +66,7 @@ public enum BaseResponseStatus {
     EXIST_NO_USER(false, 3033, "존재하지 않는 유저입니다."),
     EXIST_NO_TRAINER(false,3034,"존재하지 않는 트레이너입니다."),
     EXIST_NO_EXERCISE(false,3035,"존재하지 않는 운동입니다."),
-    EXIST_NO_EXPERTCOURSE(false,3036,"존재하지 않는 커스텀 코스입니다."),
+    EXIST_NO_COURSE(false,3036,"존재하지 않는 코스입니다."),
 
     INVALID_EMAIL(false,3040,"바르지 않은 이메일입니다."),
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),

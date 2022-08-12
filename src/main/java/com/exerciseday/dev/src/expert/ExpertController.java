@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,7 +67,7 @@ public class ExpertController {
      * [GET] /expert/{expertIdx}
      */
     @ResponseBody
-    @GetMapping("/{expertIdx")
+    @GetMapping("/{expertIdx}")
     public BaseResponse<GetExpertRes> getExpert(@PathVariable("expertIdx") int expertIdx){
         try{
             GetExpertRes expert = expertProvider.getExpert(expertIdx);
@@ -84,10 +85,11 @@ public class ExpertController {
      */
     @ResponseBody
     @GetMapping("/part")
-    public BaseResponse<GetExpertByPartRes> getExpertsByPart(@RequestBody GetExpertByPartReq getExpertByPartReq){
+    public BaseResponse<GetExpertByPartRes> getExpertsByPart(@RequestParam int page, @RequestBody GetExpertByPartReq getExpertByPartReq){
+
         try{
 
-            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(getExpertByPartReq);
+            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(getExpertByPartReq,page);
             GetExpertByPartRes getExpertByPartRes = new GetExpertByPartRes(getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart(), expertList);
             return new BaseResponse<>(getExpertByPartRes);
         }

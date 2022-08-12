@@ -25,7 +25,15 @@ public class ExerciseProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-    
+    public GetExerciseTCRes getExerciseTC(int exerciseIdx) throws BaseException{
+        try{
+            GetExerciseTCRes exerciseTCRes = exerciseDao.getExerciseTCRes(exerciseIdx);
+            return exerciseTCRes;
+        }
+        catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
     public int checkExerciseExist(int exerciseIdx) throws BaseException{
         try{
             int result = exerciseDao.checkExerciseExist(exerciseIdx);
