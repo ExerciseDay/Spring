@@ -22,7 +22,7 @@ public class GymDao {
     
     public List<GetGymRes> selectGym(String univ){
         String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce,\n" +
-        " a.gymImg, a.gymDistance, b.rvSP\n" +
+        " a.gymImg, a.gymDistance, b.rvSP, a.univ\n" +
         "FROM exercisedaydb.gym AS a\n" +
         "INNER JOIN exercisedaydb.review AS b\n" +
         "ON a.gymIdx = b.Gym_gymIdx\n" +
@@ -37,7 +37,7 @@ public class GymDao {
                     rs.getString("gymIntroduce"),
                     rs.getString("gymImg"),
                     rs.getInt("gymDistance"),
-                    rs.getInt("spoint"),
+                    rs.getInt("rvSP"),
                     rs.getString("univ")
                 ),selectGymParam);
 
