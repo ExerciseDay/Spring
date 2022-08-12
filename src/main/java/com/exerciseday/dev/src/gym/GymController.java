@@ -31,7 +31,7 @@ public class GymController {
 
     @ResponseBody
     @GetMapping("")
-    public BaseResponse<GetGymListRes> getGymList(String univ){
+    public BaseResponse<GetGymListRes> getGymList(@RequestParam String univ){
 
         try{
             GetGymListRes getGymList = gymProvider.retrieveGymList(univ);
