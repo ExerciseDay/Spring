@@ -40,5 +40,20 @@ public class GymController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @ResponseBody
+    @GetMapping("/{gymIdx}")
+    public BaseResponse<GetGymDetailRes> getGymDetail(@PathVariable("gymIdx") int gymIdx){
+        try{
+
+            GetGymDetailRes getGymDetail = gymProvider.retrieveGymDetail(gymIdx);
+
+            return new BaseResponse<>(getGymDetail);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     
 }

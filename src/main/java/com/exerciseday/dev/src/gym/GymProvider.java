@@ -39,6 +39,19 @@ public class GymProvider {
         }
     }
 
+    public GetGymDetailRes retrieveGymDetail(int gymIdx) throws BaseException {
+        try{
+
+            GetGymInfoRes getGymInfo = gymDao.selectGymInfo(gymIdx);
+            List<GetTrainersRes> getTrainers = gymDao.selectTrainers(gymIdx);
+            GetGymDetailRes getGymDetail = new GetGymDetailRes(getGymInfo,getTrainers);
+            return getGymDetail;
+
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 
     
     

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetGymListRes {
-    private List<GetGymRes> getGym;
+public class GetGymDetailRes {
+    private GetGymInfoRes getGymInfo;
+    private List<GetTrainersRes> getTrainers;
 }

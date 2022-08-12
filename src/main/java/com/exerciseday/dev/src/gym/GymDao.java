@@ -42,4 +42,36 @@ public class GymDao {
                 ),selectGymParam);
 
     }
+
+    public GetGymInfoRes selectGymInfo(int gymIdx){
+        String selectGymInfoQuery = "SELECT * FROM gym WHERE gymIdx = ?";
+        int selectGymInfoParam = gymIdx;
+        return this.jdbcTemplate.queryForObject(selectGymInfoQuery,
+                (rs,rowNum) -> new GetGymInfoRes(
+                    rs.getInt("gymIdx"),
+                    rs.getString("gymName"),
+                    rs.getString("gymAddress"),
+                    rs.getString("gymIntroduce"),
+                    rs.getString("gymImg"),
+                    rs.getString("gymTime"),
+                    rs.getInt("gymParking"),
+                    rs.getInt("gymSauna"),
+                    rs.getInt("gymCloths"),
+                    rs.getInt("gymShower"),
+                    rs.getInt("gymDistance")
+                ), selectGymInfoParam);
+    }
+
+    public List<GetTrainersRes> selectTrainers(int gymIdx){
+        String selectTrainersQuery = "SELECT * FROM trainer WHERE gymIdx = ?";
+        int selectTrainersParam = gymIdx;
+        return this.jdbcTemplate.query(selectTrainersQuery,
+                (rs,rowNum) -> new GetTrainersRes(
+                    rs.getInt("gymIdx"),
+                    rs.getString("trainerName"),
+                    rs.getString("trainerCareer"),
+                    rs.getString("trainerIntroduce"),
+                    rs.getString("trainerImg")
+                ), selectTrainersParam);
+    }
 }
