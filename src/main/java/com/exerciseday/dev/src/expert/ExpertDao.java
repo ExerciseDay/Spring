@@ -17,7 +17,7 @@ public class ExpertDao {
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    
+    /*
     public int createExpert(String name, String part, String detail){
         String createExpertQuery = "INSERT INTO ExpertCourse(eCourseName, eCoursePart, eCourseDetailPart,User_userIdx) VALUES (?,?,?,1)";
         Object[] createExpertParams = new Object[] {name,part,detail};
@@ -27,10 +27,28 @@ public class ExpertDao {
         String lastInsertIdxQuery = "select last_insert_id()"; //자동으로 가장 마지막에 들어간 idx를 리턴함
         return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
 
-    }
+    }*/
 
+    public int createExpert(String name, String part, String detail){
+        String createExpertQuery = "INSERT INTO ExpertCourse(eCourseName, eCoursePart, eCourseDetailPart) VALUES (?,?,?)";
+        Object[] createExpertParams = new Object[] {name,part,detail};
+        this.jdbcTemplate.update(createExpertQuery,
+                createExpertParams);
+
+        String lastInsertIdxQuery = "select last_insert_id()"; //자동으로 가장 마지막에 들어간 idx를 리턴함
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+
+    }
+    /* 
     public void createExpertRoutine(int expertIdx, PostExpertRoutineReq expertRoutine){
         String createExpertRoutineQuery = "INSERT INTO ExpertCourseRoutine(rep,weight,sets,rest,ExpertCourse_eCourseIdx,ExpertCourse_User_userIdx,Exercise_exIdx) VALUES(?,?,?,?,?,1,?)";
+        Object [] createExpertRoutineParams = new Object[]{expertRoutine.getRep(),expertRoutine.getWeight(),expertRoutine.getSet(),expertRoutine.getRest(),expertIdx,expertRoutine.getExerciseIdx()};
+        this.jdbcTemplate.update(createExpertRoutineQuery, createExpertRoutineParams);              
+    }
+    */
+
+    public void createExpertRoutine(int expertIdx, PostExpertRoutineReq expertRoutine){
+        String createExpertRoutineQuery = "INSERT INTO ExpertCourseRoutine(rep,weight,sets,rest,ExpertCourse_eCourseIdx,Exercise_exIdx) VALUES(?,?,?,?,?,?)";
         Object [] createExpertRoutineParams = new Object[]{expertRoutine.getRep(),expertRoutine.getWeight(),expertRoutine.getSet(),expertRoutine.getRest(),expertIdx,expertRoutine.getExerciseIdx()};
         this.jdbcTemplate.update(createExpertRoutineQuery, createExpertRoutineParams);              
     }
@@ -55,9 +73,9 @@ public class ExpertDao {
     
 
     public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq,int offset){
-        String getExpertsByPartQuery="SELECT eCourseIdx, eCourseName, eCourseIntroduce, eCourseTime, eCourseCalory, eCoursePart, eCourseDetailPart "+
-                                    "FROM ExpertCourse " +
-                                    "WHERE eCoursePart = ? AND eCourseDetailPart = ? " +
+        String getExpertsByPartQuery="SELECT eCourseIdx, eCourseName, eCourseIntroduce, eCourseTime, eCourseCalory, eCoursePart, eCourseDetailPart \n"+
+                                    "FROM ExpertCourse\n" +
+                                    "WHERE eCoursePart = ? AND eCourseDetailPart = ? \n" +
                                     "LIMIT ?,8";
 
         Object[] getExpertsByPartParams = new Object[]{getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart(),offset};
@@ -88,14 +106,14 @@ public class ExpertDao {
     }
 
     public List<ExpertRoutine> getExpertRoutines(int expertIdx){
-        String getExpertRoutineQuery = "SELECT er.eCourseRoutineIdx, "+
-                                                "er.rep,"+
-                                                "er.weight,"+ 
-                                                "er.sets," +
-                                                "er.rest," +
-                                                "er.Exercise_exIdx " +
-                                        "FROM ExpertCourseRoutine as er "+
-                                        "join ExpertCourse as e on e.eCourseIdx = er.ExpertCourse_eCourseIdx "+
+        String getExpertRoutineQuery = "SELECT er.eCourseRoutineIdx, \n"+
+                                                "er.rep,\n"+
+                                                "er.weight,\n"+ 
+                                                "er.sets,\n" +
+                                                "er.rest,\n" +
+                                                "er.Exercise_exIdx \n" +
+                                        "FROM ExpertCourseRoutine as er \n"+
+                                        "   join ExpertCourse as e on e.eCourseIdx = er.ExpertCourse_eCourseIdx\n "+
                                         "WHERE e.eCourseIdx = ?";
         int getExpertRoutineParam = expertIdx;
         return this.jdbcTemplate.query(getExpertRoutineQuery,
@@ -120,10 +138,10 @@ public class ExpertDao {
                                         "       ex.exTime, "+
                                         "       ex.exCalory, "+
                                         "       ex.exIntroduce,"+
-                                        "       e.eCourseIdx "+
-                                        "FROM Exercise as ex "+
-                                        "   join ExpertCourseRoutine as er on er.Exercise_exIdx = ex.exIdx "+     
-                                        "   join ExpertCourse as e on e.eCourseIdx = er.ExpertCourse_eCourseIdx "+        
+                                        "       e.eCourseIdx\n "+
+                                        "FROM Exercise as ex\n "+
+                                        "   join ExpertCourseRoutine as er on er.Exercise_exIdx = ex.exIdx\n "+     
+                                        "   join ExpertCourse as e on e.eCourseIdx = er.ExpertCourse_eCourseIdx \n"+        
                                         "WHERE e.eCourseIdx = ? ";
         int getExpertRoutineInfoParam = expertIdx;
         return this.jdbcTemplate.query(getExpertRoutineInfoQuery,

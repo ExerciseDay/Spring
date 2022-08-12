@@ -13,6 +13,7 @@ import com.exerciseday.dev.utils.JwtService;
 import static com.exerciseday.dev.config.BaseResponseStatus.DATABASE_ERROR;
 import static com.exerciseday.dev.config.BaseResponseStatus.EXIST_NO_PHONE;
 
+import java.util.ArrayList;
 import java.util.List;;
 
 @Service
@@ -158,8 +159,14 @@ public class UserProvider {
         try{
             User user = userDao.getUser(userIdx);
             List<GetUserCustomRes> getUserCustoms = userDao.getUserCustoms(userIdx);
-            List<GetUserExpertRes> getUserExperts = userDao.getUserExperts(userIdx);
-            GetUserCourseRes getUserCourseRes = new GetUserCourseRes(user.getImg(),user.getGoal(),getUserCustoms,getUserExperts);
+            List<Integer> list = userDao.getRelation(userIdx);
+            List<GetUserExpertRes> getUserExperts = new ArrayList<GetUserExpertRes>();
+
+            for(int i = 0 ; i < list.size() ; i++){
+                getUserExperts.add(userDao.getUserExperts(list.get(i)));
+            }
+             
+            GetUserCourseRes getUserCourseRes = new GetUserCourseRes(user.getUserIdx(),user.getNickname(),user.getImg(),user.getGoal(),getUserCustoms,getUserExperts);
             return getUserCourseRes;
         } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);

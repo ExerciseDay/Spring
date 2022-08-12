@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostUserHoldExpertReq {
-    private int userIdx;
-    private int expertIdx;
+public class PostUserHoldExpertRes {
+    
 }

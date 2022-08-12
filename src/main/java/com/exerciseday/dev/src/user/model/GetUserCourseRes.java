@@ -10,6 +10,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetUserCourseRes {
+    private int userIdx;
+    private String userNickname;
     private String userImg;
     private String userGoal;
     private List<GetUserCustomRes> customList;

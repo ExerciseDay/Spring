@@ -106,9 +106,8 @@ public class UserDao {
                 "       c.cCourseTime, \n"+
                 "       c.cCourseCalory \n"+
                 "FROM   CustomCourse as c\n"+
-                "    join User as u on u.userIdx = c.userIdx\n"+
-                "WHERE u.userIdx = ?\n"+
-                "order by c.cCourseIdx";                
+                "    join User as u on u.userIdx = c.User_userIdx\n"+
+                "WHERE u.userIdx = ?";             
         int getUserCustomsParam = userIdx;
         return this.jdbcTemplate.query(getUserCustomsQuery,
                 (rs,rowNum) -> new GetUserCustomRes(
@@ -119,7 +118,7 @@ public class UserDao {
                 ),
                 getUserCustomsParam);
     }
-
+    /*
     public List<GetUserExpertRes> getUserExperts(int userIdx){
         String getUserExpertsQuery = ""+
                 "SELECT e.eCourseIdx, \n"+
@@ -127,9 +126,8 @@ public class UserDao {
                 "       e.eCourseTime, \n"+
                 "       e.eCourseCalory \n"+
                 "FROM   ExpertCourse as e\n"+
-                "    join User as u on u.userIdx = e.userIdx\n"+
-                "WHERE u.userIdx = ?\n"+
-                "order by e.eCourseIdx";                
+                "    join User as u on u.userIdx = e.User_userIdx\n"+
+                "WHERE u.userIdx = ?";              
         int getUserExpertsParam = userIdx;
         return this.jdbcTemplate.query(getUserExpertsQuery,
                 (rs,rowNum) -> new GetUserExpertRes(
@@ -140,6 +138,39 @@ public class UserDao {
                 ),
                 getUserExpertsParam);
     }
+    */
+
+
+
+    public List<Integer> getRelation(int userIdx){
+        String getRelationQuery = "SELECT ue.ExpertCourse_eCourseIdx\n"+
+        "                          FROM User_has_ExpertCourse as ue"+
+        "                                 join User as u on u.userIdx = ue.User_userIdx"+
+        "                           WHERE u.userIdx = ?";
+        int getRelationParam = userIdx;
+        return this.jdbcTemplate.queryForList(getRelationQuery,
+                                        Integer.class,
+                                        getRelationParam);
+
+
+    }
+
+    public GetUserExpertRes getUserExperts(int expertIdx){
+        String getUserExpertsQuery = "SELECT e.eCourseIdx, e.eCourseName, e.eCourseTime, e.eCourseCalory"+
+        "                               FROM ExpertCourse as e"+
+        "                                   join User_has_ExpertCourse as ue on ue.ExpertCourse_eCourseIdx = e.eCourseIdx"+
+        "                               WHERE e.eCourseIdx = ?";         
+        int getUserExpertsParam = expertIdx;
+        return this.jdbcTemplate.queryForObject(getUserExpertsQuery,
+                (rs,rowNum) -> new GetUserExpertRes(
+                    rs.getInt("e.eCourseIdx"),
+                    rs.getString("e.eCourseName"),
+                    rs.getInt("e.eCourseTime"),
+                    rs.getInt("e.eCourseCalory")
+                ),
+                getUserExpertsParam);
+    }
+    
 
     public int postUserFindPwd(String phone){
         String postUserFindPwdQuery = "select userIdx from User where userTel=?";
