@@ -28,9 +28,9 @@ public class GymProvider {
         this.jwtService = jwtService;
     }
 
-    public GetGymListRes retrieveGymList(int gymIdx) throws BaseException {
+    public GetGymListRes retrieveGymList(String univ) throws BaseException {
         try{
-            List<GetGymRes> getGym = gymDao.selectGym(gymIdx);
+            List<GetGymRes> getGym = gymDao.selectGym(univ);
             GetGymListRes getGymList = new GetGymListRes(getGym);
             return getGymList;
         } catch(Exception exception){

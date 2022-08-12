@@ -1,6 +1,5 @@
 package com.exerciseday.dev.src.gym.model;
 
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +16,6 @@ public class GetGymRes {
     private String gymImg;
     private int gymDistance;
     private int spoint;
+    private String univ;
     
 }

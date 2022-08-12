@@ -20,14 +20,16 @@ public class GymDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     
-    public List<GetGymRes> selectGym(int gymIdx){
+    public List<GetGymRes> selectGym(String univ){
         String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce,\n" +
         " a.gymImg, a.gymDistance, b.rvSP\n" +
-        "FROM exercisedaydb.gym as a\n" +
-        "inner join exercisedaydb.review as b\n" +
-        "on a.gymIdx = b.Gym_gymIdx;";
+        "FROM exercisedaydb.gym AS a\n" +
+        "INNER JOIN exercisedaydb.review AS b\n" +
+        "ON a.gymIdx = b.Gym_gymIdx\n" +
+        "WHERE a.univ = ?";
 
-       int selectGymParam = gymIdx;
+        String selectGymParam = univ;
+
        return this.jdbcTemplate.query(selectGymQuery,
                 (rs,rowNum) -> new GetGymRes(
                     rs.getInt("gymIdx"),
@@ -35,7 +37,8 @@ public class GymDao {
                     rs.getString("gymIntroduce"),
                     rs.getString("gymImg"),
                     rs.getInt("gymDistance"),
-                    rs.getInt("spoint")
+                    rs.getInt("spoint"),
+                    rs.getString("univ")
                 ),selectGymParam);
 
     }
