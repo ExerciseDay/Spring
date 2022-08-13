@@ -1,15 +1,13 @@
-package com.exerciseday.dev;
+package com.exerciseday.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DevApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DevApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
-
-
