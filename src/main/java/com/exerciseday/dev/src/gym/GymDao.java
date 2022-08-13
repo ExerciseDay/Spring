@@ -63,11 +63,11 @@ public class GymDao {
     }
 
     public List<GetTrainersRes> selectTrainers(int gymIdx){
-        String selectTrainersQuery = "SELECT * FROM trainer WHERE gymIdx = ?";
+        String selectTrainersQuery = "SELECT * FROM trainer WHERE Gym_gymIdx = ?";
         int selectTrainersParam = gymIdx;
         return this.jdbcTemplate.query(selectTrainersQuery,
                 (rs,rowNum) -> new GetTrainersRes(
-                    rs.getInt("gymIdx"),
+                    rs.getInt("Gym_gymIdx"),
                     rs.getString("trainerName"),
                     rs.getString("trainerCareer"),
                     rs.getString("trainerIntroduce"),
