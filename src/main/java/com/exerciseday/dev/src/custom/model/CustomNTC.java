@@ -7,7 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRes {
+public class CustomNTC {
     private int customIdx;
-    private int userIdx;    
+    private String customName;
+    private int customTime;
+    private int customCalory;
 }

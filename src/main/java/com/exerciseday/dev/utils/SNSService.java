@@ -39,13 +39,13 @@ public class SNSService {
         }
         String message = "하루운동 본인인증 [" + codes + "] 입니다.";
 
-
+        /*
         //SNS 접속
         SnsClient snsClient = SnsClient.builder()
         .region(Region.AP_NORTHEAST_1)
         .credentialsProvider(ProfileCredentialsProvider.create())
         .build();
-
+        */
         
         /*
         // 토픽 구독
@@ -89,7 +89,7 @@ public class SNSService {
             
         }
 */
-        snsClient.close();
+        //snsClient.close();
         return codes;
     }
 

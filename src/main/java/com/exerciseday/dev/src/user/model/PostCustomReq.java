@@ -1,4 +1,4 @@
-package com.exerciseday.dev.src.custom.model;
+package com.exerciseday.dev.src.user.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class PostCustomReq {
     private String customName;
-    //private String customPart;
-    //private String customDetailPart;
+    private String customPart;
+    private String customDetailPart;
     private String customIntroduce;
     private List<PostCustomRoutineReq> customRoutines;
 }

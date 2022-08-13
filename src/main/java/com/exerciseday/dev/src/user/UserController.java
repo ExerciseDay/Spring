@@ -385,10 +385,10 @@ public class UserController {
 
     /*
      * 보유중인 코스 확인하기 API
-     * [GET] /users/{userIdx}
+     * [GET] /users/course/{userIdx}
      */
     @ResponseBody
-    @GetMapping("/course/{userIdx}")
+    @GetMapping("/{userIdx}/course")
     public BaseResponse<GetUserCourseRes> getUserCourse(@PathVariable("userIdx") int userIdx){
         try{
             int userIdxByJwt = jwtService.getUserIdx();
@@ -401,6 +401,73 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /*
+     * 커스텀 코스 담기 API
+     * [POST] /users/{userIdx}/custom/{customIdx}
+     */
+
+
+
+
+
+
+
+
+
+     /*
+      * 전문가 코스 담기 API
+      * [POST] /users/{userIdx}/expert/{expertIdx}
+      */
+    @ResponseBody
+    @PostMapping("/{userIdx}/expert/{expertIdx}")
+    public BaseResponse<PostUserExpertRes> postUserExpert(@PathVariable("userIdx") int userIdx, @PathVariable("expertIdx") int expertIdx) {
+        try{
+
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+       
+
+            PostUserExpertRes postUserExpertRes = userService.postUserExpert(userIdx,expertIdx);
+            return new BaseResponse<>(postUserExpertRes);
+
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /*
+     * 전문가 코스 빼기 API
+     * [DELETE] /users/{userIdx}/expert/{expertIdx}
+     */
+    @ResponseBody
+    @DeleteMapping("/{userIdx}/expert/{expertIdx}")
+    public BaseResponse<String> deleteUserExpert(@PathVariable("userIdx") int userIdx, @PathVariable("expertIdx") int expertIdx) {
+        try{
+            
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.deleteUserExpert(userIdx,expertIdx);
+            String result = "코스 삭제 성공했습니다.";
+            return new BaseResponse<>(result);
+
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+
+
+
+
 
 
     /**
@@ -455,5 +522,44 @@ public class UserController {
         }
     }
     */
+    /*
+     * 커스텀 코스 생성 API
+     * [POST] /users/{userIdx}/custom
+     */
+    @ResponseBody
+    @PostMapping("/{userIdx}/custom/course")
+    public BaseResponse<PostCustomRes> createCustom(@PathVariable("userIdx") int userIdx, @RequestBody PostCustomReq postCustomReq){
 
+            if(postCustomReq.getCustomName()==null){
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_EMAIL);
+            }
+            if(postCustomReq.getCustomName().length() > 45){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_NAME);
+            }
+            if(postCustomReq.getCustomPart()==null){
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_PART);
+            }
+            if(postCustomReq.getCustomDetailPart()==null){
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_DETAIL);
+            }
+            if(postCustomReq.getCustomRoutines().size() < 1){
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
+            }
+        
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+            
+
+            
+            System.out.println(postCustomReq.getCustomName());
+            PostCustomRes postCustomRes = new PostCustomRes(userService.createCustom(userIdx, postCustomReq), userIdx);
+            return new BaseResponse<>(postCustomRes);
+        }
+        catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

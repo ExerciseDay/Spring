@@ -54,10 +54,11 @@ public class ExpertProvider {
     }
 
     public GetExpertRes getExpert(int expertIdx) throws BaseException{
+        if(checkExpertExist(expertIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
+        }
         try{
-            if(checkExpertExist(expertIdx)==0){
-                throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
-            }
+
             ExpertNTC expertNTC = expertDao.getExpertNTC(expertIdx);
             
             List<GetExpertRoutineInfoRes> expertRoutineInfos = expertDao.getExpertRoutineInfos(expertIdx);

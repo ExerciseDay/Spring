@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRes {
-    private int customIdx;
-    private int userIdx;    
+public class PatchCustomRes {
+    
 }

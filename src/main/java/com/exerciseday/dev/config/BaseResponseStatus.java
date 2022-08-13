@@ -56,6 +56,7 @@ public enum BaseResponseStatus {
     DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
     DUPLICATED_NICKNAME(false, 3014, "중복된 닉네임입니다."),
     DUPLICATED_PHONE(false, 3015, "중복된 전화번호입니다."),
+    DUPLICATED_COURSE(false, 3018, "중복된 코스입니다."),
     // [POST] /auth/login
     FAILED_TO_LOGIN(false,3016,"없는 아이디거나 비밀번호가 틀렸습니다."),
     FAILED_MESSAGE(false,3017,"메세지 전송에 실패했습니다."),
@@ -67,6 +68,8 @@ public enum BaseResponseStatus {
     EXIST_NO_TRAINER(false,3034,"존재하지 않는 트레이너입니다."),
     EXIST_NO_EXERCISE(false,3035,"존재하지 않는 운동입니다."),
     EXIST_NO_COURSE(false,3036,"존재하지 않는 코스입니다."),
+    EXIST_NO_USER_COURSE(false,3037,"담아둔 코스가 아닙니다."),
+    EXIST_NO_ROUTINE(false,3038,"존재하지 않는 루틴입니다."),
 
     INVALID_EMAIL(false,3040,"바르지 않은 이메일입니다."),
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),
@@ -78,6 +81,10 @@ public enum BaseResponseStatus {
     EMPTY_PHONE(false,3052,"전화번호를 입력해주세요."),
     EMPTY_PASSWORD(false,3053,"비밀번호를 입력해주세요."),
     EMPTY_ROUTINE(false,3054,"운동 루틴을 추가해주세요."),
+    EMPTY_COURSE(false,3055,"코스를 입력해주세요."),
+    EMPTY_PART(false,3056,"부위를 입력해주세요."),
+    EMPTY_DETAIL(false,3057,"세부부위를 입력해주세요."),
+    EMPTY_NAME(false,3058,"이름을 입력해주세요."),
 
     DIFFERENT_USERS(false,3060,"서로 다른 유저 정보를 입력했습니다."),
     DIFFERENT_PASSWORD(false,3061,"서로 다른 비밀번호를 입력해주세요."),
@@ -102,7 +109,15 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_GOAL(false,4017,"목표 수정 실패"),
 
     DELETE_FAIL_USER(false,4020,"유저 삭제 실패"),
-    DELETE_FAIL_EXERCISE(false,4021,"운동 삭제 실패");
+    DELETE_FAIL_EXERCISE(false,4021,"운동 삭제 실패"),
+    DELETE_FAIL_COURSE(false,4022,"코스 삭제 실패"),
+    DELETE_FAIL_ROUTINE(false,4023,"루틴 삭제 실패"),
+
+    ADD_FAIL_COURSE(false,4030,"코스 추가 실패"),
+    ADD_FIAL_ROUTINE(false,4031,"루틴 추가 실패")
+
+
+    ;
     
     private final boolean isSuccess;
     private final int code;

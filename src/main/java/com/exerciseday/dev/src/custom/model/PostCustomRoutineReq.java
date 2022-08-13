@@ -7,7 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRes {
-    private int customIdx;
-    private int userIdx;    
+public class PostCustomRoutineReq {
+    private int rep;
+    private int weight;
+    private int set;
+    private int rest;
+    private int exerciseIdx;
 }

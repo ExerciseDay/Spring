@@ -152,6 +152,25 @@ public class UserProvider {
         }
     }
 
+    public int checkExpertExist(int expertIdx) throws BaseException{
+        try{
+            return userDao.checkExpertExist(expertIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public int checkUserExpertExist(int userIdx, int expertIdx) throws BaseException{
+        try{
+            return userDao.checkUserExpertExist(userIdx,expertIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+
     public GetUserCourseRes getUserCourse(int userIdx) throws BaseException{        
         if(checkUserExist(userIdx)==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
@@ -173,5 +192,22 @@ public class UserProvider {
         }
     }
 
-    
+    public GetExerciseTCRes getExerciseTC(int exerciseIdx) throws BaseException{
+        try{
+            GetExerciseTCRes exerciseTCRes = userDao.getExerciseTCRes(exerciseIdx);
+            return exerciseTCRes;
+        }
+        catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public int checkExerciseExist(int exerciseIdx) throws BaseException{
+        try{
+            int result = userDao.checkExerciseExist(exerciseIdx);
+            return result;
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

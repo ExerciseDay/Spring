@@ -141,7 +141,7 @@ public class UserDao {
     */
 
 
-
+    // 유저 - 전문가 코스 테이블 연결 테이블
     public List<Integer> getRelation(int userIdx){
         String getRelationQuery = "SELECT ue.ExpertCourse_eCourseIdx\n"+
         "                          FROM User_has_ExpertCourse as ue"+
@@ -226,6 +226,23 @@ public class UserDao {
 
     }
 
+    public int checkExpertExist(int expertIdx){
+        String checkExpertExistQuery = "select exists(select eCourseIdx from ExpertCourse where eCourseIdx = ?)";
+        int checkExpertExistParam = expertIdx;
+        return this.jdbcTemplate.queryForObject(checkExpertExistQuery
+                                                ,int.class
+                                                , checkExpertExistParam);
+    }
+
+    public int checkUserExpertExist(int userIdx, int expertIdx){
+        String checkUserExpertExistQuery = "select exists(select User_userIdx, ExpertCourse_eCourseIdx from User_has_ExpertCourse where User_userIdx = ? AND ExpertCourse_eCourseIdx = ?)";
+        Object[] checkUserExpertExistParam = new Object[]{userIdx,expertIdx};
+        return this.jdbcTemplate.queryForObject(checkUserExpertExistQuery
+                                                ,int.class
+                                                , checkUserExpertExistParam);
+    }
+
+
     public int editPwd(PatchUserEditPwdReq patchUserEditPwdReq){
         String patchUserEditPwdQuery = "update User set userPwd = ? where userIdx = ? ";
         Object[] patchUserEditPwdParams = new Object[]{patchUserEditPwdReq.getPassword(), patchUserEditPwdReq.getUserIdx()};
@@ -259,5 +276,57 @@ public class UserDao {
         Object[] editUserGoalParams = new Object[]{patchUserEditGoalReq.getGoal(),patchUserEditGoalReq.getUserIdx()};
 
         return this.jdbcTemplate.update(editUserGoalQuery,editUserGoalParams);
+    }
+
+    public int postUserExpert(int userIdx, int expertIdx){
+        String postUserExpertQuery = "INSERT INTO User_has_ExpertCourse(User_userIdx, ExpertCourse_eCourseIdx) VALUES (?,?)";
+        Object[] postUserExpertParams = new Object[]{userIdx,expertIdx};
+        return this.jdbcTemplate.update(postUserExpertQuery,postUserExpertParams);
+    }
+
+    public int deleteUserExpert(int userIdx, int expertIdx){
+        String deleteUserExpertQuery = "DELETE FROM User_has_ExpertCourse WHERE User_userIdx = ? AND ExpertCourse_eCourseIdx = ?";
+        Object[] deleteUserExpertParams = new Object[]{userIdx,expertIdx};
+        return this.jdbcTemplate.update(deleteUserExpertQuery,deleteUserExpertParams);
+    }
+
+
+    public GetExerciseTCRes getExerciseTCRes(int exerciseIdx){
+        String getExerciseQuery = "SELECT exTime, exCalory FROM Exercise WHERE exIdx = ?";
+        int getExerciseParam = exerciseIdx;
+        return this.jdbcTemplate.queryForObject(getExerciseQuery,
+                                (rs, rowNum) -> new GetExerciseTCRes(rs.getInt("exTime")
+                                                            ,rs.getInt("exCalory")                                                         
+                                                            )
+                                                            ,getExerciseParam);
+    }
+
+
+    public int checkExerciseExist(int exerciseIdx){
+        String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exidx = ?)";
+        int checkExerciseExistParam = exerciseIdx;
+        return this.jdbcTemplate.queryForObject(checkExerciseExistQuery,int.class, checkExerciseExistParam);
+    }
+
+
+    public void createCustomRoutine(int userIdx, int customIdx, PostCustomRoutineReq postCustomRoutineReq){
+        String createCustomRoutineQuery = "INSERT INTO CustomCourseRoutine(rep, weight, sets, rest, Exercise_exIdx, CustomCourse_cCourseIdx, CustomCourse_User_userIdx) VALUES (?,?,?,?,?,?,?)";
+        Object[] createCustomRoutineParams = new Object[]{postCustomRoutineReq.getRep(),postCustomRoutineReq.getWeight(),postCustomRoutineReq.getSet(),postCustomRoutineReq.getRest(),postCustomRoutineReq.getExerciseIdx(),customIdx,userIdx};
+        this.jdbcTemplate.update(createCustomRoutineQuery, createCustomRoutineParams);
+    }
+
+    public int createCustom(int userIdx, String name, String part, String detail, String intro){
+        String createCustomQuery = "INTSERT INTO CustomCourse(cCourseName, cCoursePart, cCourseDetailPart, cCourseIntroduce, User_userIdx) VALUES (?,?,?,?,?)";
+        Object[] createCustomParams = new Object[]{name,part,detail,intro,userIdx};
+        this.jdbcTemplate.update(createCustomQuery, createCustomParams);
+
+        String lastInsertIdxQuery = "SELECT last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdxQuery, int.class);
+    }
+
+    public void addCustomTC(int customIdx,int times,int calories){
+        String addCustomTCQuery = "update CustomCourse set cCourseTime = ?, cCourseCalory = ? where cCourseIdx = ? ";
+        Object[] addCustomTCParams = new Object[]{times,calories,customIdx};
+        this.jdbcTemplate.update(addCustomTCQuery,addCustomTCParams);
     }
 }

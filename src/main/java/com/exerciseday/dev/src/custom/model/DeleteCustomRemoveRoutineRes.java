@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRes {
+public class DeleteCustomRemoveRoutineRes {
+    private int userIdx;
     private int customIdx;
-    private int userIdx;    
 }

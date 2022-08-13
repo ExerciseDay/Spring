@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRes {
-    private int customIdx;
-    private int userIdx;    
+public class GetExerciseTCRes {
+    private int exIdx;
+    private int exTime;
+    private int exCalory;
 }

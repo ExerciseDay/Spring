@@ -1,4 +1,4 @@
-package com.exerciseday.dev.src.custom.model;
+package com.exerciseday.dev.src.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

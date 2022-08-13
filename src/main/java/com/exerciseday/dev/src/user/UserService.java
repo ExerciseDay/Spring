@@ -5,14 +5,19 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.exerciseday.dev.src.user.model.PostUserRes;
+import com.exerciseday.dev.src.user.model.GetExerciseTCRes;
 import com.exerciseday.dev.src.user.model.PatchUserEditGoalReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditImgReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditNicknameReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
+import com.exerciseday.dev.src.user.model.PostCustomReq;
+import com.exerciseday.dev.src.user.model.PostCustomRoutineReq;
+import com.exerciseday.dev.src.user.model.PostUserExpertRes;
 import com.exerciseday.dev.src.user.model.PostUserReq;
 import com.exerciseday.dev.utils.JwtService;
 
 import com.exerciseday.dev.config.BaseException;
+import com.exerciseday.dev.config.BaseResponseStatus;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.*;
 import com.exerciseday.dev.utils.SHA256;
@@ -174,4 +179,85 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public PostUserExpertRes postUserExpert(int userIdx, int expertIdx) throws BaseException{
+        if(userProvider.checkUserExist(userIdx)==0){
+            System.out.println(1);
+            throw new BaseException(EXIST_NO_USER);
+        }           
+        if(userProvider.checkExpertExist(expertIdx)==0){
+            System.out.println(2);
+            throw new BaseException(EXIST_NO_COURSE);
+        }
+        if(userProvider.checkUserExpertExist(userIdx, expertIdx)!=0){
+            System.out.println(3);
+            throw new BaseException(DUPLICATED_COURSE);
+        }        
+        try{
+
+
+            if(userDao.postUserExpert(userIdx,expertIdx)==0){
+                System.out.println(4);
+                throw new BaseException(ADD_FAIL_COURSE);
+            }
+            return new PostUserExpertRes(userIdx, expertIdx);
+
+
+        }
+        catch(Exception e){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void deleteUserExpert(int userIdx, int expertIdx) throws BaseException{
+        if(userProvider.checkUserExist(userIdx)==0){
+            throw new BaseException(EXIST_NO_USER);
+        }           
+        if(userProvider.checkExpertExist(expertIdx)==0){
+            throw new BaseException(EXIST_NO_COURSE);
+        }
+        if(userProvider.checkUserExpertExist(userIdx, expertIdx)==0){
+            throw new BaseException(EXIST_NO_USER_COURSE);
+        }
+        try{
+
+            if(userDao.deleteUserExpert(userIdx,expertIdx)==0){
+                throw new BaseException(DELETE_FAIL_COURSE);
+            }           
+
+
+        }
+        catch(Exception e){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int createCustom(int userIdx, PostCustomReq postCustomReq) throws BaseException{
+        for(int i = 0 ; i < postCustomReq.getCustomRoutines().size() ; i++){
+            if(userProvider.checkExerciseExist(postCustomReq.getCustomRoutines().get(i).getExerciseIdx())==0){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+            }
+        }
+        int times = 0;
+        int calories = 0;
+        try{
+            int customIdx = userDao.createCustom(userIdx, postCustomReq.getCustomName(),postCustomReq.getCustomPart(),postCustomReq.getCustomDetailPart(),postCustomReq.getCustomIntroduce());
+            for(int i = 0 ; i < postCustomReq.getCustomRoutines().size() ; i++){
+                PostCustomRoutineReq postCustomRoutineReq = postCustomReq.getCustomRoutines().get(i);
+                userDao.createCustomRoutine(userIdx,customIdx, postCustomRoutineReq);          
+                GetExerciseTCRes etc = userProvider.getExerciseTC(postCustomRoutineReq.getExerciseIdx());          
+                //times = rep * set * exTime + set * rest
+                times+= postCustomRoutineReq.getRep() * postCustomRoutineReq.getSet() * etc.getExTime() + postCustomRoutineReq.getSet() * postCustomRoutineReq.getRest();
+                //calories = rep * set * exCalory
+                calories = postCustomRoutineReq.getRep() * postCustomRoutineReq.getSet() * etc.getExCalory();
+            }
+
+            userDao.addCustomTC(customIdx,times,calories);
+
+            return customIdx;
+        } catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
 }
