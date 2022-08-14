@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetTrainersRes {
-    private int gymIdx;
+    // private int gymIdx;
     private String trainerName;
     private String trainerCareer;
     private String trainerIntroduce;

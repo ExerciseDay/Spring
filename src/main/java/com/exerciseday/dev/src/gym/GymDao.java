@@ -62,12 +62,27 @@ public class GymDao {
                 ), selectGymInfoParam);
     }
 
+    public List<GetReviewRes> selectReview(int gymIdx){
+        String selectReviewsQuery = "SELECT a.rvIdx, a.rvContent, a.rvSP, b.userNickName\n"
+        + "FROM exercisedaydb.review as a\n"
+        + "INNER JOIN exercisedaydb.user as b\n"
+        + "on a.User_userIdx = b.userIdx\n"
+        + "WHERE a.Gym_gymIdx = ?";
+        int selectReviewsParam = gymIdx;
+        return this.jdbcTemplate.query(selectReviewsQuery,
+                (rs,rowNum) -> new GetReviewRes(
+                    rs.getInt("rvIdx"),
+                    rs.getString("rvContent"),
+                    rs.getInt("rvSP"),
+                    rs.getString("userNickName")
+                ), selectReviewsParam);
+    }
+
     public List<GetTrainersRes> selectTrainers(int gymIdx){
         String selectTrainersQuery = "SELECT * FROM trainer WHERE Gym_gymIdx = ?";
         int selectTrainersParam = gymIdx;
         return this.jdbcTemplate.query(selectTrainersQuery,
                 (rs,rowNum) -> new GetTrainersRes(
-                    rs.getInt("Gym_gymIdx"),
                     rs.getString("trainerName"),
                     rs.getString("trainerCareer"),
                     rs.getString("trainerIntroduce"),
