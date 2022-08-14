@@ -266,7 +266,7 @@ public class UserController {
 
     /*
      * 비밀번호 변경 API
-     * [PATCH] /users/editPwd
+     * [PATCH] /users/edit/pwd
      *  @return BaseResponse<String>
      */
     @ResponseBody
@@ -288,6 +288,7 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+    
     /*
      * 닉네임 변경 API
      * [PATCH] /users/edit/nickname
@@ -510,7 +511,7 @@ public class UserController {
      * @return BaseResponse<GetUserRes>
      */
 
-     /*
+     
     @ResponseBody
     @GetMapping("/{userIdx}") // [GET] /users/:userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx") int userIdx){
@@ -521,45 +522,5 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-    */
-    /*
-     * 커스텀 코스 생성 API
-     * [POST] /users/{userIdx}/custom
-     */
-    @ResponseBody
-    @PostMapping("/{userIdx}/custom/course")
-    public BaseResponse<PostCustomRes> createCustom(@PathVariable("userIdx") int userIdx, @RequestBody PostCustomReq postCustomReq){
 
-            if(postCustomReq.getCustomName()==null){
-                return new BaseResponse<>(BaseResponseStatus.EMPTY_EMAIL);
-            }
-            if(postCustomReq.getCustomName().length() > 45){
-                return new BaseResponse<>(BaseResponseStatus.INVALID_NAME);
-            }
-            if(postCustomReq.getCustomPart()==null){
-                return new BaseResponse<>(BaseResponseStatus.EMPTY_PART);
-            }
-            if(postCustomReq.getCustomDetailPart()==null){
-                return new BaseResponse<>(BaseResponseStatus.EMPTY_DETAIL);
-            }
-            if(postCustomReq.getCustomRoutines().size() < 1){
-                return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
-            }
-        
-        try{
-            int userIdxByJwt = jwtService.getUserIdx();
-            if(userIdx != userIdxByJwt){
-                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
-            }
-            
-
-            
-            System.out.println(postCustomReq.getCustomName());
-            PostCustomRes postCustomRes = new PostCustomRes(userService.createCustom(userIdx, postCustomReq), userIdx);
-            return new BaseResponse<>(postCustomRes);
-        }
-        catch(BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
 }
