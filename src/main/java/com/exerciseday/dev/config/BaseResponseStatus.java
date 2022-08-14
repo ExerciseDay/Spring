@@ -85,6 +85,7 @@ public enum BaseResponseStatus {
     EMPTY_PART(false,3056,"부위를 입력해주세요."),
     EMPTY_DETAIL(false,3057,"세부부위를 입력해주세요."),
     EMPTY_NAME(false,3058,"이름을 입력해주세요."),
+    EMPTY_INDEX(false,3059,"인덱스를 입력해주세요."),
 
     DIFFERENT_USERS(false,3060,"서로 다른 유저 정보를 입력했습니다."),
     DIFFERENT_PASSWORD(false,3061,"서로 다른 비밀번호를 입력해주세요."),

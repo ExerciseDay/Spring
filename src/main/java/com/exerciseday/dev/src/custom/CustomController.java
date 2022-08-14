@@ -119,6 +119,9 @@ public class CustomController {
         }
     }
 
+    
+
+
      /*
       * 커스텀 코스 루틴 추가 API
       * [POST] /users/{userIdx}/custom/{customIdx}/add
@@ -156,6 +159,10 @@ public class CustomController {
             return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
         }
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
             customService.removeCustomRoutine(userIdx,customIdx,deleteCustomRemoveRoutineReq);
             
             return new BaseResponse<>(new DeleteCustomRemoveRoutineRes(userIdx,customIdx));

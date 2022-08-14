@@ -141,7 +141,7 @@ public class UserDao {
     */
 
 
-    // 유저 - 전문가 코스 테이블 연결 테이블
+    // 유저 - 전문가 코스 테이블 연결 테이블에서 전문가 코스 인덱스 출력
     public List<Integer> getRelation(int userIdx){
         String getRelationQuery = "SELECT ue.ExpertCourse_eCourseIdx\n"+
         "                          FROM User_has_ExpertCourse as ue"+
@@ -155,10 +155,9 @@ public class UserDao {
 
     }
 
-    public GetUserExpertRes getUserExperts(int expertIdx){
+    public GetUserExpertRes getUserExpert(int expertIdx){
         String getUserExpertsQuery = "SELECT e.eCourseIdx, e.eCourseName, e.eCourseTime, e.eCourseCalory"+
         "                               FROM ExpertCourse as e"+
-        "                                   join User_has_ExpertCourse as ue on ue.ExpertCourse_eCourseIdx = e.eCourseIdx"+
         "                               WHERE e.eCourseIdx = ?";         
         int getUserExpertsParam = expertIdx;
         return this.jdbcTemplate.queryForObject(getUserExpertsQuery,

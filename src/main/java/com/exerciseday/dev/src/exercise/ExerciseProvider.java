@@ -43,4 +43,13 @@ public class ExerciseProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public int checkUserExist(int userIdx) throws BaseException{
+        try{
+            int result = exerciseDao.checkUserExist(userIdx);
+            return result;
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

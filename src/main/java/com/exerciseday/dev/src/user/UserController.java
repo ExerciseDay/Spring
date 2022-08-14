@@ -386,7 +386,7 @@ public class UserController {
 
     /*
      * 보유중인 코스 확인하기 API
-     * [GET] /users/course/{userIdx}
+     * [GET] /users/{userIdx}/course
      */
     @ResponseBody
     @GetMapping("/{userIdx}/course")
@@ -403,19 +403,7 @@ public class UserController {
         }
     }
 
-    /*
-     * 커스텀 코스 담기 API
-     * [POST] /users/{userIdx}/custom/{customIdx}
-     */
-
-
-
-
-
-
-
-
-
+    
      /*
       * 전문가 코스 담기 API
       * [POST] /users/{userIdx}/expert/{expertIdx}

@@ -177,12 +177,15 @@ public class UserProvider {
         }
         try{
             User user = userDao.getUser(userIdx);
+
             List<GetUserCustomRes> getUserCustoms = userDao.getUserCustoms(userIdx);
+
             List<Integer> list = userDao.getRelation(userIdx);
-            List<GetUserExpertRes> getUserExperts = new ArrayList<GetUserExpertRes>();
+            
+            List<GetUserExpertRes> getUserExperts = new ArrayList<>();
 
             for(int i = 0 ; i < list.size() ; i++){
-                getUserExperts.add(userDao.getUserExperts(list.get(i)));
+                getUserExperts.add(userDao.getUserExpert(list.get(i)));
             }
              
             GetUserCourseRes getUserCourseRes = new GetUserCourseRes(user.getUserIdx(),user.getNickname(),user.getImg(),user.getGoal(),getUserCustoms,getUserExperts);

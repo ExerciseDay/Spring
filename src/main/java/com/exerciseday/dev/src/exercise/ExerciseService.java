@@ -45,4 +45,21 @@ public class ExerciseService {
                 throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public void postDibs(int exerciseIdx,int userIdx) throws BaseException{
+        if(exerciseProvider.checkUserExist(userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        if(exerciseProvider.checkExerciseExist(exerciseIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+        }
+        try{
+            exerciseDao.postDibs(exerciseIdx,userIdx);
+            
+
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

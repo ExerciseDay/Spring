@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,9 @@ public class ExerciseController {
         
     }
 
-    
+    /*
+     * 운동 생성
+     */
     @ResponseBody
     @PostMapping("")
     public BaseResponse<PostExerciseRes> createExercise(@RequestBody PostExerciseReq postExerciseReq){
@@ -48,6 +51,9 @@ public class ExerciseController {
         }
     }
 
+    /*
+     * 운동 조회
+     */
     @ResponseBody
     @GetMapping("/{exerciseIdx}")
     public BaseResponse<Exercise> getExercise(@PathVariable("exerciseIdx") int exerciseIdx){
@@ -60,6 +66,9 @@ public class ExerciseController {
         }
     }
 
+    /*
+     * 운동 삭제
+     */
     @ResponseBody
     @DeleteMapping("/{exerciseIdx}")
     public BaseResponse<String> deleteExercise(@PathVariable("exerciseIdx") int exerciseIdx){
@@ -68,6 +77,26 @@ public class ExerciseController {
             exerciseService.deleteExercise(exerciseIdx);
 
             String result = "운동 삭제 성공";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /*
+     * 운동 찜 API
+     * [POST] /exercise/{exerciseIdx}/dibs?userIdx=
+     */
+    @ResponseBody
+    @PostMapping("/{exerciseIdx}/dibs")
+    public BaseResponse<String> postDibs(@PathVariable("exerciseIdx") int exerciseIdx,@RequestParam Integer userIdx){
+        if(userIdx == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_INDEX);
+        }
+        try{
+            exerciseService.postDibs(exerciseIdx,userIdx);
+            String result = "운동 찜 성공";
             return new BaseResponse<>(result);
         }
         catch(BaseException e){

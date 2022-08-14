@@ -62,9 +62,15 @@ public class ExerciseDao {
 
 
     public int checkExerciseExist(int exerciseIdx){
-        String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exidx = ?)";
+        String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exIdx = ?)";
         int checkExerciseExistParam = exerciseIdx;
         return this.jdbcTemplate.queryForObject(checkExerciseExistQuery,int.class, checkExerciseExistParam);
+    }
+
+    public int checkUserExist(int userIdx){
+        String checkUserExistQuery = "SELECT exists(SELECT userIdx FROM User WHERE userIdx = ?)";
+        int checkUserExistParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserExistQuery,int.class, checkUserExistParam);
     }
 
     public int deleteExercise(int exerciseIdx){
@@ -73,4 +79,9 @@ public class ExerciseDao {
         return this.jdbcTemplate.update(deleteExerciseQuery, deleteExerciseParam);
     }
 
+    public void postDibs(int exerciseIdx, int userIdx){
+        String postDibsQuery = "";
+        Object[] postDibsParams = new Object[]{exerciseIdx,userIdx};
+        this.jdbcTemplate.update(postDibsQuery, postDibsParams);
+    }
 }
