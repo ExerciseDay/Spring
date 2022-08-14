@@ -9,6 +9,7 @@ import com.exerciseday.dev.src.user.model.User;
 import com.exerciseday.dev.src.user.model.PatchUserEditImgReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditNicknameReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
+import com.exerciseday.dev.src.user.model.PatchUserPhoneReq;
 import com.exerciseday.dev.src.user.model.PostUserReq;
 import com.exerciseday.dev.utils.JwtService;
 
@@ -153,14 +154,19 @@ public class UserService {
     }
 
     /*
-     * 유저찾기
-     * 카카오로그인에 사용 예정
+     * 핸드폰 번호로 유저찾기
      */
-    // public <Stirng> User UserFind(Stirng nickname) {
-    // User user = ((Object)
-    // userRepository.findByUsernickname(nickname)).orElseGet(() -> {
-    // return new User();
-    // });
-    // return user;
-    // }
+
+    public void UserFindByPhone(PatchUserPhoneReq patchUserPhoneReq) throws BaseException {
+        // 존재하는 유저?
+        if (userProvider.checkUserExist(patchUserPhoneReq.getUserIdx()) == 0) {
+            throw new BaseException(EXIST_NO_USER);
+        }
+    }
 }
+// public <Stirng> User UserFind(Stirng nickname, Object phone) {
+// User user = ((Object)userRepository.findByPhone(phone)).orElseGet(() -> {
+// return new User();
+// });
+// return user;
+// }

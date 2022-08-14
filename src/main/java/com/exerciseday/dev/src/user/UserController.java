@@ -1,5 +1,7 @@
 package com.exerciseday.dev.src.user;
 
+import lombok.Builder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
+import com.exerciseday.dev.src.user.kakao.GetKakaoPhone;
+import com.exerciseday.dev.src.user.kakao.KakaoProfile;
 import com.exerciseday.dev.src.user.model.*;
 import com.exerciseday.dev.utils.JwtService;
 import com.exerciseday.dev.utils.SNSService;
@@ -16,7 +20,8 @@ import software.amazon.awssdk.services.sns.model.SnsException;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.*;
 import static com.exerciseday.dev.utils.ValidationRegex.isRegexEmail;
-import com.exerciseday.dev.src.user.model.KakaoProfile;
+
+import com.exerciseday.dev.src.user.model.User.UserBuilder;
 
 @RestController
 @RequestMapping("/users")
@@ -349,55 +354,56 @@ public class UserController {
      * [GET] /users
      * 이메일 검색 조회 API. 이메일을 입력 받아서 해당 이메일 주인 정보 반환
      * [GET] /users? Email=
-     * 
-     * @return BaseResponse<GetUserRes>
-     */
-
-    // @ResponseBody
-    // @GetMapping("") // [GET] localhost:9000/users
-    // public BaseResponse<GetUserRes> getUserByEmail(@RequestParam(required = true)
-    // String Email) {
-    // try {
-
-    // if (Email == null) {
-    // return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-    // }
-    // if (!isRegexEmail(Email)) {
-    // return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
-
-    // }
-    // GetUserRes getUserRes = userProvider.getUserByEmail(Email);
-    // return new BaseResponse<>(getUserRes);
-    // } catch (BaseException exception) {
-    // return new BaseResponse<>((exception.getStatus()));
-
-    // }
-    // }
-
-    /*
-     * kakao profile + 회원조회 API
-     * 카카오 프로필 정보 받아서 회원정보 비교
-     * 회원가입 되어있고 정보 일치하면 로그인
-     * 아닌경우 회원가입
-     */
-
-    User kakaoUser = User.builder()
-            .nickname(KakaoProfile.getKakaoAccount().getnickname() + "_" + KakaoProfile.getId())
-            .password(codKey)
-            .email(KakaoProfile.getKakaoAccount().getEmail())
-            // .oauth("kakao")
-            .build();
-
-    // User originUser = UserService.UserFind(kakaoUser.get);
-    /**
-     * userIdx 검색 조회 API. userIdx 입력 받아서 해당 유저 정보 반환.
-     * [GET] /users/{userIdx}
      */
 
     // @return BaseResponse<GetUserRes>
 
     @ResponseBody
+    @GetMapping("") // [GET] localhost:9000/users
+    public BaseResponse<GetUserRes> getUserByEmail(@RequestParam(required = true) String Email) {
+        try {
 
+            if (Email == null) {
+                return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            }
+            if (!isRegexEmail(Email)) {
+                return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+
+            }
+            GetUserRes getUserRes = userProvider.getUserByEmail(Email);
+            return new BaseResponse<>(getUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+
+        }
+    }
+
+    /*
+     * kakao profile 정보조회 API
+     */
+
+    @Builder
+    User kakaoUser = ((UserBuilder) User.builder())
+            .phone(GetKakaoPhone.getPhone_number("010"))
+            .nickname(KakaoProfile.getKakao_account().getEmail() + "_" + KakaoProfile.getId())
+            .password(password)
+            .email(KakaoProfile.getKakao_account().getEmail())
+            // .oauth("kakao")
+            .build();
+
+    User originUser = UserService.UserFind(kakaoUser.get);
+
+    /**
+     * userIdx 검색 조회 API. userIdx 입력 받아서 해당 유저 정보 반환.
+     * [GET] /users/{userIdx}
+     */
+
+    /*
+     * 회원정보 불러오기 By userIdx
+     */
+    // @return BaseResponse<GetUserRes>
+
+    @ResponseBody
     @GetMapping("/{userIdx}") // [GET] /users/:userIdx
     public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx") int userIdx) {
         try {
@@ -407,5 +413,21 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    // 회원정보 불러오기 By phone
+    @ResponseBody
+    @GetMapping("/{phone}") // [GET] /users/:phone
+    public BaseResponse<GetUserRes> getUserByPhone(@PathVariable("phone") String phone) {
+        try {
+            GetUserRes getUserRes = userProvider.getUserByPhone(phone);
+            return new BaseResponse<>(getUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // private UserBuilder UserBuilder() {
+    // return null;
+    // }
 
 }
