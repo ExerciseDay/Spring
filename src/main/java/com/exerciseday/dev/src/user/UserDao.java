@@ -47,7 +47,7 @@ public class UserDao {
     }
 
     public User getUser(int userIdx){
-        String getUserByIdxQuery = "select userIdx,userEmail,userPwd, userNickname, userTel, userGender, userImg, userGoal, userCreate from User where userIdx=?";
+        String getUserByIdxQuery = "select userIdx,userEmail,userPwd, userNickname, userTel, userImg, userGoal, userCreate from User where userIdx=?";
         int getUserByIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserByIdxQuery,
                 (rs, rowNum) -> new User(
@@ -56,7 +56,7 @@ public class UserDao {
                         rs.getString("userPwd"),
                         rs.getString("userNickname"),                        
                         rs.getString("userTel"),
-                        rs.getString("userGender"),
+                        
                         rs.getString("userImg"),
                         rs.getString("userGoal"),
                         rs.getString("userCreate")),
