@@ -213,4 +213,28 @@ public class UserProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public int checkUserLogin(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUserLogin(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public int checkUserLogout(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUserLogout(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public int checkUserDelete(int userIdx) throws BaseException{
+        try{
+            return userDao.checkUserDelete(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

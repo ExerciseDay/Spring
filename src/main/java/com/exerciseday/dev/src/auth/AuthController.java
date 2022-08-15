@@ -86,7 +86,7 @@ public class AuthController {
 
         try{
             if(jwtService.isExpiredJWT()){
-                return new BaseResponse<>(INVALID_JWT);
+                return new BaseResponse<>(EXPIRED_JWT);
             }
             int userIdxByJwt = jwtService.getUserIdx();
             

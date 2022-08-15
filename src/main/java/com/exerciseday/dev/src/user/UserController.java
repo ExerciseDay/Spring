@@ -82,7 +82,12 @@ public class UserController {
             if(postUserReq.getPhone() == null){
                 return new BaseResponse<>(POST_USERS_EMPTY_PHONE);
             }
-            // 전화번호 형식
+            if(postUserReq.getGender() == null){
+                return new BaseResponse<>(EMPTY_GENDER);
+            }
+            if(postUserReq.getGender().equals("남성") == false | postUserReq.getGender().equals("여성") == false){
+                return new BaseResponse<>(INVALID_GENDER);
+            }
             
 
             logger.info("[POST] /users 호출 성공 ############");
@@ -502,9 +507,9 @@ public class UserController {
      
     @ResponseBody
     @GetMapping("/{userIdx}") // [GET] /users/:userIdx
-    public BaseResponse<GetUserRes> getUserByIdx(@PathVariable("userIdx") int userIdx){
+    public BaseResponse<User> getUserByIdx(@PathVariable("userIdx") int userIdx){
         try{
-            GetUserRes getUserRes = userProvider.getUserByIdx(userIdx);
+            User getUserRes = userProvider.getUser(userIdx);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

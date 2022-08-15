@@ -45,4 +45,28 @@ public class AuthProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public int checkUserLogin(int userIdx) throws BaseException{
+        try{
+            return authDao.checkUserLogin(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public int checkUserLogout(int userIdx) throws BaseException{
+        try{
+            return authDao.checkUserLogout(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public int checkUserDelete(int userIdx) throws BaseException{
+        try{
+            return authDao.checkUserDelete(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

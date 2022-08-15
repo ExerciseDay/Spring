@@ -60,4 +60,21 @@ public class AuthDao {
                 (rs, rowNum)-> rs.getInt("userIdx")
                 , getUserIdxByJWTParams);
     }
+    public int checkUserLogin(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'ACTIVE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
+
+    public int checkUserLogout(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'INACTIVE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
+
+    public int checkUserDelete(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'DELETE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
 }

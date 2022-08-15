@@ -52,4 +52,5 @@ public class ExerciseProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
 }

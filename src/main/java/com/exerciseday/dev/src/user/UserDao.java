@@ -47,7 +47,7 @@ public class UserDao {
     }
 
     public User getUser(int userIdx){
-        String getUserByIdxQuery = "select userIdx,userEmail,userPwd, userNickname, userTel, userImg, userGoal from User where userIdx=?";
+        String getUserByIdxQuery = "select userIdx,userEmail,userPwd, userNickname, userTel, userGender, userImg, userGoal, userCreate from User where userIdx=?";
         int getUserByIdxParams = userIdx;
         return this.jdbcTemplate.queryForObject(getUserByIdxQuery,
                 (rs, rowNum) -> new User(
@@ -56,8 +56,10 @@ public class UserDao {
                         rs.getString("userPwd"),
                         rs.getString("userNickname"),                        
                         rs.getString("userTel"),
+                        rs.getString("userGender"),
                         rs.getString("userImg"),
-                        rs.getString("userGoal")),
+                        rs.getString("userGoal"),
+                        rs.getString("userCreate")),
                         getUserByIdxParams);
     }
 
@@ -181,8 +183,15 @@ public class UserDao {
     }
 
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into User (userEmail, userPwd, userNickname, userTel ) VALUES (?,?,?,?)";
-        Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname(), postUserReq.getPhone()};
+        String img = "";
+        if(postUserReq.getGender().equals("남성")){
+            img = "/images/gender/male.png";
+        }
+        else if(postUserReq.getGender().equals("여성")){
+            img = "/images/gender/female.png";
+        }
+        String createUserQuery = "insert into User (userEmail, userPwd, userNickname, userTel, userGender, userGoal,userImg ) VALUES (?,?,?,?,?,?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getEmail(), postUserReq.getPassword(), postUserReq.getNickname(), postUserReq.getPhone(), postUserReq.getGender(), postUserReq.getGoal(),img};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
 
         String lastInserIdQuery = "select last_insert_id()";
@@ -241,6 +250,23 @@ public class UserDao {
                                                 , checkUserExpertExistParam);
     }
 
+    public int checkUserLogin(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'ACTIVE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
+
+    public int checkUserLogout(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'INACTIVE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
+
+    public int checkUserDelete(int userIdx){
+        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'DELETE')";
+        int checkUserLoginParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+    }
 
     public int editPwd(PatchUserEditPwdReq patchUserEditPwdReq){
         String patchUserEditPwdQuery = "update User set userPwd = ? where userIdx = ? ";

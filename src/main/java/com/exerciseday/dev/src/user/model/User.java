@@ -13,6 +13,8 @@ public class User {
     private String password;
     private String nickname;
     private String phone;
+    private String gender;
     private String img;
     private String goal;
+    private String create;
 }

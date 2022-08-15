@@ -20,7 +20,7 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
-
+    EXPIRED_JWT(false,2004,"만료된 토큰입니다."),
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
@@ -75,6 +75,7 @@ public enum BaseResponseStatus {
     INVALID_NICKNAME(false, 3041, "바르지 않은 닉네임입니다."),
     INVALID_PHONE(false, 3042, "바르지 않은 전화번호입니다."),
     INVALID_NAME(false,3043,"바르지 않은 이름입니다."),
+    INVALID_GENDER(false,3044,"바르지 않은 성별입니다."),
 
     EMPTY_EMAIL(false,3050,"이메일을 입력해주세요."),
     EMPTY_NICKNAME(false,3051,"닉네임을 입력해주세요."),
@@ -86,6 +87,7 @@ public enum BaseResponseStatus {
     EMPTY_DETAIL(false,3057,"세부부위를 입력해주세요."),
     EMPTY_NAME(false,3058,"이름을 입력해주세요."),
     EMPTY_INDEX(false,3059,"인덱스를 입력해주세요."),
+    EMPTY_GENDER(false, 3070,"성별을 입력해주세요."),
 
     DIFFERENT_USERS(false,3060,"서로 다른 유저 정보를 입력했습니다."),
     DIFFERENT_PASSWORD(false,3061,"서로 다른 비밀번호를 입력해주세요."),
