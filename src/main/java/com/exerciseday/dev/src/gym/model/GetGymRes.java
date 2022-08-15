@@ -20,6 +20,6 @@ public class GetGymRes {
     private int gymSauna;
     private int gymCloths;
     private int Shower;
-    private int gymSP;
+    private double gymSP;
     
 }

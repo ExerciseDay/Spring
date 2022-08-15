@@ -21,7 +21,7 @@ public class GymDao {
     }
     
     public List<GetGymRes> selectGym(String univ){
-        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, a.gymImg, a.gymDistance, a.univ, AVG(b.rvSP)\n" +
+        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, a.gymImg, a.gymDistance, a.univ, AVG(b.rvSP) as gymSP,\n" +
         "a.gymParking, a.gymSauna, a.gymCloths, a.gymShower\n" +
         "FROM gym as a\n" +
         "INNER JOIN review as b\n" +
@@ -43,7 +43,7 @@ public class GymDao {
                     rs.getInt("gymSauna"),
                     rs.getInt("gymCloths"),
                     rs.getInt("gymShower"),
-                    rs.getInt("AVG(rvSP)")
+                    rs.getDouble("gymSP")
                 ),selectGymParam);
 
     }
