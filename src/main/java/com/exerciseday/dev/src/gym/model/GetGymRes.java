@@ -15,7 +15,11 @@ public class GetGymRes {
     private String gymIntroduce;
     private String gymImg;
     private int gymDistance;
-    private int spoint;
     private String univ;
+    private int gymParking;
+    private int gymSauna;
+    private int gymCloths;
+    private int Shower;
+    private int gymSP;
     
 }
