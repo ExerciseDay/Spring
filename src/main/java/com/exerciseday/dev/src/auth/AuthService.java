@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
+import com.exerciseday.dev.src.auth.model.GetTagRes;
 import com.exerciseday.dev.src.auth.model.PostLoginReq;
 import com.exerciseday.dev.src.auth.model.PostLoginRes;
 import com.exerciseday.dev.src.auth.model.User;
@@ -14,6 +15,8 @@ import com.exerciseday.dev.utils.JwtService;
 import com.exerciseday.dev.utils.SHA256;
 
 import static com.exerciseday.dev.config.BaseResponseStatus.*;
+
+import java.util.List;
 
 @Service
 public class AuthService {
@@ -38,24 +41,28 @@ public class AuthService {
         if(authProvider.checkEmail(postLoginReq.getEmail())==0){
             throw new BaseException(FAILED_TO_LOGIN);
         }
-
+        
+        
         User user = authDao.getUserByLoginReq(postLoginReq);
         String encryptPwd;
         try {
             new SHA256();
             encryptPwd = SHA256.encrypt(postLoginReq.getPassword());
-            //postLoginReq.setPassword(encryptPwd);
+            postLoginReq.setPassword(encryptPwd);
         }
         catch (Exception exception) {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
-
+        
         if(user.getPassword().equals(encryptPwd)){
             
             int userIdx = user.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
+            
+            List<GetTagRes> tags = authProvider.getRandomTags();
             logger.info("[POST] /auth/login 로그인 성공 ###############");
-            return new PostLoginRes(userIdx, jwt);
+            System.out.println("여기");
+            return new PostLoginRes(userIdx, jwt,user.getNickname(),user.getUserImg(),user.getUserGoal(),tags);
         } else{            
             throw new BaseException(FAILED_TO_LOGIN);
         }

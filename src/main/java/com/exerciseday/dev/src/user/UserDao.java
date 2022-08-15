@@ -142,7 +142,7 @@ public class UserDao {
     }
     */
 
-
+    /*
     // 유저 - 전문가 코스 테이블 연결 테이블에서 전문가 코스 인덱스 출력
     public List<Integer> getRelation(int userIdx){
         String getRelationQuery = "SELECT ue.ExpertCourse_eCourseIdx\n"+
@@ -171,7 +171,22 @@ public class UserDao {
                 ),
                 getUserExpertsParam);
     }
-    
+    */
+    public List<GetUserExpertRes> getUserExperts2(int userIdx){
+        String getUserExperts2Query = "SELECT e.eCourseIdx, e.eCourseName, e.eCourseTime, e.eCourseCalory\n"+
+                                    "   FROM ExpertCourse as e\n"+
+                                    "       join User_has_ExpertCourse as ue on ue.ExpertCourse_eCourseIdx = e.eCourseIdx\n"+
+                                    "       join User as u on u.userIdx = ue.User_userIdx\n"+
+                                    "   WHERE u.userIdx = ?";
+        int getUserExperts2Param = userIdx;
+        return this.jdbcTemplate.query(getUserExperts2Query, 
+                                        (rs,rowNum)->new GetUserExpertRes(
+                                                    rs.getInt("e.eCourseIdx"),
+                                                    rs.getString("e.eCourseName"),
+                                                    rs.getInt("e.eCourseTime"),
+                                                    rs.getInt("e.eCourseCalory")
+                                        ), getUserExperts2Param);        
+    }
 
     public int postUserFindPwd(String phone){
         String postUserFindPwdQuery = "select userIdx from User where userTel=?";
@@ -187,7 +202,7 @@ public class UserDao {
         if(postUserReq.getGender().equals("남성")){
             img = "/images/gender/male.png";
         }
-        else if(postUserReq.getGender().equals("여성")){
+        if(postUserReq.getGender().equals("여성")){
             img = "/images/gender/female.png";
         }
         String createUserQuery = "insert into User (userEmail, userPwd, userNickname, userTel, userGender, userGoal,userImg ) VALUES (?,?,?,?,?,?,?)";

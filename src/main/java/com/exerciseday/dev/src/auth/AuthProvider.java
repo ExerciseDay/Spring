@@ -1,11 +1,14 @@
 package com.exerciseday.dev.src.auth;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponseStatus;
+import com.exerciseday.dev.src.auth.model.GetTagRes;
 import com.exerciseday.dev.utils.JwtService;
 
 
@@ -64,6 +67,14 @@ public class AuthProvider {
     public int checkUserDelete(int userIdx) throws BaseException{
         try{
             return authDao.checkUserDelete(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public List<GetTagRes> getRandomTags() throws BaseException{
+        try{
+            return authDao.getRamdomTags();
         }
         catch(Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

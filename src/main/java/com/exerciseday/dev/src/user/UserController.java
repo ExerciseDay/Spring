@@ -85,7 +85,7 @@ public class UserController {
             if(postUserReq.getGender() == null){
                 return new BaseResponse<>(EMPTY_GENDER);
             }
-            if(postUserReq.getGender().equals("남성") == false | postUserReq.getGender().equals("여성") == false){
+            if(!(postUserReq.getGender().equals("남성") || postUserReq.getGender().equals("여성"))){
                 return new BaseResponse<>(INVALID_GENDER);
             }
             

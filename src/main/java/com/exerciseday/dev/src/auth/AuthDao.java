@@ -1,5 +1,7 @@
 package com.exerciseday.dev.src.auth;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,9 @@ public class AuthDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
+    
     public User getUserByLoginReq(PostLoginReq postLoginReq){
-        String getUserByLoginReqQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel,userImg FROM User WHERE userEmail = ?";
+        String getUserByLoginReqQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel,userGender, userImg, userGoal, userCreate FROM User WHERE userEmail = ?";
         String getUserByLoginReqParams = postLoginReq.getEmail();
         
         return this.jdbcTemplate.queryForObject(getUserByLoginReqQuery,
@@ -29,11 +31,14 @@ public class AuthDao {
                         rs.getString("userPwd"),
                         rs.getString("userNickname"),
                         rs.getString("userTel"),
-                        rs.getString("userImg")
+                        rs.getString("userGender"),
+                        rs.getString("userImg"),
+                        rs.getString("userGoal"),
+                        rs.getString("userCreate")
                         
                 ), getUserByLoginReqParams);
     }
-
+    
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select userEmail from User where userEmail = ?)";
         String checkEmailParams = email;
@@ -77,4 +82,29 @@ public class AuthDao {
         int checkUserLoginParam = userIdx;
         return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
     }
+    public List<GetTagRes> getRamdomTags(){
+        String getRamdomTagsQuery = "SELECT tagIdx, tagName FROM Tag ORDER BY RAND() LIMIT 4";
+        //List<GetTagExpertInfoRes> expertInfos;
+        return this.jdbcTemplate.query(getRamdomTagsQuery,
+                                             (rs, rowNum) -> new GetTagRes(
+                                                        rs.getInt("tagIdx"), 
+                                                        rs.getString("tagName"), 
+                                                        this.jdbcTemplate.query(
+                                                            "SELECT e.eCourseIdx, e.eCourseName, e.eCourseImg\n"+
+                                                            "FROM ExpertCourse as e\n"+
+                                                            "   join ExpertCourse_has_Tag as et on et.ExpertCourse_eCourseIdx = e.eCourseIdx\n"+
+                                                            "   join Tag as t on t.tagIdx = et.Tag_tagIdx\n"+
+                                                            "WHERE t.tagIdx = ?\n"+
+                                                            "LIMIT 4",
+                                                            (rk,rownum)->new GetTagExpertInfoRes(
+                                                                rk.getInt("e.eCourseIdx"),
+                                                                rk.getString("e.eCourseName"),
+                                                                rk.getString("e.eCourseImg")
+                                                            ),
+                                                            rs.getInt("tagIdx")
+                                                                    )
+                                                            )
+                                        );
+    }
 }
+ 

@@ -60,9 +60,12 @@ public class UserService {
             throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
         }
         try{
+            
             int userIdx = userDao.createUser(postUserReq);
+            
             //jwt 발급.
             String jwt = jwtService.createJwt(userIdx);
+            
             logger.info("[POST] /users 회원가입 성공 #############");
             return new PostUserRes(userIdx,jwt);
         } catch (Exception exception) {
