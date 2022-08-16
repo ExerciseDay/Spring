@@ -163,17 +163,17 @@ public class ExerciseController {
 
     /*
      * 운동 검색 API
-     * [GET] /exercise/search?exerciseName=
+     * [GET] /exercise/search?what=
      */
     @ResponseBody
     @GetMapping("/search")
-    public BaseResponse<GetExercisesRes> getExercises(@RequestParam(required = false) String exerciseName){
-        if(exerciseName == null){
+    public BaseResponse<GetExercisesRes> getExercises(@RequestParam(required = false) String what){
+        if(what == null){
             return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
         }
         try{
-            System.out.println(exerciseName);
-            return new BaseResponse<>(exerciseProvider.getExercises(exerciseName));
+            
+            return new BaseResponse<>(exerciseProvider.getExercises(what));
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
