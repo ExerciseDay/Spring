@@ -397,10 +397,12 @@ public class UserController {
     @GetMapping("/{userIdx}/course")
     public BaseResponse<GetUserCourseRes> getUserCourse(@PathVariable("userIdx") int userIdx){
         try{
+            
             int userIdxByJwt = jwtService.getUserIdx();
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            
             GetUserCourseRes getUserCourseRes = userProvider.getUserCourse(userIdx);
             return new BaseResponse<>(getUserCourseRes);
         } catch(BaseException exception){

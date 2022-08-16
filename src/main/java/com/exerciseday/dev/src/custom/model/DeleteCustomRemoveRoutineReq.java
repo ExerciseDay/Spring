@@ -10,5 +10,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class DeleteCustomRemoveRoutineReq {
+    public DeleteCustomRemoveRoutineReq(){}
     private List<Integer> customRoutineIdxs;
 }

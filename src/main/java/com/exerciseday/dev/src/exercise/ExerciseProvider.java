@@ -25,6 +25,18 @@ public class ExerciseProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public GetExercisesRes getExercises(String exerciseName) throws BaseException{
+        
+        try{
+            String exNameSearchForm = "%" + exerciseName + "%";
+            return exerciseDao.getExercises(exNameSearchForm);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
     public GetExerciseTCRes getExerciseTC(int exerciseIdx) throws BaseException{
         try{
             GetExerciseTCRes exerciseTCRes = exerciseDao.getExerciseTCRes(exerciseIdx);
@@ -34,6 +46,19 @@ public class ExerciseProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public GetDibsRes getDibs(int userIdx) throws BaseException{
+        if(checkUserExist(userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        try{
+            return exerciseDao.getDibs(userIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
     public int checkExerciseExist(int exerciseIdx) throws BaseException{
         try{
             int result = exerciseDao.checkExerciseExist(exerciseIdx);

@@ -16,6 +16,7 @@ import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.exercise.model.*;
+import com.exerciseday.dev.utils.JwtService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,13 @@ public class ExerciseController {
     private ExerciseProvider exerciseProvider;
     @Autowired
     private ExerciseService exerciseService;
+    @Autowired
+    private JwtService jwtService;
 
-
-    public ExerciseController(ExerciseProvider exerciseProvider, ExerciseService exerciseService){
+    public ExerciseController(ExerciseProvider exerciseProvider, ExerciseService exerciseService, JwtService jwtService){
         this.exerciseProvider = exerciseProvider;
         this.exerciseService = exerciseService;
+        this.jwtService = jwtService;
         
     }
 
@@ -95,9 +98,82 @@ public class ExerciseController {
             return new BaseResponse<>(BaseResponseStatus.EMPTY_INDEX);
         }
         try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+            }
             exerciseService.postDibs(exerciseIdx,userIdx);
             String result = "운동 찜 성공";
             return new BaseResponse<>(result);
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /*
+     * 운동 찜 목록 조회 API
+     * [GET] /exercise/dibs?userIdx=?
+     */
+    @ResponseBody
+    @GetMapping("/dibs")
+    public BaseResponse<GetDibsRes> getDibs(@RequestParam Integer userIdx){
+        if(userIdx == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_INDEX);
+        }
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+            }
+            GetDibsRes getDibsRes = exerciseProvider.getDibs(userIdx);
+            return new BaseResponse<>(getDibsRes);
+            
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+
+
+    /*
+     * 운동 찜 삭제 API
+     * [DELETE] /exercise/{exerciseIdx}/dibs?userIdx=
+     */
+    @ResponseBody
+    @DeleteMapping("/{exerciseIdx}/dibs")
+    public BaseResponse<String> deleteDibs(@PathVariable("exerciseIdx") int exerciseIdx,@RequestParam Integer userIdx){
+        if(userIdx == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_INDEX);
+        }
+        try{
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+            }
+            exerciseService.deleteDibs(exerciseIdx,userIdx);
+            String result = "운동 찜 삭제 성공";
+            return new BaseResponse<>(result);
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    /*
+     * 운동 검색 API
+     * [GET] /exercise/search?exerciseName=
+     */
+    @ResponseBody
+    @GetMapping("/search")
+    public BaseResponse<GetExercisesRes> getExercises(@RequestParam(required = false) String exerciseName){
+        if(exerciseName == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
+        }
+        try{
+            System.out.println(exerciseName);
+            return new BaseResponse<>(exerciseProvider.getExercises(exerciseName));
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());

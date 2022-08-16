@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
+import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.auth.model.GetTagRes;
 import com.exerciseday.dev.src.auth.model.PostLoginReq;
 import com.exerciseday.dev.src.auth.model.PostLoginRes;
@@ -39,7 +40,10 @@ public class AuthService {
     public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
         // 유저 가입 여부 검사
         if(authProvider.checkEmail(postLoginReq.getEmail())==0){
-            throw new BaseException(FAILED_TO_LOGIN);
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        if(authProvider.checkUserDeleteByEmail(postLoginReq.getEmail())==1){
+            throw new BaseException(DELETED_USER);
         }
         
         
@@ -61,7 +65,7 @@ public class AuthService {
             
             List<GetTagRes> tags = authProvider.getRandomTags();
             logger.info("[POST] /auth/login 로그인 성공 ###############");
-            System.out.println("여기");
+            
             return new PostLoginRes(userIdx, jwt,user.getNickname(),user.getUserImg(),user.getUserGoal(),tags);
         } else{            
             throw new BaseException(FAILED_TO_LOGIN);

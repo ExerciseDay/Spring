@@ -60,6 +60,64 @@ public class ExerciseDao {
                                                             ,getExerciseParam);
     }
 
+    /* 
+    public int getExCount(String exerciseName){
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE exName like ?";
+        String getExercisesParam = exerciseName;
+        return this.jdbcTemplate.queryForObject(getExercisesQuery,int.class, getExercisesParam);
+    }
+    */
+
+    public GetExercisesRes getExercises(String exNameSearchForm){
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE exName LIKE ?";
+        String getExercisesParam = exNameSearchForm;
+        return this.jdbcTemplate.queryForObject(getExercisesQuery,
+                                                (rs,rowNum) -> new GetExercisesRes(
+                                                                    rs.getInt("count"),
+                                                                    this.jdbcTemplate.query("SELECT exIdx, exName, exPart, exDetailPart, exIntroduce\n"+
+                                                                                            "FROM Exercise\n"+
+                                                                                            "WHERE exName\n"+
+                                                                                            "LIKE ?",
+                                                                                            (rk,rownum)->new ExerciseInfo(
+                                                                                                            rk.getInt("exIdx"),
+                                                                                                            rk.getString("exName"),
+                                                                                                            rk.getString("exPart"),
+                                                                                                            rk.getString("exDetailPart"),
+                                                                                                            rk.getString("exIntroduce")
+                                                                                                         )
+                                                                                            ,getExercisesParam)
+                                                                )
+                                                                ,getExercisesParam);
+    }
+
+    public GetDibsRes getDibs(int userIdx){
+        String getDibsResQuery = ""+
+                                "SELECT u.userIdx, u.userNickname, IF(dibsCount is null, 0, dibsCount) as dibsCount\n"+
+                                "FROM User as u\n"+
+                                "   left join(SELECT User_userIdx, Count(Exercise_exIdx) as dibsCount\n"+
+                                "             FROM User_has_Exercise\n"+
+                                "             GROUP BY User_userIdx) ue on ue.User_userIdx = u.userIdx\n"+
+                                "WHERE u.userIdx = ?";
+        int getDibsResParam = userIdx;
+        return this.jdbcTemplate.queryForObject(getDibsResQuery,
+                                                (rk, rownum) -> new GetDibsRes(
+                                                                rk.getInt("u.userIdx"),
+                                                                rk.getString("u.userNickname"),
+                                                                rk.getInt("dibsCount"),                                                
+                                                                this.jdbcTemplate.query("SELECT e.exIdx, e.exName, e.exPart, e.exDetailPart, e.exIntroduce\n"+
+                                                                                        "FROM Exercise as e\n"+
+                                                                                        "   join User_has_Exercise as ue on ue.Exercise_exIdx = e.exIdx\n"+
+                                                                                        "   join User as u on u.userIdx = ue.User_userIdx\n"+
+                                                                                        "WHERE u.userIdx = ?",
+                                                                                        (rs, rowNum)->new ExerciseInfo( 
+                                                                                                        rs.getInt("e.exIdx"),
+                                                                                                        rs.getString("e.exName"),
+                                                                                                        rs.getString("e.exPart"),
+                                                                                                        rs.getString("e.exDetailPart"),
+                                                                                                        rs.getString("e.exIntroduce")) 
+                                                                                        ,rk.getInt("u.userIdx"))
+                                                                ),getDibsResParam);
+    }
 
     public int checkExerciseExist(int exerciseIdx){
         String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exIdx = ?)";
@@ -73,6 +131,7 @@ public class ExerciseDao {
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,int.class, checkUserExistParam);
     }
 
+
     public int deleteExercise(int exerciseIdx){
         String deleteExerciseQuery = "DELETE FROM Exercise WHERE exIdx = ?";
         int deleteExerciseParam = exerciseIdx;
@@ -80,8 +139,13 @@ public class ExerciseDao {
     }
 
     public void postDibs(int exerciseIdx, int userIdx){
-        String postDibsQuery = "";
+        String postDibsQuery = "INSERT INTO User_has_Exercise(Exercise_exIdx, User_userIdx) VALUES(?,?)";
         Object[] postDibsParams = new Object[]{exerciseIdx,userIdx};
         this.jdbcTemplate.update(postDibsQuery, postDibsParams);
+    }
+    public int deleteDibs(int exerciseIdx, int userIdx){
+        String deleteDibsQuery = "DELETE FROM User_has_Exercise WHERE Exercise_exIdx = ? AND User_userIdx = ?";
+        Object[] deleteDibsParams = new Object[]{exerciseIdx,userIdx};
+        return this.jdbcTemplate.update(deleteDibsQuery, deleteDibsParams);
     }
 }

@@ -39,6 +39,25 @@ public class AuthDao {
                 ), getUserByLoginReqParams);
     }
     
+    public User autoLogin(int userIdx){
+        String autoLoginQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel,userGender, userImg, userGoal, userCreate FROM User WHERE userIdx = ?";
+        int autoLoginParams = userIdx;
+        
+        return this.jdbcTemplate.queryForObject(autoLoginQuery,
+                (rs, rowNum)-> new User(
+                        rs.getInt("userIdx"),
+                        rs.getString("userEmail"),
+                        rs.getString("userPwd"),
+                        rs.getString("userNickname"),
+                        rs.getString("userTel"),
+                        rs.getString("userGender"),
+                        rs.getString("userImg"),
+                        rs.getString("userGoal"),
+                        rs.getString("userCreate")
+                        
+                ), autoLoginParams);
+    }
+
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select userEmail from User where userEmail = ?)";
         String checkEmailParams = email;
@@ -72,15 +91,20 @@ public class AuthDao {
     }
 
     public int checkUserLogout(int userIdx){
-        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'INACTIVE')";
-        int checkUserLoginParam = userIdx;
-        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+        String checkUserLogoutQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'INACTIVE')";
+        int checkUserLogoutParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserLogoutQuery,int.class, checkUserLogoutParam);
     }
 
     public int checkUserDelete(int userIdx){
-        String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'DELETE')";
-        int checkUserLoginParam = userIdx;
-        return this.jdbcTemplate.queryForObject(checkUserLoginQuery,int.class, checkUserLoginParam);
+        String checkUserDeleteQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'DELETE')";
+        int checkUserDeleteParam = userIdx;
+        return this.jdbcTemplate.queryForObject(checkUserDeleteQuery,int.class, checkUserDeleteParam);
+    }
+    public int checkUserDeleteByEmail(String email){
+        String checkUserDeleteByEmailQuery = "select exists(select userEmail from User where userEmail = ? AND userStatus = 'DELETE')";
+        String checkUserDeleteByEmailParam = email;
+        return this.jdbcTemplate.queryForObject(checkUserDeleteByEmailQuery,int.class, checkUserDeleteByEmailParam);
     }
     public List<GetTagRes> getRamdomTags(){
         String getRamdomTagsQuery = "SELECT tagIdx, tagName FROM Tag ORDER BY RAND() LIMIT 4";

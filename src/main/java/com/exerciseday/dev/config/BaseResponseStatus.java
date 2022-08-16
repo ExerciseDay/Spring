@@ -40,6 +40,7 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_PHONE(false, 2023, "전화번호를 입력해주세요."),
     POST_USERS_INVALID_PHONE(false, 2024, "전화번호를 확인해주세요."),
     
+    DELETED_USER(false,2030,"탈퇴한 유저입니다."),
 
 
 

@@ -84,10 +84,12 @@ public class CustomController {
     @GetMapping("/{customIdx}")
     public BaseResponse<GetCustomRes> getCustom(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx){
         try{
+            
             int userIdxByJwt = jwtService.getUserIdx();
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
+            
 
             GetCustomRes custom = customProvider.getCustom(userIdx, customIdx);
             return new BaseResponse<>(custom);
@@ -150,22 +152,24 @@ public class CustomController {
 
      /*
       * 커스텀 코스 루틴 빼기 API
-      * [PATCH] /users/{userIdx}/custom/{customIdx}/remove
+      * [DELETE] /users/{userIdx}/custom/{customIdx}/remove
       */
     @ResponseBody
     @DeleteMapping("/{customIdx}/remove")
-    public BaseResponse<DeleteCustomRemoveRoutineRes> removeCustomRoutine(@PathVariable("userIdx") int userIdx,@PathVariable("customIdx") int customIdx, @RequestBody DeleteCustomRemoveRoutineReq deleteCustomRemoveRoutineReq){
+    public BaseResponse<String> removeCustomRoutine(@PathVariable("userIdx") int userIdx,@PathVariable("customIdx") int customIdx, @RequestBody DeleteCustomRemoveRoutineReq deleteCustomRemoveRoutineReq){
         if(deleteCustomRemoveRoutineReq.getCustomRoutineIdxs().size() < 1){
             return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
         }
         try{
+            
             int userIdxByJwt = jwtService.getUserIdx();
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
-            customService.removeCustomRoutine(userIdx,customIdx,deleteCustomRemoveRoutineReq);
             
-            return new BaseResponse<>(new DeleteCustomRemoveRoutineRes(userIdx,customIdx));
+            customService.removeCustomRoutine(userIdx,customIdx,deleteCustomRemoveRoutineReq);
+            return new BaseResponse<>("루틴 삭제 성공");
+            //return new BaseResponse<>(new DeleteCustomRemoveRoutineRes(userIdx,customIdx));
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());

@@ -62,4 +62,18 @@ public class ExerciseService {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public void deleteDibs(int exerciseIdx, int userIdx) throws BaseException{
+        if(exerciseProvider.checkUserExist(userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        if(exerciseProvider.checkExerciseExist(exerciseIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+        }
+        
+        if(exerciseDao.deleteDibs(exerciseIdx, userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+        }
+        
+    }
 }

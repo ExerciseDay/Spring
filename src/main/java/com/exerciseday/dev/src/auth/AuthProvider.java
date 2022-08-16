@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.auth.model.GetTagRes;
+import com.exerciseday.dev.src.auth.model.PostLoginReq;
+import com.exerciseday.dev.src.auth.model.PostLoginRes;
+import com.exerciseday.dev.src.auth.model.User;
 import com.exerciseday.dev.utils.JwtService;
 
 
@@ -39,15 +42,17 @@ public class AuthProvider {
         }
     }
     public int getUserIdxByJWT(int userIdxByJwt) throws BaseException{
+        if(checkUserExist(userIdxByJwt)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
         try{      
-            if(checkUserExist(userIdxByJwt)==0){
-                throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
-            }
+
             return authDao.getUserIdxByJWT(userIdxByJwt);
         } catch (Exception exception){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
     public int checkUserLogin(int userIdx) throws BaseException{
         try{
             return authDao.checkUserLogin(userIdx);
@@ -72,9 +77,36 @@ public class AuthProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public int checkUserDeleteByEmail(String email) throws BaseException{
+        try{
+            return authDao.checkUserDeleteByEmail(email);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
     public List<GetTagRes> getRandomTags() throws BaseException{
         try{
             return authDao.getRamdomTags();
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    public PostLoginRes autoLogin(int userIdx,String jwt) throws BaseException{
+        if(checkUserExist(userIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
+        }
+        if(checkUserDelete(userIdx)==1){
+            throw new BaseException(BaseResponseStatus.DELETED_USER);
+        }
+        try{
+
+
+            User user = authDao.autoLogin(userIdx);
+
+            List<GetTagRes> tags = getRandomTags();
+            return new PostLoginRes(userIdx, jwt, user.getNickname(), user.getUserImg(), user.getUserGoal(), tags);
         }
         catch(Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

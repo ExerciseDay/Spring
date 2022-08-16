@@ -82,16 +82,17 @@ public class AuthController {
      */
     @ResponseBody
     @GetMapping("/jwt")
-    public BaseResponse<Integer> autoLogin(){
+    public BaseResponse<PostLoginRes> autoLogin(){
 
         try{
             if(jwtService.isExpiredJWT()){
                 return new BaseResponse<>(EXPIRED_JWT);
             }
             int userIdxByJwt = jwtService.getUserIdx();
-            
+            String jwt = jwtService.getJwt();
             int userIdx = authProvider.getUserIdxByJWT(userIdxByJwt);
-            return new BaseResponse<>(userIdx);
+            PostLoginRes postLoginRes = authProvider.autoLogin(userIdx,jwt);
+            return new BaseResponse<>(postLoginRes);
         }
         catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
