@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Mapping
 public class GetKakaoPhone {
 
     private String phone_number;

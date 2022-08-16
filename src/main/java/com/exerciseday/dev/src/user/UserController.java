@@ -384,7 +384,7 @@ public class UserController {
 
     @Builder
     User kakaoUser = ((UserBuilder) User.builder())
-            .phone(GetKakaoPhone.getPhone_number("010"))
+            .phone(GetKakaoPhone.getPhone_number(""))
             .nickname(KakaoProfile.getKakao_account().getEmail() + "_" + KakaoProfile.getId())
             .password(password)
             .email(KakaoProfile.getKakao_account().getEmail())
