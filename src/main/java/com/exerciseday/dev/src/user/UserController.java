@@ -1,6 +1,7 @@
 package com.exerciseday.dev.src.user;
 
 import lombok.Builder;
+import lombok.Data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
-import com.exerciseday.dev.src.user.kakao.GetKakaoPhone;
+import com.exerciseday.dev.src.auth.AuthController;
+import com.exerciseday.dev.src.user.kakao.GetKakaoProfile;
 import com.exerciseday.dev.src.user.kakao.KakaoProfile;
+
 import com.exerciseday.dev.src.user.model.*;
 import com.exerciseday.dev.utils.JwtService;
 import com.exerciseday.dev.utils.SNSService;
@@ -36,13 +39,19 @@ public class UserController {
     private final JwtService jwtService;
     @Autowired
     private final SNSService snsService;
+    @Autowired
+    private final GetKakaoProfile getKakaoProfile;
+    @Autowired
+    private final AuthController authController;
 
     public UserController(UserProvider userProvider, UserService userService, JwtService jwtService,
-            SNSService snsService) {
+            SNSService snsService, GetKakaoProfile getKakaoProfile, AuthController authController) {
         this.userProvider = userProvider;
         this.userService = userService;
         this.jwtService = jwtService;
         this.snsService = snsService;
+        this.getKakaoProfile = getKakaoProfile;
+        this.authController = authController;
     }
 
     /**
@@ -381,17 +390,45 @@ public class UserController {
     /*
      * kakao profile 정보조회 API
      */
+    // @ResponseBody
+    // @GetMapping("/kakao/callback") // [GET] localhost:9000/users
+    // public String kakaoCallback(@RequestParam(required = true) String
+    // getPhone_number) {
 
-    @Builder
-    User kakaoUser = ((UserBuilder) User.builder())
-            .phone(GetKakaoPhone.getPhone_number(""))
-            .nickname(KakaoProfile.getKakao_account().getEmail() + "_" + KakaoProfile.getId())
-            .password(password)
-            .email(KakaoProfile.getKakao_account().getEmail())
-            // .oauth("kakao")
-            .build();
+    // User kakaoUser = ((UserBuilder) User.builder())
+    // .phone(getKakaoProfile.getPhone_number())
+    // .email(getKakaoProfile.getEmail())
+    // .build();
 
-    User originUser = UserService.UserFind(kakaoUser.get);
+    // User originUser =
+    // UserService.getUserByPhone(getKakaoProfile.getPhone_number());
+
+    // if(originUser.getUser)
+    // }
+
+    @ResponseBody
+    @GetMapping("/kakao/callback") // [GET] localhost:9000/users
+    public void kakaoCallback(@RequestParam(required = true) String getPhone_number, String getEmail)
+            throws BaseException {
+
+        User kakaoUser = ((UserBuilder) User.builder())
+                .phone(getKakaoProfile.getPhone_number())
+                .email(getKakaoProfile.getEmail())
+                .build();
+
+        User originUser = userService.getUserByPhone(getKakaoProfile.getPhone_number());
+        String kakaoPhone = kakaoUser.getPhone();
+        String kakaoEmail = kakaoUser.getEmail();
+
+        if (originUser.getPhone() != null) {
+            System.out.println("기존 회원이 아닙니다.");
+            userService.createUser(null); // 회원가입
+        }
+
+        System.out.println("자동로그인을 진행합니다.");
+        String login = "/login";
+
+    }
 
     /**
      * userIdx 검색 조회 API. userIdx 입력 받아서 해당 유저 정보 반환.
@@ -414,17 +451,18 @@ public class UserController {
         }
     }
 
-    // 회원정보 불러오기 By phone
-    @ResponseBody
-    @GetMapping("/{phone}") // [GET] /users/:phone
-    public BaseResponse<GetUserRes> getUserByPhone(@PathVariable("phone") String phone) {
-        try {
-            GetUserRes getUserRes = userProvider.getUserByPhone(phone);
-            return new BaseResponse<>(getUserRes);
-        } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
-        }
-    }
+    // // 회원정보 불러오기 By phone
+    // @ResponseBody
+    // @GetMapping("/{phone}") // [GET] /users/:phone
+    // public BaseResponse<GetUserRes> getUserByPhone(@PathVariable("phone") String
+    // phone) {
+    // try {
+    // GetUserRes getUserRes = userProvider.getUserByPhone(phone);
+    // return new BaseResponse<>(getUserRes);
+    // } catch (BaseException exception) {
+    // return new BaseResponse<>((exception.getStatus()));
+    // }
+    // }
 
     // private UserBuilder UserBuilder() {
     // return null;

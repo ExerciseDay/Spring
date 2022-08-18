@@ -12,9 +12,7 @@ public class PostUserReq {
     private String password;
     private String nickname;
     private String phone;
-    
+    // 웹 nickName email pwd 가입경로 건의사항
+    // 앱 email name pwd
 
-    //웹 nickName email pwd 가입경로 건의사항
-    //앱 email name pwd
 }
-

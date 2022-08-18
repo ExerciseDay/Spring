@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.exerciseday.dev.src.user.model.PostUserRes;
 import com.exerciseday.dev.src.user.model.User;
+import com.exerciseday.dev.src.user.model.GetUserRes;
 import com.exerciseday.dev.src.user.model.PatchUserEditImgReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditNicknameReq;
 import com.exerciseday.dev.src.user.model.PatchUserEditPwdReq;
@@ -147,7 +148,33 @@ public class UserService {
             if (result == 0) {
                 throw new BaseException(DELETE_FAIL_USER);
             }
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
+    /*
+     * 핸드폰으로 유저찾기
+     */
+    public int checkPhoneExist(String phone) throws BaseException {
+        try {
+
+            return userDao.checkPhoneExist(phone);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public User getUserByPhone(String phone) throws BaseException {
+
+        if (checkPhoneExist(phone) == 0) {
+            throw new BaseException(EXIST_NO_PHONE);
+        }
+
+        try {
+
+            User getUserRes = userDao.getUserByPhoneTU(phone);
+            return getUserRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -157,12 +184,21 @@ public class UserService {
      * 핸드폰 번호로 유저찾기
      */
 
-    public void UserFindByPhone(PatchUserPhoneReq patchUserPhoneReq) throws BaseException {
-        // 존재하는 유저?
-        if (userProvider.checkUserExist(patchUserPhoneReq.getUserIdx()) == 0) {
-            throw new BaseException(EXIST_NO_USER);
-        }
-    }
+    // public void UserFindByPhone(PatchUserPhoneReq patchUserPhoneReq) throws
+    // BaseException {
+    // // 존재하는 유저?
+    // if (userProvider.checkUserExist(patchUserPhoneReq.getUserIdx()) == 0) {
+    // throw new BaseException(EXIST_NO_USER);
+    // }
+    // try {
+    // int result = userDao.getUserByPhone(폰번호);
+    // if (result == 0) {
+    // throw new BaseException(DELETE_FAIL_USER);
+    // }
+    // } catch (Exception exception) {
+    // throw new BaseException(DATABASE_ERROR);
+    // }
+    // }
 }
 // public <Stirng> User UserFind(Stirng nickname, Object phone) {
 // User user = ((Object)userRepository.findByPhone(phone)).orElseGet(() -> {

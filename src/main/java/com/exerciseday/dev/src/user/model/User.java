@@ -19,8 +19,4 @@ public class User {
     private String nickname;
     private String phone;
 
-    public static Object builder() {
-        return null;
-    }
-
 }
