@@ -13,4 +13,5 @@ public class GetGymDetailRes {
     private GetGymInfoRes getGymInfo;
     private List<GetTrainersRes> getTrainers;
     private List<GetReviewRes> getReviews;
+    private List<GetImgRes> getImg;
 }

@@ -21,11 +21,14 @@ public class GymDao {
     }
     
     public List<GetGymRes> selectGym(String univ){
-        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, a.gymImg, a.gymDistance, a.univ, AVG(b.rvSP) as gymSP,\n" +
+        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, c.gymImg," +
+        "a.gymDistance, a.univ, AVG(b.rvSP) as gymSP,\n" +
         "a.gymParking, a.gymSauna, a.gymCloths, a.gymShower\n" +
         "FROM gym as a\n" +
         "INNER JOIN review as b\n" +
         "ON a.gymIdx = b.Gym_gymIdx\n" +
+        "INNER JOIN gymImg as c\n" +
+        "ON a.gymIdx = c.Gym_gymIdx\n" +
         "WHERE a.univ = ?\n" +
         "GROUP BY gymIdx";
 
@@ -93,5 +96,15 @@ public class GymDao {
                     rs.getString("trainerIntroduce"),
                     rs.getString("trainerImg")
                 ), selectTrainersParam);
+    }
+
+    public List<GetImgRes> selectImgs(int gymIdx){
+        String selectImgsQuery = "SELECT gymImg, facility FROM gymimg where Gym_gymIdx = ?";
+        int selectImgsParam = gymIdx;
+        return this.jdbcTemplate.query(selectImgsQuery,
+                (rs,rowNum) -> new GetImgRes(
+                    rs.getString("gymImg"),
+                    rs.getInt("facility")
+                ), selectImgsParam);
     }
 }

@@ -45,7 +45,8 @@ public class GymProvider {
             GetGymInfoRes getGymInfo = gymDao.selectGymInfo(gymIdx);
             List<GetTrainersRes> getTrainers = gymDao.selectTrainers(gymIdx);
             List<GetReviewRes> getReviews = gymDao.selectReview(gymIdx);
-            GetGymDetailRes getGymDetail = new GetGymDetailRes(getGymInfo,getTrainers, getReviews);
+            List<GetImgRes> getImgs = gymDao.selectImgs(gymIdx);
+            GetGymDetailRes getGymDetail = new GetGymDetailRes(getGymInfo,getTrainers, getReviews, getImgs);
             return getGymDetail;
 
         } catch(Exception exception){
