@@ -42,6 +42,18 @@ public class GymController {
     }
 
     @ResponseBody
+    @GetMapping("/search")
+    public BaseResponse<String> searchGym(@PathVariable("keyword") String keyword){
+        try{
+            GetGymListRes searchGymList = gymProvider.searchGymList(keyword);
+            return new BaseResponse<>(searchGymList);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+
+    @ResponseBody
     @GetMapping("/{gymIdx}")
     public BaseResponse<GetGymDetailRes> getGymDetail(@PathVariable("gymIdx") int gymIdx){
         try{

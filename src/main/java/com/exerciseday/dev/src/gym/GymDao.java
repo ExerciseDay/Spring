@@ -51,6 +51,37 @@ public class GymDao {
 
     }
 
+    public List<GetGymRes> searchGym(String keyword){
+        String searchGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, c.gymImg," +
+        "a.gymDistance, a.univ, AVG(b.rvSP) as gymSP,\n" +
+        "a.gymParking, a.gymSauna, a.gymCloths, a.gymShower\n" +
+        "FROM gym as a\n" +
+        "INNER JOIN review as b\n" +
+        "ON a.gymIdx = b.Gym_gymIdx\n" +
+        "INNER JOIN gymImg as c\n" +
+        "ON a.gymIdx = c.Gym_gymIdx\n" +
+        "where a.gymName LIKE CONCATE('%',?,'%')\n" +
+        "GROUP BY gymIdx";
+
+        String searchGymParam = keyword;
+
+       return this.jdbcTemplate.query(searchGymQuery,
+                (rs,rowNum) -> new GetGymRes(
+                    rs.getInt("gymIdx"),
+                    rs.getString("gymName"),
+                    rs.getString("gymIntroduce"),
+                    rs.getString("gymImg"),
+                    rs.getInt("gymDistance"),
+                    rs.getString("univ"),
+                    rs.getInt("gymParking"),
+                    rs.getInt("gymSauna"),
+                    rs.getInt("gymCloths"),
+                    rs.getInt("gymShower"),
+                    rs.getDouble("gymSP")
+                ),searchGymParam);
+
+    }
+
     public GetGymInfoRes selectGymInfo(int gymIdx){
         String selectGymInfoQuery = "SELECT * FROM gym WHERE gymIdx = ?";
         int selectGymInfoParam = gymIdx;

@@ -34,7 +34,16 @@ public class GymProvider {
             GetGymListRes getGymList = new GetGymListRes(getGym);
             return getGymList;
         } catch(Exception exception){
-            System.out.println(exception);
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetGymListRes searchGymList(String keyword) throws BaseException {
+        try{
+            List<GetGymRes> searchGym = gymDao.searchGym(keyword);
+            GetGymListRes searchGymList = new GetGymListRes(searchGym);
+            return searchGymList;
+        } catch(Exception exception){
             throw new BaseException(DATABASE_ERROR);
         }
     }
