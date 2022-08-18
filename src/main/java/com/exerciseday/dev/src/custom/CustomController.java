@@ -58,7 +58,7 @@ public class CustomController {
             return new BaseResponse<>(BaseResponseStatus.EMPTY_DETAIL);
         }
         */
-        if(postCustomReq.getCustomRoutines().size() < 1){
+        if(postCustomReq.getExercises().size() < 1){
             return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
         }
         
@@ -122,7 +122,23 @@ public class CustomController {
     }
 
     
-
+    /*
+     * 커스텀 코스 옵션 설정(변경) API
+     * [Patch] /users/{userIdx}/custom/{customIdx}
+     */
+    @ResponseBody
+    @PatchMapping("/{customIdx}")
+    public BaseResponse<String> setCustomOption(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @RequestBody PatchCustomRoutineReq patchCustomRoutineReq){
+        try{
+            if(customService.setCustomOption(userIdx, customIdx, patchCustomRoutineReq)==0){
+                return new BaseResponse<>(BaseResponseStatus.MODIFY_FAIL_OPTION);
+            }
+            return new BaseResponse<>("옵션 설정 성공");
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
 
      /*
       * 커스텀 코스 루틴 추가 API
@@ -140,9 +156,11 @@ public class CustomController {
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
 
-            int uId = customService.addCustomRoutine(userIdx, customIdx, postCustomRoutineReq);
+            if(customService.addCustomRoutine(userIdx, customIdx, postCustomRoutineReq)==0){
+                return new BaseResponse<>(BaseResponseStatus.ADD_FIAL_ROUTINE);
+            }
             
-            return new BaseResponse<>(new PostCustomRes(customIdx, uId));
+            return new BaseResponse<>(new PostCustomRes(customIdx, userIdx));
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());

@@ -305,7 +305,7 @@ public class UserDao {
     }
 
     public int deleteUser(int userIdx){
-        String deleteUserQuery = "update User set userStatus = 0 where userIdx = ? ";
+        String deleteUserQuery = "update User set userStatus = 'DELETE' where userIdx = ? ";
         Object[] deleteUserParams = new Object[]{userIdx};
 
         return this.jdbcTemplate.update(deleteUserQuery,deleteUserParams);

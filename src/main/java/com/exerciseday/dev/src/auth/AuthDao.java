@@ -106,6 +106,12 @@ public class AuthDao {
         String checkUserDeleteByEmailParam = email;
         return this.jdbcTemplate.queryForObject(checkUserDeleteByEmailQuery,int.class, checkUserDeleteByEmailParam);
     }
+
+    public GetExerciseRes getRandomEx(){
+        String getRandomExQuery = "SELECT exIdx, exName FROM Exercise ORDER BY RAND() LIMIT 1";
+        return this.jdbcTemplate.queryForObject(getRandomExQuery, (rs,rowNum)->new GetExerciseRes(rs.getInt("exIdx"),rs.getString("exName")));
+    }
+
     public List<GetTagRes> getRamdomTags(){
         String getRamdomTagsQuery = "SELECT tagIdx, tagName FROM Tag ORDER BY RAND() LIMIT 4";
         //List<GetTagExpertInfoRes> expertInfos;
@@ -129,6 +135,12 @@ public class AuthDao {
                                                                     )
                                                             )
                                         );
+    }
+
+    public void logout(int userIdx){
+        String logoutQuery = "UPDATE User set userStatus = 'INACTIVE' WHERE userIdx = ? ";
+        int logoutParam = userIdx;
+        this.jdbcTemplate.update(logoutQuery, logoutParam);
     }
 }
  

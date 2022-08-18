@@ -13,6 +13,7 @@ import com.exerciseday.dev.src.custom.model.CustomRoutine;
 import com.exerciseday.dev.src.custom.model.GetCustomRoutineInfoRes;
 import com.exerciseday.dev.src.custom.model.GetExerciseTCRes;
 import com.exerciseday.dev.src.custom.model.PatchCustomRes;
+import com.exerciseday.dev.src.custom.model.PatchCustomRoutineReq;
 import com.exerciseday.dev.src.custom.model.PostCustomReq;
 import com.exerciseday.dev.src.custom.model.PostCustomRoutineReq;
 
@@ -46,17 +47,23 @@ public class CustomDao {
                                                             )
                                                             ,getExerciseParam);
     }
-
-    public void createCustomRoutine(int userIdx, int customIdx, PostCustomRoutineReq postCustomRoutineReq){
-        String createCustomRoutineQuery = "INSERT INTO CustomCourseRoutine(rep, weight, sets, rest, Exercise_exIdx, CustomCourse_cCourseIdx, CustomCourse_User_userIdx) VALUES (?,?,?,?,?,?,?)";
-        Object[] createCustomRoutineParams = new Object[]{postCustomRoutineReq.getRep(),postCustomRoutineReq.getWeight(),postCustomRoutineReq.getSet(),postCustomRoutineReq.getRest(),postCustomRoutineReq.getExerciseIdx(),customIdx,userIdx};
-        this.jdbcTemplate.update(createCustomRoutineQuery, createCustomRoutineParams);
+    /*
+    public int createCustomRoutine(int userIdx, int customIdx, int exerciseIdx){
+        String createCustomRoutineQuery = "INSERT INTO CustomCourseRoutine(Exercise_exIdx, CustomCourse_cCourseIdx, CustomCourse_User_userIdx) VALUES (?,?,?)";
+        Object[] createCustomRoutineParams = new Object[]{exerciseIdx,customIdx,userIdx};
+        return this.jdbcTemplate.update(createCustomRoutineQuery, createCustomRoutineParams);
+    }
+    */
+    public int createCustomRoutine(int userIdx, int customIdx, PostCustomRoutineReq postCustomRoutineReq){
+        String createCustomRoutineQuery = "INSERT INTO CustomCourseRoutine(rep, weight,sets,rest,Exercise_exIdx, CustomCourse_cCourseIdx, CustomCourse_User_userIdx) VALUES (?,?,?,90,?,?,?)";
+        Object[] createCustomRoutineParams = new Object[]{postCustomRoutineReq.getRep(),postCustomRoutineReq.getWeight(),postCustomRoutineReq.getSet(),postCustomRoutineReq.getExerciseIdx(),customIdx,userIdx};
+        return this.jdbcTemplate.update(createCustomRoutineQuery, createCustomRoutineParams);
     }
 
-    public void addCustomTC(int customIdx,int times,int calories){
+    public int addCustomTC(int customIdx,int times,int calories){
         String addCustomTCQuery = "update CustomCourse set cCourseTime = ?, cCourseCalory = ? where cCourseIdx = ? ";
         Object[] addCustomTCParams = new Object[]{times,calories,customIdx};
-        this.jdbcTemplate.update(addCustomTCQuery,addCustomTCParams);
+        return this.jdbcTemplate.update(addCustomTCQuery,addCustomTCParams);
     }
 
     public CustomNTC getCustomNTC(int userIdx,int customIdx){
@@ -120,6 +127,22 @@ public class CustomDao {
                                         ,getCustomRoutineInfoParams);
     }
 
+    public List<PostCustomRoutineReq> getCustomTCList(int userIdx, int customIdx){
+        String getCustomNTCListQuery = "SELECT cr.cCourseRoutineIdx, cr.rep, cr.weight, cr.sets FROM CustomCourseRoutine as cr\n"+
+                                        "join CustomCourse as c on c.ccourseIdx = cr.CustomCourse_cCourseIdx\n"+
+                                        "join User as u on u.userIdx = cr.CustomCourse_User_userIdx\n"+
+                                        "WHERE cr.CustomCourse_User_userIdx = ? AND cr.CustomCourse_cCourseIdx = ? ";
+        Object[] getCustomNTCListParams = new Object[]{customIdx,userIdx};
+        return this.jdbcTemplate.query(getCustomNTCListQuery,
+                                        (rs, rowNum) -> new PostCustomRoutineReq(
+                                                                        rs.getInt("cr.cCourseRoutineIdx"),
+                                                                        rs.getInt("cr.rep"),
+                                                                        rs.getInt("cr.weight"),
+                                                                        rs.getInt("cr.sets")),
+                                        
+                                        getCustomNTCListParams);
+    }
+
     public int checkExerciseExist(int exerciseIdx){
         String checkExerciseExistQuery = "select exists(select exIdx from Exercise where exIdx = ?)";
         int checkExerciseExistParam = exerciseIdx;
@@ -154,5 +177,23 @@ public class CustomDao {
         String removeCustomRoutineQuery = "DELETE FROM CustomCourseRoutine WHERE CustomCourse_User_userIdx = ? AND CustomCourse_cCourseIdx = ? AND cCourseRoutineIdx = ?";
         Object[] removeCustomRoutineParam = new Object[]{userIdx,customIdx, customRoutineIdx};
         return this.jdbcTemplate.update(removeCustomRoutineQuery, removeCustomRoutineParam);
+    }
+
+    public int setCustomOption(PatchCustomRoutineReq patchCustomRoutineReq){
+        String setCustomOptionQuery ="UPDATE CustomCourseRoutine set rep = ?, weight = ?, sets = ?, rest =? WHERE cCourseRoutineIdx = ?";
+        Object[] setCustomOptionParams = new Object[]{patchCustomRoutineReq.getRep(),patchCustomRoutineReq.getWeight(),patchCustomRoutineReq.getRest(),patchCustomRoutineReq.getCustomRoutineIdx()};
+        return this.jdbcTemplate.update(setCustomOptionQuery,setCustomOptionParams);
+    }
+
+    public int checkUserHasCustom(int userIdx,int customIdx){
+        String checkUserHasCustomQuery = "SELECT exists(select cCourseIdx from CustomCourse WHERE User_userIdx = ? AND cCourseIdx = ? )";
+        Object[] checkUserHasCustomParams = new Object[]{userIdx, customIdx};
+        return this.jdbcTemplate.update(checkUserHasCustomQuery, checkUserHasCustomParams);
+    }
+
+    public int checkCustomHasRoutine(int customIdx,int customRoutineIdx){
+        String checkCustomHasRoutineQuery = "SELECT exists(select cCourseRoutineIdx from CustomCourseRoutine WHERE CustomCourse_cCourseIdx = ? AND cCourseRoutineIdx = ? )";
+        Object[] checkCustomHasRoutineParams = new Object[]{customIdx, customRoutineIdx};
+        return this.jdbcTemplate.update(checkCustomHasRoutineQuery, checkCustomHasRoutineParams);
     }
 }

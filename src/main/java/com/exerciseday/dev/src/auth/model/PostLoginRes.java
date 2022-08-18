@@ -15,6 +15,7 @@ public class PostLoginRes {
     private String userNickname;
     private String userImg;
     private String userGoal;
+    private GetExerciseRes simpleExercise;
     private List<GetTagRes> tags;
     
     /*

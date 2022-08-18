@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponseStatus;
+import com.exerciseday.dev.src.auth.model.GetExerciseRes;
 import com.exerciseday.dev.src.auth.model.GetTagRes;
 import com.exerciseday.dev.src.auth.model.PostLoginReq;
 import com.exerciseday.dev.src.auth.model.PostLoginRes;
@@ -93,6 +94,7 @@ public class AuthProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    
     public PostLoginRes autoLogin(int userIdx,String jwt) throws BaseException{
         if(checkUserExist(userIdx)==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_USER);
@@ -104,9 +106,9 @@ public class AuthProvider {
 
 
             User user = authDao.autoLogin(userIdx);
-
+            GetExerciseRes exs = authDao.getRandomEx();
             List<GetTagRes> tags = getRandomTags();
-            return new PostLoginRes(userIdx, jwt, user.getNickname(), user.getUserImg(), user.getUserGoal(), tags);
+            return new PostLoginRes(userIdx, jwt, user.getNickname(), user.getUserImg(), user.getUserGoal(),exs, tags);
         }
         catch(Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

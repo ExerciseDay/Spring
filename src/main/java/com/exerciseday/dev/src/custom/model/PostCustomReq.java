@@ -13,5 +13,5 @@ public class PostCustomReq {
     //private String customPart;
     //private String customDetailPart;
     private String customIntroduce;
-    private List<PostCustomRoutineReq> customRoutines;
+    private List<PostCustomRoutineReq> exercises;
 }

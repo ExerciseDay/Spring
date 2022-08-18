@@ -3,16 +3,15 @@ package com.exerciseday.dev.src.custom.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostCustomRoutineReq {
+public class PatchCustomRoutineReq {
+    private int customRoutineIdx;
     private int exerciseIdx;
     private int rep;
     private int weight;
     private int set;
-    //private int rest;
-    
+    private int rest;
 }

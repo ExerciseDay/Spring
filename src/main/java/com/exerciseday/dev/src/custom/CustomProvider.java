@@ -11,6 +11,7 @@ import com.exerciseday.dev.src.custom.model.GetExerciseTCRes;
 
 import java.util.List;
 
+import org.hibernate.jdbc.Expectations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 @Service
@@ -68,6 +69,24 @@ public class CustomProvider {
     public int checkCustomRoutineExist(int customRoutineIdx) throws BaseException{
         try{
             return customDao.checkCustomRoutineExist(customRoutineIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public int checkUserHasCustom(int userIdx, int customIdx) throws BaseException{
+        try{
+            return customDao.checkUserHasCustom(userIdx, customIdx);
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public int checkCustomHasRoutine(int customIdx, int customRoutineIdx) throws BaseException{
+        try{
+            return customDao.checkCustomHasRoutine(customIdx,customRoutineIdx);
         }
         catch(Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

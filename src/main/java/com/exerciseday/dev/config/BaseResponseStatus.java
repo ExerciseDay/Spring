@@ -41,6 +41,8 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PHONE(false, 2024, "전화번호를 확인해주세요."),
     
     DELETED_USER(false,2030,"탈퇴한 유저입니다."),
+    LOGOUT_USER(false,2031,"로그아웃한 유저입니다."),
+    LOGIN_USER(false,2032,"로그인한 유저입니다."),
 
 
 
@@ -77,6 +79,7 @@ public enum BaseResponseStatus {
     INVALID_PHONE(false, 3042, "바르지 않은 전화번호입니다."),
     INVALID_NAME(false,3043,"바르지 않은 이름입니다."),
     INVALID_GENDER(false,3044,"바르지 않은 성별입니다."),
+    INVALID_RELATION(false,3045,"바르지 않은 관계입니다."),
 
     EMPTY_EMAIL(false,3050,"이메일을 입력해주세요."),
     EMPTY_NICKNAME(false,3051,"닉네임을 입력해주세요."),
@@ -111,6 +114,7 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_PASSWORD(false,4015,"유저 비밀번호 수정 실패"),
     MODIFY_FAIL_IMG(false,4016,"사진 수정 실패"),
     MODIFY_FAIL_GOAL(false,4017,"목표 수정 실패"),
+    MODIFY_FAIL_OPTION(false,4018,"옵션 수정 실패"),
 
     DELETE_FAIL_USER(false,4020,"유저 삭제 실패"),
     DELETE_FAIL_EXERCISE(false,4021,"운동 삭제 실패"),
