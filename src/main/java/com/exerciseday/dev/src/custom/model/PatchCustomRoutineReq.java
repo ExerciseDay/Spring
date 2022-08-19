@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchCustomRoutineReq {
-    private int customRoutineIdx;
-    private int exerciseIdx;
+    private int routineIdx;
+    //private int exerciseIdx;
     private int rep;
     private int weight;
     private int set;
-    private int rest;
+    
 }

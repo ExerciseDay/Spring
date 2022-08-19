@@ -8,6 +8,7 @@ import com.exerciseday.dev.src.custom.model.CustomNTC;
 import com.exerciseday.dev.src.custom.model.GetCustomRes;
 import com.exerciseday.dev.src.custom.model.GetCustomRoutineInfoRes;
 import com.exerciseday.dev.src.custom.model.GetExerciseTCRes;
+import com.exerciseday.dev.src.custom.model.GetRoutineInfo;
 
 import java.util.List;
 
@@ -44,6 +45,15 @@ public class CustomProvider {
             return exerciseTCRes;
         }
         catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    public GetRoutineInfo getRoutineInfo(int routineIdx, int userIdx, int customIdx) throws BaseException{
+        try{
+            return customDao.getRoutineInfo(routineIdx,userIdx,customIdx);
+        }
+        catch(Exception e){
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }

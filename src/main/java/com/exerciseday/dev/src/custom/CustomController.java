@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +70,7 @@ public class CustomController {
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
-
+            
             PostCustomRes postCustomRes = new PostCustomRes(customService.createCustom(userIdx, postCustomReq), userIdx);
             return new BaseResponse<>(postCustomRes);
         }
@@ -98,6 +101,22 @@ public class CustomController {
             return new BaseResponse<>(e.getStatus());
         }
     }
+
+    /*
+     * 커스텀 코스 운동 조회
+     */
+    @ResponseBody
+    @GetMapping("/{customIdx}/routine/{routineIdx}")
+    public BaseResponse<GetRoutineInfo> getRoutineExercise(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @PathVariable("routineIdx") int routineIdx){
+        
+        try{
+            return new BaseResponse<>(new GetRoutineInfo(customProvider.getRoutineInfo(routineIdx,userIdx,customIdx)));
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
 
       /*
        * 커스텀 코스 삭제 API
@@ -130,9 +149,9 @@ public class CustomController {
     @PatchMapping("/{customIdx}")
     public BaseResponse<String> setCustomOption(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @RequestBody PatchCustomRoutineReq patchCustomRoutineReq){
         try{
-            if(customService.setCustomOption(userIdx, customIdx, patchCustomRoutineReq)==0){
-                return new BaseResponse<>(BaseResponseStatus.MODIFY_FAIL_OPTION);
-            }
+            customService.setCustomOption(userIdx, customIdx, patchCustomRoutineReq);
+                //return new BaseResponse<>(BaseResponseStatus.MODIFY_FAIL_OPTION);
+            
             return new BaseResponse<>("옵션 설정 성공");
         }
         catch(BaseException e){
@@ -146,7 +165,7 @@ public class CustomController {
       */
     @ResponseBody
     @PostMapping("/{customIdx}/add")
-    public BaseResponse<PostCustomRes> addCustomRoutine(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @RequestBody PostCustomRoutineReq postCustomRoutineReq){
+    public BaseResponse<AddCustomRoutineRes> addCustomRoutine(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @RequestBody PostCustomRoutineReq postCustomRoutineReq){
         if(postCustomRoutineReq == null){
             return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
         }
@@ -155,12 +174,20 @@ public class CustomController {
             if(userIdx != userIdxByJwt){
                 return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
             }
-
-            if(customService.addCustomRoutine(userIdx, customIdx, postCustomRoutineReq)==0){
-                return new BaseResponse<>(BaseResponseStatus.ADD_FIAL_ROUTINE);
+            /*
+            List<Integer> routineIdxs = new ArrayList<>();
+            for(int i = 0 ; i < exercises.getExercises().size() ; i++){
+                
+                if(customService.addCustomRoutine(userIdx, customIdx, exercises.get(i))==0){
+                    return new BaseResponse<>(BaseResponseStatus.ADD_FIAL_ROUTINE);
+                }
+                
+                routineIdxs.add(customService.addCustomRoutine(userIdx, customIdx, exercises.getExercises().get(i)));
             }
-            
-            return new BaseResponse<>(new PostCustomRes(customIdx, userIdx));
+            */
+            int routineIdx = customService.addCustomRoutine(userIdx, customIdx, postCustomRoutineReq);
+            //GetRoutineInfo routineInfo = customProvider.getRoutineInfo(routineIdx);
+            return new BaseResponse<>(new AddCustomRoutineRes(routineIdx));
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -175,9 +202,11 @@ public class CustomController {
     @ResponseBody
     @DeleteMapping("/{customIdx}/remove")
     public BaseResponse<String> removeCustomRoutine(@PathVariable("userIdx") int userIdx,@PathVariable("customIdx") int customIdx, @RequestBody DeleteCustomRemoveRoutineReq deleteCustomRemoveRoutineReq){
+        
         if(deleteCustomRemoveRoutineReq.getCustomRoutineIdxs().size() < 1){
             return new BaseResponse<>(BaseResponseStatus.EMPTY_ROUTINE);
         }
+        
         try{
             
             int userIdxByJwt = jwtService.getUserIdx();

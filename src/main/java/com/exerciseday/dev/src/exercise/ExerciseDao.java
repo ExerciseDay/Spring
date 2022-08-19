@@ -68,16 +68,19 @@ public class ExerciseDao {
     }
     */
 
+    //운동 검색
     public GetExercisesRes getExercises(String exNameSearchForm){
-        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE exName LIKE ?";
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ?";
         String getExercisesParam = exNameSearchForm;
         return this.jdbcTemplate.queryForObject(getExercisesQuery,
                                                 (rs,rowNum) -> new GetExercisesRes(
                                                                     rs.getInt("count"),
                                                                     this.jdbcTemplate.query("SELECT exIdx, exName, exPart, exDetailPart, exIntroduce\n"+
                                                                                             "FROM Exercise\n"+
-                                                                                            "WHERE exName\n"+
-                                                                                            "LIKE ?",
+                                                                                            "WHERE(\n"+
+                                                                                            "exName LIKE ? OR\n"+
+                                                                                            "exPart Like ? OR\n"+
+                                                                                            "exDetailPart Like ?)",
                                                                                             (rk,rownum)->new ExerciseInfo(
                                                                                                             rk.getInt("exIdx"),
                                                                                                             rk.getString("exName"),

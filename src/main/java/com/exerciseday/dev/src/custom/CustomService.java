@@ -7,6 +7,7 @@ import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
 import com.exerciseday.dev.src.custom.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -52,8 +53,8 @@ public class CustomService {
                 //calories = rep * set * exCalory
                 calories = postCustomRoutineReq.getRep() * postCustomRoutineReq.getSet() * etc.getExCalory();
             }
-
-            return customDao.addCustomTC(customIdx,times,calories);
+            customDao.addCustomTC(customIdx,times,calories);
+            return customIdx;
             
             //return customIdx;
         } catch(Exception exception){
@@ -61,10 +62,21 @@ public class CustomService {
         }
     }
 
+    
     public int addCustomRoutine(int userIdx, int customIdx, PostCustomRoutineReq postCustomRoutineReq) throws BaseException{
-        if(customProvider.checkCustomExist(customIdx)==0){
+
+        if(customProvider.checkCustomExist(customIdx)==0){            
             throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
         }
+        if(customProvider.checkExerciseExist(postCustomRoutineReq.getExerciseIdx())==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+        }        
+        //이거 왜 안됨??
+        /*
+        if(customProvider.checkUserHasCustom(userIdx, customIdx)==0){
+            throw new BaseException(BaseResponseStatus.ADD_FIAL_ROUTINE);
+        }
+        */
         /*
         for(int i = 0 ; i < postCustomRoutineReq.getExerciseIdx().size() ; i++){
             if(customProvider.checkExerciseExist(postCustomRoutineReq.getExerciseIdx().get(i))==0){
@@ -72,13 +84,18 @@ public class CustomService {
             }
         }
         */
-        if(customProvider.checkExerciseExist(postCustomRoutineReq.getExerciseIdx())==0){
-            throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+        /*
+        for(int i = 0 ; i < postCustomRoutinesReq.getExercises().size() ; i++){
+            System.out.print("여기");
+            if(customProvider.checkExerciseExist(postCustomRoutinesReq.getExercises().get(i).getExerciseIdx())==0){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_EXERCISE);
+            }
         }
         if(customProvider.checkUserHasCustom(userIdx, customIdx)==0){
+            System.out.print("여기");
             throw new BaseException(BaseResponseStatus.ADD_FIAL_ROUTINE);
         }
-        
+        */
         try{
             /*
             for(int i = 0 ; i < postCustomRoutineReq.getExerciseIdx().get(i) ; i++){
@@ -87,12 +104,32 @@ public class CustomService {
                 }
             }
             */
-
+            /*
             if(customDao.createCustomRoutine(userIdx,customIdx, postCustomRoutineReq)==0){
                 throw new BaseException(BaseResponseStatus.ADD_FIAL_ROUTINE);
             }   
+            /*
+            System.out.print("여기");
+            List<Integer> routineIdxs = new ArrayList<>();
+            System.out.print("여기");
+            for(int i = 0 ; i < postCustomRoutinesReq.getExercises().size() ; i++){
+                    int idx = customDao.createCustomRoutine(userIdx, customIdx, postCustomRoutinesReq.getExercises().get(i));
+                    System.out.print("여기");
+                    routineIdxs.add(idx);
+                    System.out.print("여기");
+            }
+            */
+            /*
+            if(customDao.createCustomRoutine(userIdx,customIdx, postCustomRoutineReq)==0){
+                throw new BaseException(BaseResponseStatus.ADD_FIAL_ROUTINE);
+            }
+            */
+           
             
-            return autoCustomTC(userIdx, customIdx);
+            int routineIdx = customDao.createCustomRoutine(userIdx, customIdx, postCustomRoutineReq);
+            //autoCustomTC(userIdx, customIdx);
+            return routineIdx;
+
             //times = rep * set * exTime + set * rest
             //times+= postCustomRoutineReq.getRep() * postCustomRoutineReq.getSet() * etc.getExTime() + postCustomRoutineReq.getSet() * rest;
             //calories = rep * set * exCalory
@@ -123,26 +160,33 @@ public class CustomService {
         }
     }
 
-    public int setCustomOption(int userIdx,int customIdx, PatchCustomRoutineReq patchCustomRoutineReq) throws BaseException{
-        
+    public void setCustomOption(int userIdx,int customIdx, PatchCustomRoutineReq patchCustomRoutineReq) throws BaseException{
+        /*
         if(customProvider.checkCustomExist(customIdx)==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
         }
-        if(customProvider.checkCustomRoutineExist(patchCustomRoutineReq.getCustomRoutineIdx())==0){
+        */
+        /*
+        if(customProvider.checkCustomRoutineExist(patchCustomRoutineReq.getRoutineIdx())==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_ROUTINE);
         }
+        */
+        /*
         if(customProvider.checkUserHasCustom(userIdx,customIdx)==0){
             throw new BaseException(BaseResponseStatus.INVALID_RELATION);
         }
+        */
+        /*
         if(customProvider.checkCustomHasRoutine(customIdx,patchCustomRoutineReq.getCustomRoutineIdx())==0){
             throw new BaseException(BaseResponseStatus.INVALID_RELATION);
         }
+        */
         try{
             
             if(customDao.setCustomOption(patchCustomRoutineReq)==0){
                 throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
             }
-            return autoCustomTC(userIdx, customIdx);
+            //return autoCustomTC(userIdx, customIdx);
 
         }
         catch(Exception e){
@@ -197,9 +241,11 @@ public class CustomService {
                     throw new BaseException(BaseResponseStatus.DELETE_FAIL_ROUTINE);
                 }
             }
+            /*
             if(autoCustomTC(userIdx, customIdx)==0){
                 throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
             }
+            */
 
         }
         catch(Exception e){

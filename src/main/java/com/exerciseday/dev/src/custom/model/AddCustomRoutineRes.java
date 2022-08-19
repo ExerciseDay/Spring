@@ -9,8 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class DeleteCustomRemoveRoutineReq {
-    public DeleteCustomRemoveRoutineReq(){}
-    private List<Integer> customRoutineIdxs;
-    
+public class AddCustomRoutineRes {
+    private int routineIdx;
+    //private GetRoutineInfo routineInfo;
 }
