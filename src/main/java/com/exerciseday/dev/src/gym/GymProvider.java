@@ -40,10 +40,13 @@ public class GymProvider {
 
     public GetGymListRes searchGymList(String keyword) throws BaseException {
         try{
-            List<GetGymRes> searchGym = gymDao.searchGym(keyword);
+            String kw = "%" + keyword + "%";
+            List<GetGymRes> searchGym = gymDao.searchGym(kw);
             GetGymListRes searchGymList = new GetGymListRes(searchGym);
             return searchGymList;
         } catch(Exception exception){
+            System.out.println("provider");
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

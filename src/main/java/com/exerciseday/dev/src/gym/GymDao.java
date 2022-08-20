@@ -60,7 +60,7 @@ public class GymDao {
         "ON a.gymIdx = b.Gym_gymIdx\n" +
         "INNER JOIN gymImg as c\n" +
         "ON a.gymIdx = c.Gym_gymIdx\n" +
-        "where a.gymName LIKE CONCATE('%',?,'%')\n" +
+        "where a.gymName LIKE ?\n" +
         "GROUP BY gymIdx";
 
         String searchGymParam = keyword;
