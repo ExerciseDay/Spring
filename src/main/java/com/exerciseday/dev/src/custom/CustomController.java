@@ -110,7 +110,12 @@ public class CustomController {
     public BaseResponse<GetRoutineInfo> getRoutineExercise(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @PathVariable("routineIdx") int routineIdx){
         
         try{
-            return new BaseResponse<>(new GetRoutineInfo(customProvider.getRoutineInfo(routineIdx,userIdx,customIdx)));
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+            GetRoutineInfo getRoutineInfo = customProvider.getRoutineInfo(routineIdx,userIdx,customIdx);
+            return new BaseResponse<>(getRoutineInfo);
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
@@ -143,13 +148,17 @@ public class CustomController {
     
     /*
      * 커스텀 코스 옵션 설정(변경) API
-     * [Patch] /users/{userIdx}/custom/{customIdx}
+     * [Patch] /users/{userIdx}/custom/{customIdx}/routine/{routineIdx}
      */
     @ResponseBody
-    @PatchMapping("/{customIdx}")
+    @PatchMapping("/{customIdx}/option")
     public BaseResponse<String> setCustomOption(@PathVariable("userIdx") int userIdx, @PathVariable("customIdx") int customIdx, @RequestBody PatchCustomRoutineReq patchCustomRoutineReq){
         try{
-            customService.setCustomOption(userIdx, customIdx, patchCustomRoutineReq);
+            int userIdxByJwt = jwtService.getUserIdx();
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_JWT);
+            }
+            customService.setCustomOption(userIdx, customIdx,patchCustomRoutineReq);
                 //return new BaseResponse<>(BaseResponseStatus.MODIFY_FAIL_OPTION);
             
             return new BaseResponse<>("옵션 설정 성공");

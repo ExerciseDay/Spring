@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetRoutineInfo {
-    public GetRoutineInfo(GetRoutineInfo routineInfo) {
-    }
+    
     private int exerciseIdx;
     private String exerciseName;
     private String exercisePart;

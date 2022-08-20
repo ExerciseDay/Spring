@@ -40,9 +40,13 @@ public class AuthDao {
     }
     
     public User autoLogin(int userIdx){
+
+        String loginQuery = "UPDATE User set userStatus = 'ACTIVE' WHERE userIdx = ?";
         String autoLoginQuery = "SELECT userIdx, userEmail, userPwd, userNickname, userTel,userGender, userImg, userGoal, userCreate FROM User WHERE userIdx = ?";
         int autoLoginParams = userIdx;
         
+        this.jdbcTemplate.update(loginQuery, autoLoginParams);
+
         return this.jdbcTemplate.queryForObject(autoLoginQuery,
                 (rs, rowNum)-> new User(
                         rs.getInt("userIdx"),
@@ -84,6 +88,7 @@ public class AuthDao {
                 (rs, rowNum)-> rs.getInt("userIdx")
                 , getUserIdxByJWTParams);
     }
+    
     public int checkUserLogin(int userIdx){
         String checkUserLoginQuery = "select exists(select userIdx from User where userIdx = ? AND userStatus = 'ACTIVE')";
         int checkUserLoginParam = userIdx;

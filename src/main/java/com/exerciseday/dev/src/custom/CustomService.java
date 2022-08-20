@@ -146,10 +146,11 @@ public class CustomService {
             throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
         }
         //유저의 커스텀 코스가 맞는가?!
+        /*
         if(customProvider.checkUserHasCustom(userIdx, customIdx)==0){
             throw new BaseException(BaseResponseStatus.DELETE_FAIL_COURSE);
         }
-        
+        */
         try{
             if(customDao.deleteCustom(customIdx)==0){
                 throw new BaseException(BaseResponseStatus.DELETE_FAIL_COURSE);
@@ -160,22 +161,24 @@ public class CustomService {
         }
     }
 
-    public void setCustomOption(int userIdx,int customIdx, PatchCustomRoutineReq patchCustomRoutineReq) throws BaseException{
-        /*
+    public void setCustomOption(int userIdx,int customIdx,  PatchCustomRoutineReq patchCustomRoutineReq) throws BaseException{
+        
         if(customProvider.checkCustomExist(customIdx)==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
         }
-        */
-        /*
+        
+        
+
         if(customProvider.checkCustomRoutineExist(patchCustomRoutineReq.getRoutineIdx())==0){
             throw new BaseException(BaseResponseStatus.EXIST_NO_ROUTINE);
         }
-        */
+        //유저가 갖고 있는 커스텀 코스인가?
         /*
-        if(customProvider.checkUserHasCustom(userIdx,customIdx)==0){
+        if(customProvider.checkUserHasCustom(userIdx,customIdx)==null){
             throw new BaseException(BaseResponseStatus.INVALID_RELATION);
         }
         */
+        //커스텀 코스에 포함된 루틴인가?
         /*
         if(customProvider.checkCustomHasRoutine(customIdx,patchCustomRoutineReq.getCustomRoutineIdx())==0){
             throw new BaseException(BaseResponseStatus.INVALID_RELATION);
@@ -183,9 +186,7 @@ public class CustomService {
         */
         try{
             
-            if(customDao.setCustomOption(patchCustomRoutineReq)==0){
-                throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
-            }
+            customDao.setCustomOption(patchCustomRoutineReq);
             //return autoCustomTC(userIdx, customIdx);
 
         }

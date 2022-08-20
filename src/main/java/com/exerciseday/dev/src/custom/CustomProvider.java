@@ -23,6 +23,22 @@ public class CustomProvider {
     public CustomProvider(CustomDao customDao){
         this.customDao = customDao;
     }
+    /*
+    public GetCustomRes getCustom(int userIdx, int customIdx) throws BaseException{
+        if(checkCustomExist(customIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
+        }
+        try{
+            CustomNTC customNTC = customDao.getCustomNTC(userIdx,customIdx);
+            List<GetCustomRoutineInfoRes> customRoutineInfos = customDao.getCustomRoutineInfos(userIdx, customIdx);
+            GetCustomRes getCustomRes = new GetCustomRes(customNTC, customRoutineInfos);
+            return getCustomRes;
+        }
+        catch(Exception e){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    */
 
     public GetCustomRes getCustom(int userIdx, int customIdx) throws BaseException{
         if(checkCustomExist(customIdx)==0){
@@ -39,6 +55,7 @@ public class CustomProvider {
         }
     }
 
+
     public GetExerciseTCRes getExerciseTC(int exerciseIdx) throws BaseException{
         try{
             GetExerciseTCRes exerciseTCRes = customDao.getExerciseTCRes(exerciseIdx);
@@ -50,6 +67,12 @@ public class CustomProvider {
     }
 
     public GetRoutineInfo getRoutineInfo(int routineIdx, int userIdx, int customIdx) throws BaseException{
+        if(checkCustomExist(customIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
+        }
+        if(checkCustomRoutineExist(routineIdx)==0){
+            throw new BaseException(BaseResponseStatus.EXIST_NO_ROUTINE);
+        }
         try{
             return customDao.getRoutineInfo(routineIdx,userIdx,customIdx);
         }
@@ -58,7 +81,7 @@ public class CustomProvider {
         }
     }
 
-    public int checkExerciseExist(int exerciseIdx) throws BaseException{
+    public Integer checkExerciseExist(int exerciseIdx) throws BaseException{
         try{
             return customDao.checkExerciseExist(exerciseIdx);
         }
@@ -67,7 +90,7 @@ public class CustomProvider {
         }
     }
 
-    public int checkCustomExist(int customIdx) throws BaseException{
+    public Integer checkCustomExist(int customIdx) throws BaseException{
         try{
             return customDao.checkCustomExist(customIdx);
         }
@@ -76,7 +99,7 @@ public class CustomProvider {
         }
     }
 
-    public int checkCustomRoutineExist(int customRoutineIdx) throws BaseException{
+    public Integer checkCustomRoutineExist(int customRoutineIdx) throws BaseException{
         try{
             return customDao.checkCustomRoutineExist(customRoutineIdx);
         }
@@ -85,7 +108,7 @@ public class CustomProvider {
         }
     }
 
-    public int checkUserHasCustom(int userIdx, int customIdx) throws BaseException{
+    public Integer checkUserHasCustom(int userIdx, int customIdx) throws BaseException{
         try{
             return customDao.checkUserHasCustom(userIdx, customIdx);
         }
@@ -94,7 +117,7 @@ public class CustomProvider {
         }
     }
 
-    public int checkCustomHasRoutine(int customIdx, int customRoutineIdx) throws BaseException{
+    public Integer checkCustomHasRoutine(int customIdx, int customRoutineIdx) throws BaseException{
         try{
             return customDao.checkCustomHasRoutine(customIdx,customRoutineIdx);
         }
