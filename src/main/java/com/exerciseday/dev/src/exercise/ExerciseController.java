@@ -118,7 +118,7 @@ public class ExerciseController {
      * 운동 찜 목록 조회 API
      * [GET] /exercise/dibs?userIdx=?
      */
-    /*
+    
     @ResponseBody
     @GetMapping("/dibs")
     public BaseResponse<GetDibsRes> getDibs(@RequestParam Integer userIdx){
@@ -138,7 +138,7 @@ public class ExerciseController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-    */
+    
 
 
     /*

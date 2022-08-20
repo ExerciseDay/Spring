@@ -29,9 +29,9 @@ public class ExpertDao {
 
     }*/
 
-    public int createExpert(String name, String part, String detail){
-        String createExpertQuery = "INSERT INTO ExpertCourse(eCourseName, eCoursePart, eCourseDetailPart) VALUES (?,?,?)";
-        Object[] createExpertParams = new Object[] {name,part,detail};
+    public int createExpert(String name, String part, String detail, String intro){
+        String createExpertQuery = "INSERT INTO ExpertCourse(eCourseName, eCoursePart, eCourseDetailPart,eCourseIntroduce) VALUES (?,?,?,?)";
+        Object[] createExpertParams = new Object[] {name,part,detail,intro};
         this.jdbcTemplate.update(createExpertQuery,
                 createExpertParams);
 

@@ -34,7 +34,7 @@ public class ExpertService {
             }
             int times = 0;
             int calories = 0;
-            int expertIdx = expertDao.createExpert(postExpertReq.getExpertName(),postExpertReq.getExpertPart(),postExpertReq.getExpertDetailPart());
+            int expertIdx = expertDao.createExpert(postExpertReq.getExpertName(),postExpertReq.getExpertPart(),postExpertReq.getExpertDetailPart(),postExpertReq.getExpertIntroduce());
             for(int i = 0 ; i < postExpertReq.getExpertRoutines().size() ; i++){
                 PostExpertRoutineReq postExpertRoutineReq = postExpertReq.getExpertRoutines().get(i);
                 expertDao.createExpertRoutine(expertIdx, postExpertRoutineReq);          
