@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.exerciseday.dev.config.BaseException;
 import com.exerciseday.dev.config.BaseResponse;
 import com.exerciseday.dev.config.BaseResponseStatus;
+import com.exerciseday.dev.src.auth.model.GetExerciseRes;
 import com.exerciseday.dev.src.exercise.model.*;
 import com.exerciseday.dev.utils.JwtService;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +118,7 @@ public class ExerciseController {
      * 운동 찜 목록 조회 API
      * [GET] /exercise/dibs?userIdx=?
      */
+    /*
     @ResponseBody
     @GetMapping("/dibs")
     public BaseResponse<GetDibsRes> getDibs(@RequestParam Integer userIdx){
@@ -134,7 +138,7 @@ public class ExerciseController {
             return new BaseResponse<>(e.getStatus());
         }
     }
-
+    */
 
 
     /*
@@ -165,6 +169,7 @@ public class ExerciseController {
      * 운동 검색 API
      * [GET] /exercise/search?what=
      */
+    
     @ResponseBody
     @GetMapping("/search")
     public BaseResponse<GetExercisesRes> getExercises(@RequestParam(required = false) String what){
@@ -172,11 +177,46 @@ public class ExerciseController {
             return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
         }
         try{
-            
-            return new BaseResponse<>(exerciseProvider.getExercises(what));
+            System.out.println(what+1);
+            GetExercisesRes getExercisesRes = exerciseProvider.getExercises(what);
+            System.out.println(getExercisesRes.getCount());
+            return new BaseResponse<>(getExercisesRes);
         }
         catch(BaseException e){
             return new BaseResponse<>(e.getStatus());
         }
     }
+    
+    /*
+    @ResponseBody
+    @GetMapping("/count")
+    public BaseResponse<Integer> getCount(@RequestParam String what){
+        if(what == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
+        }
+        try{
+            
+            return new BaseResponse<>(exerciseProvider.getCount(what));
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+    */
+    /*
+    @ResponseBody
+    @GetMapping("/info")
+    public BaseResponse<List<ExerciseInfo>> getExInfo(@RequestParam String what){
+        if(what == null){
+            return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
+        }
+        try{
+            
+            return new BaseResponse<>(exerciseProvider.getExInfo(what));
+        }
+        catch(BaseException e){
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+    */
 }

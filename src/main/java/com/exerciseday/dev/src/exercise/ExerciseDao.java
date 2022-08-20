@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.exerciseday.dev.src.exercise.model.ExerciseInfo;
 import com.exerciseday.dev.src.exercise.model.*;
+
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -67,20 +70,52 @@ public class ExerciseDao {
         return this.jdbcTemplate.queryForObject(getExercisesQuery,int.class, getExercisesParam);
     }
     */
+    
+        //운동 검색
+    public int getCount(String exNameSearchForm){
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ? OR exIntroduce LIKE ?)";
+        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm,exNameSearchForm,exNameSearchForm};
+        //String getExercisesParam = exNameSearchForm;
+        return this.jdbcTemplate.queryForObject(getExercisesQuery,
+                                                int.class,getExercisesParam);
+    }
 
-    //운동 검색
+    public List<ExerciseInfo> getExInfos(String exNameSearchForm){
+        String getExercisesQuery = "SELECT exIdx, exName, exPart, exDetailPart, exIntroduce \n"+
+                                    "FROM Exercise \n"+        
+                                    "WHERE( \n"+
+                                    "exName LIKE ? OR \n"+
+                                    "exPart LIKE ? OR \n"+
+                                    "exDetailPart LIKE ? OR \n"+
+                                    "exIntroduce LIKE ? )";
+        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm,exNameSearchForm,exNameSearchForm};
+        //String getExercisesParam = exNameSearchForm;
+        return this.jdbcTemplate.query(getExercisesQuery,
+                                                (rs, rowNum)->
+                                                new ExerciseInfo(rs.getInt("exIdx"),
+                                                rs.getString("exName"),
+                                                rs.getString("exPart"),
+                                                rs.getString("exDetailPart"),
+                                                rs.getString("exIntroduce"))
+                                                ,getExercisesParam);
+    }
+    
+    //운동 검색    
+    /*
     public GetExercisesRes getExercises(String exNameSearchForm){
-        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ?";
-        String getExercisesParam = exNameSearchForm;
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ? OR exIntroduce LIKE ?)";
+        Object getExercisesParams = new Object[]{exNameSearchForm,exNameSearchForm,exNameSearchForm,exNameSearchForm};
+        //String getExercisesParam = exNameSearchForm;
         return this.jdbcTemplate.queryForObject(getExercisesQuery,
                                                 (rs,rowNum) -> new GetExercisesRes(
                                                                     rs.getInt("count"),
-                                                                    this.jdbcTemplate.query("SELECT exIdx, exName, exPart, exDetailPart, exIntroduce\n"+
-                                                                                            "FROM Exercise\n"+
-                                                                                            "WHERE(\n"+
-                                                                                            "exName LIKE ? OR\n"+
-                                                                                            "exPart Like ? OR\n"+
-                                                                                            "exDetailPart Like ?)",
+                                                                    this.jdbcTemplate.query("SELECT exIdx, exName, exPart, exDetailPart, exIntroduce \n"+
+                                                                                            "FROM Exercise \n"+                                                                                            
+                                                                                            "WHERE( \n"+
+                                                                                            "exName LIKE ? OR \n"+
+                                                                                            "exPart LIKE ? OR \n"+
+                                                                                            "exDetailPart LIKE ? OR \n"+
+                                                                                            "exIntroduce LIKE ? )",                                                                                            
                                                                                             (rk,rownum)->new ExerciseInfo(
                                                                                                             rk.getInt("exIdx"),
                                                                                                             rk.getString("exName"),
@@ -88,11 +123,12 @@ public class ExerciseDao {
                                                                                                             rk.getString("exDetailPart"),
                                                                                                             rk.getString("exIntroduce")
                                                                                                          )
-                                                                                            ,getExercisesParam)
+                                                                                            ,getExercisesParams)
                                                                 )
-                                                                ,getExercisesParam);
+                                                                ,getExercisesParams);
     }
-
+    */
+    
     public GetDibsRes getDibs(int userIdx){
         String getDibsResQuery = ""+
                                 "SELECT u.userIdx, u.userNickname, IF(dibsCount is null, 0, dibsCount) as dibsCount\n"+
@@ -121,7 +157,7 @@ public class ExerciseDao {
                                                                                         ,rk.getInt("u.userIdx"))
                                                                 ),getDibsResParam);
     }
-
+    
     public int checkExerciseExist(int exerciseIdx){
         String checkExerciseExistQuery = "SELECT exists(SELECT exIdx FROM Exercise WHERE exIdx = ?)";
         int checkExerciseExistParam = exerciseIdx;
