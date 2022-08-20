@@ -71,14 +71,15 @@ public class ExpertDao {
         this.jdbcTemplate.update(addExpertTCQuery,addExpertTCParams);
     }
     
-
-    public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq,int offset){
+    
+    public List<ExpertByPart> getExpertsByPart(String part, String detailPart1, int offset){
+        //String detailPart1 = part + " " + detailPart;
         String getExpertsByPartQuery="SELECT eCourseIdx, eCourseName, eCourseIntroduce, eCourseTime, eCourseCalory, eCoursePart, eCourseDetailPart \n"+
                                     "FROM ExpertCourse\n" +
                                     "WHERE eCoursePart = ? AND eCourseDetailPart = ? \n" +
                                     "LIMIT ?,8";
 
-        Object[] getExpertsByPartParams = new Object[]{getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart(),offset};
+        Object[] getExpertsByPartParams = new Object[]{part,detailPart1,offset};
         return this.jdbcTemplate.query(getExpertsByPartQuery,
                     (rs,rowNum) -> new ExpertByPart(
                         rs.getInt("eCourseIdx"),
@@ -91,7 +92,28 @@ public class ExpertDao {
                         )
                         ,getExpertsByPartParams);
     }
+    /*
+    public List<ExpertByPart> getExpertsByPart(String detailPart1, int offset){
+        //String detailPart1 = part + " " + detailPart;
+        String getExpertsByPartQuery="SELECT eCourseIdx, eCourseName, eCourseIntroduce, eCourseTime, eCourseCalory, eCoursePart, eCourseDetailPart \n"+
+                                    "FROM ExpertCourse\n" +
+                                    "WHERE eCourseDetailPart = ? \n" +
+                                    "LIMIT ?,8";
 
+        Object[] getExpertsByPartParams = new Object[]{detailPart1,offset};
+        return this.jdbcTemplate.query(getExpertsByPartQuery,
+                    (rs,rowNum) -> new ExpertByPart(
+                        rs.getInt("eCourseIdx"),
+                        rs.getString("eCourseName"),
+                        rs.getString("eCourseIntroduce"),
+                        rs.getInt("eCourseTime"),
+                        rs.getInt("eCourseCalory"),
+                        rs.getString("eCoursePart"),
+                        rs.getString("eCourseDetailPart")
+                        )
+                        ,getExpertsByPartParams);
+    }
+    */
     public ExpertNTC getExpertNTC(int expertIdx){
         String getExpertNTCQuery = "select eCourseIdx, eCourseName, eCourseTime, eCourseCalory from ExpertCourse where eCourseIdx = ?";
         int getExpertNTCParam = expertIdx;

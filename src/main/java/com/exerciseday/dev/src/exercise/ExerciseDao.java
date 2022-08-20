@@ -73,8 +73,8 @@ public class ExerciseDao {
     
         //운동 검색
     public int getCount(String exNameSearchForm){
-        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ? OR exIntroduce LIKE ?)";
-        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm,exNameSearchForm,exNameSearchForm};
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exDetailPart LIKE ?)";
+        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm};
         //String getExercisesParam = exNameSearchForm;
         return this.jdbcTemplate.queryForObject(getExercisesQuery,
                                                 int.class,getExercisesParam);
@@ -84,11 +84,10 @@ public class ExerciseDao {
         String getExercisesQuery = "SELECT exIdx, exName, exPart, exDetailPart, exIntroduce \n"+
                                     "FROM Exercise \n"+        
                                     "WHERE( \n"+
-                                    "exName LIKE ? OR \n"+
-                                    "exPart LIKE ? OR \n"+
-                                    "exDetailPart LIKE ? OR \n"+
-                                    "exIntroduce LIKE ? )";
-        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm,exNameSearchForm,exNameSearchForm};
+                                    "exName LIKE ? OR \n"+                                    
+                                    "exDetailPart LIKE ? )";
+                                    
+        Object[] getExercisesParam = new Object[]{exNameSearchForm, exNameSearchForm};
         //String getExercisesParam = exNameSearchForm;
         return this.jdbcTemplate.query(getExercisesQuery,
                                                 (rs, rowNum)->
@@ -103,8 +102,8 @@ public class ExerciseDao {
     //운동 검색    
     /*
     public GetExercisesRes getExercises(String exNameSearchForm){
-        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exPart LIKE ? OR exDetailPart LIKE ? OR exIntroduce LIKE ?)";
-        Object getExercisesParams = new Object[]{exNameSearchForm,exNameSearchForm,exNameSearchForm,exNameSearchForm};
+        String getExercisesQuery = "SELECT Count(exIdx) as count FROM Exercise WHERE (exName LIKE ? OR exDetailPart LIKE ?)";
+        Object getExercisesParams = new Object[]{exNameSearchForm,exNameSearchForm};
         //String getExercisesParam = exNameSearchForm;
         return this.jdbcTemplate.queryForObject(getExercisesQuery,
                                                 (rs,rowNum) -> new GetExercisesRes(
@@ -113,9 +112,9 @@ public class ExerciseDao {
                                                                                             "FROM Exercise \n"+                                                                                            
                                                                                             "WHERE( \n"+
                                                                                             "exName LIKE ? OR \n"+
-                                                                                            "exPart LIKE ? OR \n"+
-                                                                                            "exDetailPart LIKE ? OR \n"+
-                                                                                            "exIntroduce LIKE ? )",                                                                                            
+                                                                                            
+                                                                                            "exDetailPart LIKE ?  \n"+
+                                                                                            ")",                                                                                            
                                                                                             (rk,rownum)->new ExerciseInfo(
                                                                                                             rk.getInt("exIdx"),
                                                                                                             rk.getString("exName"),

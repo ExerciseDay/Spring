@@ -70,11 +70,27 @@ public class ExpertProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-
-    public List<ExpertByPart> getExpertsByPart(GetExpertByPartReq getExpertByPartReq,int page) throws BaseException{
+    /*
+    public List<ExpertByPart> getExpertsByPart(String part, String detailPart ,int page) throws BaseException{
         try{
             int offset = (page - 1)*8;
-            List<ExpertByPart> expertList = expertDao.getExpertsByPart(getExpertByPartReq,offset);
+            //String detailPart1 = part + " " + detailPart;
+            List<ExpertByPart> expertList = expertDao.getExpertsByPart(part,detailPart,offset);
+            if(expertList.size()<1){
+                throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
+            }
+            return expertList;
+
+        } catch(Exception exception){
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+    */
+    public List<ExpertByPart> getExpertsByPart(String part, String detailPart,int page) throws BaseException{
+        try{
+            int offset = (page - 1)*8;
+            //String detailPart1 = part + " " + detailPart;
+            List<ExpertByPart> expertList = expertDao.getExpertsByPart(part,detailPart,offset);
             if(expertList.size()<1){
                 throw new BaseException(BaseResponseStatus.EXIST_NO_COURSE);
             }

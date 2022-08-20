@@ -42,6 +42,7 @@ public class ExerciseProvider {
         }
     }
     */
+    
     public GetExercisesRes getExercises(String exerciseName) throws BaseException{
         
         try{

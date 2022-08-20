@@ -80,22 +80,30 @@ public class ExpertController {
 
 
     /*
-     * 부위별 전문가 코스 목록 조회 API
+     * 부위별 전문가 코스 목록 조회 API @RequestParam("detailPart")String detailPart
      * [GET] /expert/part
      */
+    
     @ResponseBody
-    @GetMapping("/part")
-    public BaseResponse<GetExpertByPartRes> getExpertsByPart(@RequestParam int page, @RequestBody GetExpertByPartReq getExpertByPartReq){
-
+    @GetMapping("/list")
+    public BaseResponse<GetExpertByPartRes> getExpertsByPart(@RequestParam(required = false,value = "page")Integer page, 
+                                                             @RequestParam(required = false,value = "part")String part,
+                                                             @RequestParam(required = false,value = "detailPart")String detailPart){
+        
+        if(page == null || part == null || detailPart == null){
+            return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR);
+        }
+        
         try{
-
-            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(getExpertByPartReq,page);
-            GetExpertByPartRes getExpertByPartRes = new GetExpertByPartRes(getExpertByPartReq.getPart(),getExpertByPartReq.getDetailPart(), expertList);
+            
+            List<ExpertByPart> expertList = expertProvider.getExpertsByPart(part,detailPart,page);
+            GetExpertByPartRes getExpertByPartRes = new GetExpertByPartRes(detailPart, expertList);
             return new BaseResponse<>(getExpertByPartRes);
         }
         catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
+   
 
 }

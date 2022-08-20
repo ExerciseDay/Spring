@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetExpertByPartRes {
-    private String part;
+    //private String part;
     private String detailPart;
     private List<ExpertByPart> expertList;
 

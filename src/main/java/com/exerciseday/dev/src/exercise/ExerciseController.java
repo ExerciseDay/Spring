@@ -177,9 +177,9 @@ public class ExerciseController {
             return new BaseResponse<>(BaseResponseStatus.EMPTY_NAME);
         }
         try{
-            System.out.println(what+1);
+            
             GetExercisesRes getExercisesRes = exerciseProvider.getExercises(what);
-            System.out.println(getExercisesRes.getCount());
+            
             return new BaseResponse<>(getExercisesRes);
         }
         catch(BaseException e){
