@@ -68,5 +68,19 @@ public class GymController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/{gymIdx}/review")
+    public BaseResponse<PostReviewRes> updateReview(@RequestBody PostReviewReq postReviewReq){
+        try{
+
+            PostReviewRes postReviewRes = gymService.updateReview(postReviewReq);
+
+            return new BaseResponse<>(postReviewRes);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
     
 }
