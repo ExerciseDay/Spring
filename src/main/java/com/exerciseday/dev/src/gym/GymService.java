@@ -46,14 +46,13 @@ public class GymService {
         }
     }
 
-    public PostReviewRes updateReview(int userIdx, PostReviewReq postReviewReq) throws BaseException{
+    public void updateReview(int userIdx, int gymIdx, String rvContent, int rvSP) throws BaseException{
         try{
 
-            PostReviewRes postReviewRes = gymService.updateReview(postReviewReq);
+            int reviewIdx = gymDao.updateReview(userIdx, gymIdx, rvContent, rvSP);
 
-            return new BaseResponse<>(postReviewRes);
-
-        } catch (BaseException exception) {
+        } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

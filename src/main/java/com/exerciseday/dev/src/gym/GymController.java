@@ -69,13 +69,15 @@ public class GymController {
     }
 
     @ResponseBody
-    @PostMapping("/{gymIdx}/review")
-    public BaseResponse<PostReviewRes> updateReview(@RequestBody PostReviewReq postReviewReq){
+    @GetMapping("/{gymIdx}/review")
+    public BaseResponse<String> updateReview(@PathVariable("gymIdx") int gymIdx, @RequestParam String rvContent, @RequestParam int rvSP){
         try{
 
-            PostReviewRes postReviewRes = gymService.updateReview(postReviewReq);
+            int userIdxByJwt = jwtService.getUserIdx();
+            gymService.updateReview(userIdxByJwt, gymIdx, rvContent, rvSP);
 
-            return new BaseResponse<>(postReviewRes);
+            String result = "리뷰가 등록되었습니다";
+            return new BaseResponse<>(result);
 
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

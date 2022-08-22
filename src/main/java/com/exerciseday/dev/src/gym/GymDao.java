@@ -138,4 +138,12 @@ public class GymDao {
                     rs.getInt("facility")
                 ), selectImgsParam);
     }
+
+    public int updateReview(int userIdx, int gymIdx, String rvContent, int rvSP){
+        String updateReviewQuery = "INSERT INTO review (`User_userIdx`, `Gym_gymIdx`, `rvContent`, `rvSP`, `rvStatus`)\n"
+        + "VALUES (?, ?, ?, ?, '1');";
+
+        Object[] updateReviewParams = new Object[]{userIdx, gymIdx, rvContent, rvSP};
+        return this.jdbcTemplate.update(updateReviewQuery, updateReviewParams);
+    }
 }

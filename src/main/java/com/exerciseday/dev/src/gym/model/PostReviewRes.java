@@ -10,5 +10,4 @@ import lombok.Setter;
 public class PostReviewRes {
     private int userIdx;
     private int gymIdx;
-    private int rvIdx;
 }
