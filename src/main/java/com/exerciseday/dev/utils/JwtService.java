@@ -111,6 +111,7 @@ public class JwtService {
         }
     }
 
+
     public int getGymIdx() throws BaseException{
         //1. JWT 추출
         String accessToken = getJwt();
@@ -131,4 +132,9 @@ public class JwtService {
         // 3. userIdx 추출
         return claims.getBody().get("gymIdx",Integer.class);
     }
+
 }
+
+
+
+

@@ -15,9 +15,13 @@
 	<description>UMC project</description>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>17</java.version>
+		<java.version>17</java.version>		
 	</properties>
+
+	
+
 	<!-- <dependencyManagement>
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
 		<dependencies>
 		 <dependency>
 		  <groupId>software.amazon.awssdk</groupId>
@@ -27,7 +31,11 @@
 		  <scope>import</scope>
 		 </dependency>
 		</dependencies>
+
+	</dependencyManagement>
+
 	</dependencyManagement> -->
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -91,6 +99,33 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		 </dependency>
+
+
+		 <dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>sns</artifactId>
+			<version>2.17.243</version>
+		 </dependency>
+<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-messaging -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-aws-messaging</artifactId>
+			<version>2.2.6.RELEASE</version>
+		</dependency>
+		 <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-aws</artifactId>
+			<version>2.2.6.RELEASE</version>
+		</dependency>
+<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-sns -->
+		<!--
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-sns</artifactId>
+			<version>1.12.272</version>
+		</dependency>
+		-->
+
 	</dependencies>
 
 	<build>

@@ -35,5 +35,15 @@ build/
 application.properties
 
 
+
+
 ### JWT KEY###
+
 **/secret/
+
+
+
+application.properties
+
+
+

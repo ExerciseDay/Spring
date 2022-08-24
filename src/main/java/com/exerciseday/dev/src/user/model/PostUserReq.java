@@ -8,12 +8,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PostUserReq {
-    private String name;
-    private String nickName;
     private String email;
     private String password;
-
-    //웹 nickName email pwd 가입경로 건의사항
-    //앱 email name pwd
+    private String nickname;
+    private String phone;
+    private String gender;
+    private String goal;
 }
 
