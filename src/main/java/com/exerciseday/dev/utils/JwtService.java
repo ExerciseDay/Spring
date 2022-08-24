@@ -110,9 +110,7 @@ public class JwtService {
             return false;
         }
     }
-<<<<<<< HEAD
-}
-=======
+
 
     public int getGymIdx() throws BaseException{
         //1. JWT 추출
@@ -134,5 +132,9 @@ public class JwtService {
         // 3. userIdx 추출
         return claims.getBody().get("gymIdx",Integer.class);
     }
+
 }
->>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
+
+
+
+

@@ -17,9 +17,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>		
 	</properties>
-<<<<<<< HEAD
-	<dependencyManagement>
-=======
+
+	
+
 	<!-- <dependencyManagement>
 >>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
 		<dependencies>
@@ -31,11 +31,11 @@
 		  <scope>import</scope>
 		 </dependency>
 		</dependencies>
-<<<<<<< HEAD
+
 	</dependencyManagement>
-=======
+
 	</dependencyManagement> -->
->>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -99,7 +99,7 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		 </dependency>
-<<<<<<< HEAD
+
 
 		 <dependency>
 			<groupId>software.amazon.awssdk</groupId>
@@ -125,8 +125,7 @@
 			<version>1.12.272</version>
 		</dependency>
 		-->
-=======
->>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
+
 	</dependencies>
 
 	<build>
