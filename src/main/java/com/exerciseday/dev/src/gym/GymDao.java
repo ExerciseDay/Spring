@@ -21,7 +21,7 @@ public class GymDao {
     }
     
     public List<GetGymRes> selectGym(String univ){
-        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymIntroduce, c.gymImg," +
+        String selectGymQuery = "SELECT a.gymIdx, a.gymName, a.gymAddress, c.gymImg," +
         "a.gymDistance, a.univ, AVG(b.rvSP) as gymSP,\n" +
         "a.gymParking, a.gymSauna, a.gymCloths, a.gymShower\n" +
         "FROM gym as a\n" +
@@ -38,7 +38,7 @@ public class GymDao {
                 (rs,rowNum) -> new GetGymRes(
                     rs.getInt("gymIdx"),
                     rs.getString("gymName"),
-                    rs.getString("gymIntroduce"),
+                    rs.getString("gymAddress"),
                     rs.getString("gymImg"),
                     rs.getInt("gymDistance"),
                     rs.getString("univ"),

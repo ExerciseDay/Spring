@@ -34,6 +34,7 @@ public class GymProvider {
             GetGymListRes getGymList = new GetGymListRes(getGym);
             return getGymList;
         } catch(Exception exception){
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }

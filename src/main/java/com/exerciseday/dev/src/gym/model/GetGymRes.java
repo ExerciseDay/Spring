@@ -12,7 +12,7 @@ public class GetGymRes {
 
     private int gymIdx;
     private String gymName;
-    private String gymIntroduce;
+    private String gymAddess;
     private String gymImg;
     private int gymDistance;
     private String univ;
