@@ -110,4 +110,29 @@ public class JwtService {
             return false;
         }
     }
+<<<<<<< HEAD
 }
+=======
+
+    public int getGymIdx() throws BaseException{
+        //1. JWT 추출
+        String accessToken = getJwt();
+        if(accessToken == null || accessToken.length() == 0){
+            throw new BaseException(EMPTY_JWT);
+        }
+
+        // 2. JWT parsing
+        Jws<Claims> claims;
+        try{
+            claims = Jwts.parser()
+                    .setSigningKey(Secret.JWT_SECRET_KEY)
+                    .parseClaimsJws(accessToken);
+        } catch (Exception ignored) {
+            throw new BaseException(INVALID_JWT);
+        }
+
+        // 3. userIdx 추출
+        return claims.getBody().get("gymIdx",Integer.class);
+    }
+}
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23

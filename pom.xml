@@ -17,7 +17,11 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>		
 	</properties>
+<<<<<<< HEAD
 	<dependencyManagement>
+=======
+	<!-- <dependencyManagement>
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
 		<dependencies>
 		 <dependency>
 		  <groupId>software.amazon.awssdk</groupId>
@@ -27,7 +31,11 @@
 		  <scope>import</scope>
 		 </dependency>
 		</dependencies>
+<<<<<<< HEAD
 	</dependencyManagement>
+=======
+	</dependencyManagement> -->
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,7 +64,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		  </dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -64,19 +71,22 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+    		<groupId>org.mybatis.spring.boot</groupId>
+    		<artifactId>mybatis-spring-boot-starter</artifactId>
+    		<version>1.3.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<!-- JWT -->
 		<dependency>
@@ -89,6 +99,7 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		 </dependency>
+<<<<<<< HEAD
 
 		 <dependency>
 			<groupId>software.amazon.awssdk</groupId>
@@ -114,6 +125,8 @@
 			<version>1.12.272</version>
 		</dependency>
 		-->
+=======
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
 	</dependencies>
 
 	<build>

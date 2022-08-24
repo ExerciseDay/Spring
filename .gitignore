@@ -32,13 +32,19 @@ build/
 ### VS Code ###
 .vscode/
 
+application.properties
+
 
 application.properties
 
 
 ### JWT KEY###
+<<<<<<< HEAD
 **/secret/
 
 
 
 application.properties
+=======
+**/secret/
+>>>>>>> 8c18c162e6717ea3b7302b2dbabac96e4c691e23
